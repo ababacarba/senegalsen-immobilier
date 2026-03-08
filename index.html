@@ -1551,36 +1551,31 @@ function AuthModal({ onClose, onSuccess }) {
     }
     setLoading(true);
     const fullName = `${firstName.trim()} ${lastName.trim()}`;
-    const { data, error } = await sb.auth.signUp({
-      email,
-      password: pass,
-      options: { data: { full_name: fullName, user_type: userType } }
-    });
-    if (error) {
-      setErr(error.message);
+    const metadata = {
+      full_name: fullName,
+      user_type: userType || "resident",
+      ...userType === "diaspora" && {
+        country_residence: countryRes || null,
+        city_residence: cityRes || null,
+        nationality: nationality || "S\xE9n\xE9galaise",
+        investment_budget: budget || null,
+        property_type_interest: propTypes.length > 0 ? propTypes : null,
+        zone_interest: zone || null
+      }
+    };
+    const { error: signUpError } = await sb.auth.signUp({ email, password: pass, options: { data: metadata } });
+    if (signUpError) {
+      setErr(signUpError.message || "Erreur lors de l'inscription.");
       setLoading(false);
       return;
     }
-    const userId = data?.id || data?.user?.id;
-    if (userId && userType) {
-      const profilePayload = {
-        full_name: fullName,
-        user_type: userType,
-        ...userType === "diaspora" && {
-          country_residence: countryRes,
-          city_residence: cityRes || null,
-          nationality,
-          investment_budget: budget ? parseInt(budget) : null,
-          property_type_interest: propTypes.length > 0 ? propTypes : null,
-          zone_interest: zone || null,
-          diaspora_onboarded: false
-        }
-      };
-      await sb.from("profiles").update(profilePayload).eq("id", userId).catch(() => {
-      });
-    }
+    const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({ email, password: pass });
     setLoading(false);
-    setOk(userType === "diaspora" ? "\u{1F389} Compte diaspora cr\xE9\xE9 ! Consultez vos emails pour confirmer votre inscription." : "\u2705 Compte cr\xE9\xE9 ! V\xE9rifiez votre email pour confirmer.");
+    if (loginError) {
+      setOk(userType === "diaspora" ? "\u{1F389} Compte Diaspora cr\xE9\xE9 ! Cliquez le lien re\xE7u par email puis reconnectez-vous." : "\u2705 Compte cr\xE9\xE9 ! V\xE9rifiez vos emails puis reconnectez-vous.");
+      return;
+    }
+    onSuccess(loginData.user);
   }
   async function demoLogin(account) {
     setDemoLoading(account.role);
