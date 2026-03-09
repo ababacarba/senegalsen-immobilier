@@ -1,1161 +1,18 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a5c36">
-<title>SeneGalsen Immobilier — La référence immobilière au Sénégal</title>
-<meta name="description" content="Trouvez votre bien immobilier au Sénégal : appartements, villas, terrains. Annonces vérifiées, agences certifiées, visite vidéo pour la diaspora.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
-<style>
 
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --g:#0a5c36;--gl:#e8f5ef;--gm:#16a34a;
-  --au:#f4a01b;--al:#fef3c7;
-  --nv:#1e3a5f;--rd:#dc2626;--rl:#fee2e2;
-  --tx:#1a1a1a;--mu:#6b7280;--br:#e5e7eb;
-  --bg:#f9f8f5;--wh:#fff;
-  --sh:0 2px 12px rgba(0,0,0,.07);--shh:0 8px 32px rgba(0,0,0,.13);
-  --r:14px;--fd:'Plus Jakarta Sans',sans-serif;--fb:'Inter',sans-serif;
-}
-body{font-family:var(--fb);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-size:15px;line-height:1.6;text-rendering:optimizeLegibility;font-feature-settings:'kern' 1,'liga' 1}
-button,input,select,textarea{font-family:var(--fb);font-size:14px;line-height:1.5}
-/* ── NAV ── */
-.nav{background:var(--wh);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:300;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.navi{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:62px;gap:8px}
-.logo{font-family:var(--fd);font-size:19px;font-weight:800;letter-spacing:-.02em;color:var(--g);cursor:pointer;display:flex;align-items:center;gap:5px;border:none;background:none;flex-shrink:0}
-.logo span{color:var(--au)}
-.navl{display:flex;gap:2px;align-items:center}
-.nb{padding:7px 11px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:500;letter-spacing:.01em;color:var(--mu);border:none;background:none;transition:.18s;white-space:nowrap}
-.nb:hover,.nb.on{color:var(--g);background:var(--gl)}
-.ncta{background:var(--g);color:#fff;padding:8px 16px;border-radius:100px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:.18s;white-space:nowrap}
-.ncta:hover{background:#083d25;transform:translateY(-1px)}
-.nauth{display:flex;gap:7px;align-items:center}
-.av{width:34px;height:34px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:none;flex-shrink:0;position:relative}
-/* notif badge */
-.nbadge{position:absolute;top:-4px;right:-4px;background:var(--rd);color:#fff;border-radius:50%;min-width:17px;height:17px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;line-height:1}
-/* ── HERO ── */
-.hero{background:linear-gradient(135deg,#051f11,#0a5c36 50%,#0d6b40);position:relative;overflow:hidden;padding:74px 20px 90px}
-.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1562501700-54b33a3cc900?w=1400&auto=format&q=35') center/cover;opacity:.08}
-.heroi{max-width:820px;margin:0 auto;text-align:center;position:relative}
-.htag{display:inline-flex;align-items:center;gap:4px;background:rgba(244,160,27,.18);border:1px solid rgba(244,160,27,.38);color:var(--au);padding:4px 13px;border-radius:100px;font-size:11px;font-weight:700;margin-bottom:16px;letter-spacing:.4px}
-.hero h1{font-family:var(--fd);font-size:clamp(26px,5vw,52px);font-weight:800;color:#fff;line-height:1.08;margin-bottom:13px;letter-spacing:-.02em}
-.hero h1 em{color:var(--au);font-style:normal}
-.hero p{color:rgba(255,255,255,.72);font-size:16px;line-height:1.65;margin-bottom:30px;font-weight:400}
-.sbox{background:#fff;border-radius:16px;padding:15px;box-shadow:0 20px 60px rgba(0,0,0,.22)}
-.stabs{display:flex;gap:3px;margin-bottom:11px;background:var(--bg);border-radius:10px;padding:3px}
-.stab{flex:1;padding:7px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--mu);transition:.18s}
-.stab.on{background:var(--g);color:#fff}
-.srow{display:flex;gap:7px;flex-wrap:wrap}
-.si{flex:1;min-width:150px;padding:10px 13px;border:1.5px solid var(--br);border-radius:9px;font-size:14px;outline:none;transition:.18s;line-height:1.5}
-.si:focus{border-color:var(--g)}
-.sbtn{background:var(--g);color:#fff;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:.18s;white-space:nowrap}
-.sbtn:hover{background:#083d25;transform:translateY(-1px)}
-/* ── STATS ── */
-.sbar{background:var(--nv);padding:15px 20px}
-.sbari{max-width:1280px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px}
-.st{text-align:center}
-.stn{font-family:var(--fd);font-size:24px;font-weight:800;color:var(--au);letter-spacing:-.03em}
-.stl{font-size:10px;color:rgba(255,255,255,.52)}
-/* ── SECTION ── */
-.sec{max-width:1280px;margin:0 auto;padding:48px 20px}
-.sech{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;gap:10px;flex-wrap:wrap}
-.sectl{font-family:var(--fd);font-size:22px;font-weight:800;letter-spacing:-.025em;line-height:1.2}
-.sectl span{color:var(--g)}
-.seclink{color:var(--g);font-size:12.5px;font-weight:700;cursor:pointer;border:none;background:none;white-space:nowrap}
-.seclink:hover{text-decoration:underline}
-/* ── FILTERS ── */
-.fils{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-.flab{font-size:10px;font-weight:800;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
-.fbt{padding:6px 12px;border-radius:100px;border:1.5px solid var(--br);background:#fff;font-size:11px;font-weight:600;cursor:pointer;transition:.18s;color:var(--mu)}
-.fbt:hover,.fbt.on{border-color:var(--g);color:var(--g);background:var(--gl);font-weight:700}
-/* ── ADV FILTERS ── */
-.advfil{background:#fff;border:1px solid var(--br);border-radius:var(--r);padding:18px;margin-bottom:18px;box-shadow:var(--sh)}
-.advfilg{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.range-row{display:flex;gap:6px}
-.range-row .si{flex:1;min-width:0}
-/* ── GRID ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:18px}
-/* ── CARD ── */
-.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;cursor:pointer;transition:.22s;border:1px solid var(--br);position:relative}
-.card:hover{box-shadow:var(--shh);transform:translateY(-4px)}
-.cimg{width:100%;height:196px;object-fit:cover;display:block;background:#e5e7eb}
-.cbdg{position:absolute;top:9px;left:9px;display:flex;gap:4px;flex-wrap:wrap}
-.bdg{padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700}
-.bprem{background:var(--au);color:#1a1a1a}
-.cfav{position:absolute;top:9px;right:9px;background:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.13);cursor:pointer;border:none;font-size:14px;transition:.18s}
-.cfav:hover{transform:scale(1.18)}
-.cbod{padding:13px}
-.cpri{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--g);margin-bottom:3px;letter-spacing:-.015em}
-.cpri small{font-size:10px;color:var(--mu);font-weight:400}
-.ctit{font-size:14px;font-weight:600;margin-bottom:5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:.005em}
-.cloc{font-size:11.5px;color:var(--mu);margin-bottom:8px;line-height:1.5}
-.cmeta{display:flex;gap:9px;flex-wrap:wrap;border-top:1px solid var(--br);padding-top:8px}
-.cmi{font-size:11px;color:var(--mu);display:flex;align-items:center;gap:2px}
-.cmi strong{color:var(--tx);font-weight:600}
-.cft{display:flex;justify-content:space-between;align-items:center;padding:7px 13px;border-top:1px solid var(--br);background:var(--bg)}
-.trsm{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700}
-.tbar{width:40px;height:3px;background:var(--br);border-radius:2px;overflow:hidden}
-.tfil{height:100%;border-radius:2px}
-/* ── SKELETON ── */
-.sk{animation:shim 1.4s infinite;border-radius:8px}
-.skimg{width:100%;height:196px;background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%);background-size:400% 100%}
-@keyframes shim{0%{background-position:100% 0}100%{background-position:-100% 0}}
-/* ── OVERLAY ── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:500;display:flex;align-items:center;justify-content:center;padding:12px;backdrop-filter:blur(4px)}
-.modal{background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.22)}
-.mhd{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:center}
-.mtit{font-family:var(--fd);font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
-.mcls{width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s}
-.mcls:hover{background:var(--br)}
-.mbd{padding:20px}
-.mtabs{display:flex;gap:3px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:18px}
-.mtab{flex:1;padding:7px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--mu);transition:.18s}
-.mtab.on{background:var(--g);color:#fff}
-/* ── FORM ── */
-.fg{margin-bottom:13px}
-.fl{display:block;font-size:11.5px;font-weight:700;color:var(--tx);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.fl span{color:var(--rd)}
-.fi{width:100%;padding:10px 13px;border:1.5px solid var(--br);border-radius:9px;font-size:14px;outline:none;transition:.18s;background:#fff;line-height:1.5}
-.fi:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(10,92,54,.07)}
-.fbt2{width:100%;padding:11px;border-radius:9px;font-size:14.5px;font-weight:700;border:none;cursor:pointer;transition:.18s;letter-spacing:.01em}
-.fbg{background:var(--g);color:#fff}.fbg:hover{background:#083d25}.fbg:disabled{background:#9ca3af;cursor:not-allowed}
-.fbo{background:#fff;color:var(--g);border:2px solid var(--g)}.fbo:hover{background:var(--gl)}
-.frd{background:var(--rd);color:#fff}.frd:hover{background:#b91c1c}
-.divd{display:flex;align-items:center;gap:7px;margin:13px 0;color:var(--mu);font-size:11px}
-.divd::before,.divd::after{content:'';flex:1;height:1px;background:var(--br)}
-.al{padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:11px;display:flex;align-items:flex-start;gap:6px}
-.ale{background:var(--rl);color:#991b1b;border:1px solid #fecaca}
-.alo{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
-.awi{background:var(--al);color:#92400e;border:1px solid #fde68a}
-/* ── STEPS ── */
-.steps{display:flex;margin-bottom:22px}
-.sti{flex:1;text-align:center;position:relative}
-.sti:not(:last-child)::after{content:'';position:absolute;top:14px;left:55%;width:90%;height:2px;background:var(--br)}
-.sti.dn:not(:last-child)::after{background:var(--g)}
-.stci{width:28px;height:28px;border-radius:50%;border:2px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto 4px;background:#fff;color:var(--mu);position:relative;z-index:1;transition:.3s}
-.sti.ac .stci{border-color:var(--g);color:var(--g);background:var(--gl)}
-.sti.dn .stci{border-color:var(--g);background:var(--g);color:#fff}
-.stlb{font-size:9px;color:var(--mu);display:none}
-@media(min-width:480px){.stlb{display:block}}
-.sti.ac .stlb{color:var(--g);font-weight:700}
-.iuz{border:2px dashed var(--br);border-radius:10px;padding:26px 14px;text-align:center;cursor:pointer;transition:.18s;background:var(--bg)}
-.iuz:hover{border-color:var(--g);background:var(--gl)}
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.fchip{padding:7px 4px;border:1.5px solid var(--br);border-radius:7px;text-align:center;cursor:pointer;font-size:10px;transition:.18s;background:#fff;line-height:1.4}
-.fchip.on{border-color:var(--g);background:var(--gl);color:var(--g);font-weight:700}
-.prow{display:flex;gap:7px;align-items:flex-end}
-.psuf{padding:9px 11px;background:var(--bg);border:1.5px solid var(--br);border-radius:9px;font-size:11px;font-weight:700;color:var(--mu);white-space:nowrap}
-/* ── DETAIL ── */
-.bkb{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:5px;padding:14px 20px 0;color:var(--g);font-weight:700;font-size:12px;cursor:pointer;border:none;background:none}
-.bkb:hover{text-decoration:underline}
-.detl{max-width:1280px;margin:0 auto;padding:18px 20px;display:grid;grid-template-columns:1fr 320px;gap:24px}
-@media(max-width:860px){.detl{grid-template-columns:1fr}}
-.gmain{width:100%;height:370px;object-fit:cover;border-radius:var(--r);display:block;margin-bottom:20px;cursor:zoom-in}
-.dtit{font-family:var(--fd);font-size:clamp(18px,3vw,26px);font-weight:800;margin-bottom:10px;line-height:1.2;letter-spacing:-.02em}
-.dpri{font-family:var(--fd);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--g);letter-spacing:-.025em;line-height:1}
-.dtags{display:flex;gap:5px;flex-wrap:wrap;margin:11px 0 16px}
-.tag{padding:4px 9px;border-radius:6px;font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:3px}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:20px}
-.spec{background:var(--bg);border-radius:9px;padding:10px;text-align:center}
-.spico{font-size:19px;margin-bottom:2px}
-.spv{font-weight:700;font-size:14px}
-.spl{font-size:10px;color:var(--mu)}
-.frow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px}
-.ftag{padding:4px 9px;background:var(--gl);color:var(--g);border-radius:6px;font-size:11px;font-weight:700}
-/* ── CONTACT CARD ── */
-.ccrd{background:#fff;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--br);overflow:hidden;position:sticky;top:72px}
-.cchd{background:var(--g);padding:15px 17px;color:#fff}
-.ccpri{font-family:var(--fd);font-size:21px;font-weight:800}
-.ccsub{font-size:10px;opacity:.75;margin-top:2px}
-.ccbd{padding:15px;display:flex;flex-direction:column;gap:8px}
-.btn{padding:10px 14px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:.18s;width:100%;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
-.btg{background:var(--g);color:#fff}.btg:hover{background:#083d25}
-.btw{background:#25d366;color:#fff}.btw:hover{background:#1fba59}
-.bto{background:#fff;color:var(--g);border:2px solid var(--g)}.bto:hover{background:var(--gl)}
-.bty{background:var(--al);color:#92400e;border:none}.bty:hover{background:var(--au);color:#fff}
-.trdet{background:var(--bg);border-radius:9px;padding:10px;display:flex;align-items:center;gap:9px}
-.trcir{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:14px;flex-shrink:0}
-/* ── MESSAGING ── */
-.chat-modal{background:#fff;border-radius:20px;width:100%;max-width:520px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.22)}
-.chat-hd{padding:16px 18px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:10px;flex-shrink:0}
-.chat-av{width:38px;height:38px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
-.chat-info{flex:1;min-width:0}
-.chat-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-sub{font-size:11px;color:var(--mu)}
-.chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:0}
-.msg{max-width:78%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word}
-.msg-me{background:var(--g);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-.msg-them{background:var(--bg);color:var(--tx);align-self:flex-start;border:1px solid var(--br);border-bottom-left-radius:4px}
-.msg-time{font-size:9px;opacity:.65;margin-top:3px}
-.chat-inp{padding:12px 14px;border-top:1px solid var(--br);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
-.chat-inp .fi{flex:1;resize:none;min-height:38px;max-height:100px;border-radius:10px;padding:8px 12px}
-.chat-send{background:var(--g);color:#fff;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:.18s}
-.chat-send:hover{background:#083d25}
-.chat-send:disabled{background:#9ca3af;cursor:not-allowed}
-.typing{font-size:11px;color:var(--mu);font-style:italic;padding:0 14px 6px}
-/* ── NOTIF PANEL ── */
-.notif-panel{position:absolute;top:50px;right:0;background:#fff;border:1px solid var(--br);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.14);width:320px;z-index:400;overflow:hidden}
-.notif-hd{padding:12px 14px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
-.notif-tit{font-weight:800;font-size:13px;font-family:var(--fd)}
-.notif-item{padding:10px 14px;border-bottom:1px solid var(--br);display:flex;gap:10px;cursor:pointer;transition:.15s}
-.notif-item:hover{background:var(--bg)}
-.notif-item.unr{background:#f0fdf4}
-.notif-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.notif-body{flex:1;min-width:0}
-.notif-ttl{font-size:12px;font-weight:700;color:var(--tx)}
-.notif-txt{font-size:11px;color:var(--mu);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.notif-age{font-size:10px;color:var(--mu);margin-top:2px}
-.notif-empty{padding:24px;text-align:center;color:var(--mu);font-size:13px}
-/* ── MAP ── */
-.mappage{max-width:1280px;margin:0 auto;padding:20px}
-.mapsb{display:grid;grid-template-columns:290px 1fr;height:560px;border-radius:var(--r);overflow:hidden;border:1px solid var(--br);box-shadow:var(--sh)}
-@media(max-width:680px){.mapsb{grid-template-columns:1fr;height:auto}}
-.mlist{overflow-y:auto;border-right:1px solid var(--br);background:#fff}
-@media(max-width:680px){.mlist{height:180px}}
-.mitem{padding:9px 11px;border-bottom:1px solid var(--br);cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:flex-start}
-.mitem:hover,.mitem.sel{background:var(--gl)}
-.mthumb{width:52px;height:42px;border-radius:5px;object-fit:cover;flex-shrink:0}
-.minfo{flex:1;min-width:0}
-.mpri{font-family:var(--fd);font-size:11px;font-weight:800;color:var(--g)}
-.mnam{font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mloc{font-size:9px;color:var(--mu);margin-top:1px}
-#lmap{width:100%;height:100%}
-@media(max-width:680px){#lmap{height:320px}}
-.leaflet-popup-content-wrapper{border-radius:10px!important;padding:0!important;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.17)!important}
-.leaflet-popup-content{margin:0!important;width:200px!important}
-.pimg{width:100%;height:100px;object-fit:cover;display:block}
-.pbd{padding:8px 10px}
-.ppri{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#0a5c36;letter-spacing:-.01em}
-.ptit{font-size:10px;color:#374151;margin-top:2px;line-height:1.3}
-/* ── PRICE TABLE ── */
-.ptable-wrap{overflow:auto;border-radius:var(--r);border:1px solid var(--br);box-shadow:var(--sh)}
-.ptable{width:100%;border-collapse:collapse;background:#fff;min-width:600px}
-.ptable th{background:var(--bg);padding:9px 12px;font-size:10px;font-weight:700;color:var(--mu);text-align:left;border-bottom:1px solid var(--br);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.ptable td{padding:10px 12px;font-size:12px;border-bottom:1px solid var(--br);vertical-align:middle}
-.ptable tr:last-child td{border-bottom:none}
-.ptable tr:hover td{background:var(--bg)}
-.price-cell{font-family:var(--fd);font-weight:800;color:var(--g)}
-/* ── SIMULATOR ── */
-.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sim-result{background:linear-gradient(135deg,var(--g),#16a34a);color:#fff;border-radius:12px;padding:18px;margin-top:14px}
-.sim-kpi{text-align:center;padding:8px}
-.sim-val{font-family:var(--fd);font-size:22px;font-weight:800}
-.sim-lbl{font-size:10px;opacity:.8;margin-top:2px}
-.sim-divid{width:1px;background:rgba(255,255,255,.25)}
-/* ── DASHBOARD ── */
-.dash{max-width:1280px;margin:0 auto;padding:24px 20px}
-.dashg{display:grid;grid-template-columns:210px 1fr;gap:18px}
-@media(max-width:740px){.dashg{grid-template-columns:1fr}}
-.dside{display:flex;flex-direction:column;gap:5px}
-.dnb{padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);border:none;background:none;text-align:left;transition:.18s;display:flex;align-items:center;gap:7px;position:relative}
-.dnb:hover,.dnb.on{color:var(--g);background:var(--gl)}
-.dpc{background:#fff;border-radius:var(--r);border:1px solid var(--br);padding:16px;text-align:center;margin-bottom:5px}
-.dav{width:56px;height:56px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;font-weight:800;margin:0 auto 8px}
-.dname{font-weight:700;font-size:13px;margin-bottom:1px}
-.drole{font-size:10px;color:var(--g);font-weight:700;background:var(--gl);padding:2px 8px;border-radius:100px;display:inline-block;margin-top:4px}
-.kpig{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:11px;margin-bottom:18px}
-.kpi{background:#fff;border-radius:var(--r);border:1px solid var(--br);padding:14px;box-shadow:var(--sh)}
-.kpiv{font-family:var(--fd);font-size:28px;font-weight:800;color:var(--g);letter-spacing:-.03em;line-height:1}
-.kpil{font-size:11px;color:var(--mu);margin-top:1px}
-.kpiic{font-size:22px;margin-bottom:3px}
-.dtit2{font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:14px;letter-spacing:-.018em;line-height:1.2}
-.dtbl{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--br);box-shadow:var(--sh)}
-.dtbl th{background:var(--bg);padding:9px 12px;font-size:10px;font-weight:700;color:var(--mu);text-align:left;border-bottom:1px solid var(--br);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.dtbl td{padding:10px 12px;font-size:12px;border-bottom:1px solid var(--br);vertical-align:middle}
-.dtbl tr:last-child td{border-bottom:none}
-.dtbl tr:hover td{background:var(--bg)}
-.sdot{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700}
-.dot{width:5px;height:5px;border-radius:50%}
-.dg{background:#16a34a}.dy{background:#d97706}.dr{background:#dc2626}
-.abtns{display:flex;gap:4px}
-.ab{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;border:none;cursor:pointer;transition:.15s}
-.abe{background:var(--al);color:#92400e}.abe:hover{background:var(--au);color:#fff}
-.abd{background:var(--rl);color:var(--rd)}.abd:hover{background:var(--rd);color:#fff}
-.abv{background:var(--gl);color:var(--g)}.abv:hover{background:var(--g);color:#fff}
-.cbrw{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.cblbl{font-size:10px;color:var(--mu);width:80px;flex-shrink:0;text-align:right}
-.cbwrp{flex:1;height:16px;background:var(--bg);border-radius:3px;overflow:hidden}
-.cbfil{height:100%;border-radius:3px;background:var(--g);transition:.5s}
-.cbval{font-size:10px;font-weight:700;width:32px;flex-shrink:0}
-/* ── REVIEW STARS ── */
-.stars{display:flex;gap:2px}
-.star{font-size:14px;color:#d1d5db}.star.on{color:var(--au)}
-/* ── AGENCY PAGE ── */
-.agpage{max-width:1280px;margin:0 auto;padding:20px}
-.ag-hero{background:linear-gradient(135deg,var(--nv),#264f8c);border-radius:var(--r);padding:28px;color:#fff;display:flex;gap:18px;align-items:center;margin-bottom:24px;flex-wrap:wrap}
-.ag-logo{width:70px;height:70px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:26px;font-weight:800;flex-shrink:0}
-.ag-info{flex:1}
-.ag-name{font-family:var(--fd);font-size:23px;font-weight:800;margin-bottom:5px;letter-spacing:-.025em}
-.ag-meta{font-size:13px;opacity:.75}
-.ag-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
-.ag-badge{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25)}
-/* ── SIMILAR ── */
-.similar{max-width:1280px;margin:0 auto;padding:0 20px 40px}
-/* ── PROMO / FOOTER ── */
-.promo{background:var(--g);padding:42px 20px;text-align:center}
-.promo h2{font-family:var(--fd);font-size:22px;font-weight:800;color:#fff;margin-bottom:7px}
-.promo p{color:rgba(255,255,255,.68);font-size:13px;margin-bottom:18px}
-.pbtn{background:var(--au);color:#1a1a1a;padding:11px 26px;border-radius:100px;font-size:13px;font-weight:800;border:none;cursor:pointer}
-.footer{background:var(--nv);color:rgba(255,255,255,.55);padding:30px 20px;text-align:center}
-.flogo{font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;margin-bottom:4px}
-.flogo span{color:var(--au)}
-.flinks{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-.flnk{color:rgba(255,255,255,.4);text-decoration:none;font-size:11px;cursor:pointer}
-.flnk:hover{color:#fff}
-/* ── TOAST ── */
-.toast{position:fixed;bottom:20px;right:20px;z-index:1000;padding:11px 15px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.17);animation:slu .3s ease;display:flex;align-items:center;gap:6px;max-width:290px}
-.tok{background:#166534;color:#fff}.terr{background:#991b1b;color:#fff}
-@keyframes slu{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
-.ldr{display:flex;justify-content:center;align-items:center;min-height:260px}
-.spin{width:34px;height:34px;border:3px solid var(--br);border-top-color:var(--g);border-radius:50%;animation:spn .7s linear infinite}
-@keyframes spn{to{transform:rotate(360deg)}}
-/* ── COMPARE BAR ── */
-.cmpbar{position:fixed;bottom:0;left:0;right:0;background:var(--nv);color:#fff;z-index:400;padding:10px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,.25);flex-wrap:wrap}
-.cmpbar-title{font-family:var(--fd);font-weight:800;font-size:13px;flex-shrink:0}
-.cmp-items{display:flex;gap:8px;flex:1;flex-wrap:wrap;min-width:0}
-.cmp-item{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:600;max-width:160px}
-.cmp-item-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.cmp-rm{background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:14px;padding:0;flex-shrink:0;line-height:1}
-.cmp-rm:hover{color:#fff}
-.cmpbar .btn{padding:8px 18px;font-size:12px;flex-shrink:0;width:auto}
-/* ── COMPARE MODAL ── */
-.cmp-modal{background:#fff;border-radius:18px;width:100%;max-width:780px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.22)}
-.cmp-table{width:100%;border-collapse:collapse}
-.cmp-table th{background:var(--g);color:#fff;padding:12px 14px;font-family:var(--fd);font-weight:700;font-size:13px;text-align:left;position:sticky;top:0;z-index:1}
-.cmp-table th:first-child{background:var(--bg);color:var(--mu);font-family:var(--fb);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.cmp-table td{padding:10px 14px;border-bottom:1px solid var(--br);font-size:12px;vertical-align:top}
-.cmp-table td:first-child{font-weight:700;color:var(--mu);font-size:11px;text-transform:uppercase;letter-spacing:.3px;background:var(--bg);white-space:nowrap}
-.cmp-table tr:last-child td{border-bottom:none}
-.cmp-img{width:100%;height:120px;object-fit:cover;border-radius:8px;display:block;margin-bottom:6px}
-.cmp-badge-ok{color:#16a34a;font-weight:700}.cmp-badge-no{color:#6b7280}
-/* ── SPARKLINE ── */
-.sparkline-wrap{background:var(--bg);border-radius:10px;padding:14px;margin-bottom:20px}
-.sparkline-title{font-family:var(--fd);font-weight:700;font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.sparkline-delta{font-size:11px;font-weight:700;padding:2px 7px;border-radius:100px}
-/* ── SHARE POPUP ── */
-.share-popup{position:absolute;bottom:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--br);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.14);padding:12px;width:220px;z-index:200}
-.share-btn-item{width:100%;padding:8px 10px;border:none;background:none;text-align:left;cursor:pointer;font-size:12px;font-weight:600;border-radius:7px;display:flex;align-items:center;gap:8px;transition:.15s}
-.share-btn-item:hover{background:var(--bg)}
-/* ── ALERT MODAL ── */
-.alert-filters{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-/* ── PROFILE EDIT ── */
-.pedit-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-/* ── LOAD MORE ── */
-.loadmore-wrap{text-align:center;padding:28px 0}
-.loadmore-btn{background:#fff;border:2px solid var(--g);color:var(--g);padding:11px 32px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;transition:.18s}
-.loadmore-btn:hover{background:var(--g);color:#fff}
-/* ── BOOST BADGE ── */
-.boost-badge{background:linear-gradient(135deg,var(--au),#f59e0b);color:#1a1a1a;font-size:9px;font-weight:800;padding:2px 7px;border-radius:100px;display:inline-flex;align-items:center;gap:3px}
-@media(max-width:580px){
-  .navl{display:none}
-  .srow{flex-direction:column}
-  .detl{padding:12px}
-  .gmain{height:220px}
-  .fgrid{grid-template-columns:repeat(2,1fr)}
-  .sim-grid{grid-template-columns:1fr}
-  .advfilg{grid-template-columns:1fr 1fr}
-  .cmpbar{flex-direction:column;align-items:flex-start}
-  .cmp-modal{border-radius:14px 14px 0 0;max-width:100%;max-height:95vh}
-  .alert-filters{grid-template-columns:1fr}
-  .pedit-grid{grid-template-columns:1fr}
-}
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
-/* ── Role Dashboards ─────────────────────── */
-.dash-card{background:#fff;border:1px solid var(--br);border-radius:var(--r);padding:15px;box-shadow:var(--sh);margin-bottom:0}
-.empty-state{background:#fff;border:1px solid var(--br);border-radius:var(--r);padding:36px 24px;text-align:center;box-shadow:var(--sh)}
-
-/* ══ WHATSAPP BUTTON ══════════════════════════════════════ */
-.btn-wa-pro{
-  background:linear-gradient(135deg,#25d366,#128c7e);
-  color:#fff;border:none;border-radius:11px;
-  padding:11px 14px;font-size:13px;font-weight:700;
-  cursor:pointer;width:100%;display:flex;align-items:center;
-  justify-content:center;gap:8px;transition:.2s;
-  box-shadow:0 4px 14px rgba(37,211,102,.35);
-  text-decoration:none;
-}
-.btn-wa-pro:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,211,102,.45)}
-.wa-pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;
-  animation:wapulse 1.8s ease infinite;}
-@keyframes wapulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
-.wa-float{
-  position:fixed;bottom:calc(70px + env(safe-area-inset-bottom,0px));right:16px;
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,#25d366,#128c7e);
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:24px;cursor:pointer;z-index:390;
-  box-shadow:0 4px 18px rgba(37,211,102,.5);
-  border:none;transition:.22s;
-  animation:wafloat 3s ease infinite;
-}
-.wa-float:hover{transform:scale(1.1);}
-@keyframes wafloat{0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.5)}50%{box-shadow:0 4px 28px rgba(37,211,102,.75)}}
-.wa-tooltip{
-  position:absolute;right:60px;top:50%;transform:translateY(-50%);
-  background:#1a1a1a;color:#fff;padding:5px 10px;border-radius:7px;
-  font-size:11px;font-weight:700;white-space:nowrap;
-  opacity:0;pointer-events:none;transition:.18s;
-}
-.wa-float:hover .wa-tooltip{opacity:1}
-
-/* ══ ESTIMATION PRIX ══════════════════════════════════════ */
-.estim-hero-btn{
-  display:inline-flex;align-items:center;gap:7px;
-  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);
-  color:#fff;padding:9px 20px;border-radius:100px;
-  font-size:13px;font-weight:700;cursor:pointer;
-  transition:.2s;backdrop-filter:blur(4px);
-  margin-top:12px;
-}
-.estim-hero-btn:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.5)}
-.estim-result{
-  background:linear-gradient(135deg,#0a5c36,#16a34a);
-  border-radius:14px;padding:20px;color:#fff;
-  margin-top:16px;text-align:center;
-}
-.estim-price{font-family:var(--fd);font-size:30px;font-weight:800;margin:6px 0;letter-spacing:-.03em}
-.estim-range{font-size:12px;opacity:.8;margin-top:2px}
-.estim-confidence{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:3px 10px;border-radius:100px;font-size:10px;font-weight:800;
-  margin-top:8px;
-}
-.conf-high{background:rgba(255,255,255,.2)}
-.conf-medium{background:rgba(244,160,27,.3)}
-.conf-low{background:rgba(220,38,38,.3)}
-.estim-lead-gate{
-  background:var(--gl);border:1.5px solid var(--g);
-  border-radius:12px;padding:18px;margin-top:14px;
-  text-align:center;
-}
-.estim-kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.estim-kpi{background:rgba(255,255,255,.15);border-radius:9px;padding:12px;text-align:center}
-.estim-kpi-v{font-family:var(--fd);font-size:17px;font-weight:800}
-.estim-kpi-l{font-size:9px;opacity:.75;margin-top:2px}
-.estim-bar{height:6px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:12px;overflow:hidden}
-.estim-bar-fill{height:100%;border-radius:3px;background:#fff;transition:width 1s ease}
-
-/* ══ BADGE VÉRIFIÉ PHYSIQUEMENT ══════════════════════════= */
-.badge-phys{
-  display:inline-flex;align-items:center;gap:5px;
-  background:linear-gradient(135deg,#f59e0b,#d97706);
-  color:#fff;padding:4px 10px;border-radius:6px;
-  font-size:10px;font-weight:800;
-  box-shadow:0 2px 8px rgba(245,158,11,.4);
-  position:relative;overflow:hidden;
-}
-.badge-phys::before{
-  content:'';position:absolute;top:-50%;left:-60%;
-  width:40%;height:200%;
-  background:rgba(255,255,255,.3);
-  transform:skewX(-20deg);
-  animation:shimmer-gold 2.5s ease infinite;
-}
-@keyframes shimmer-gold{0%{left:-60%}100%{left:160%}}
-.badge-phys-lg{
-  display:flex;align-items:center;gap:10px;
-  background:linear-gradient(135deg,#fffbeb,#fef3c7);
-  border:1.5px solid #f59e0b;border-radius:12px;
-  padding:12px 16px;margin-bottom:14px;
-}
-.badge-phys-lg-ico{
-  width:40px;height:40px;border-radius:50%;
-  background:linear-gradient(135deg,#f59e0b,#d97706);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-}
-.badge-phys-lg-body{flex:1}
-.badge-phys-lg-title{font-weight:800;font-size:13px;color:#92400e}
-.badge-phys-lg-sub{font-size:11px;color:#b45309;margin-top:2px}
-
-/* ══ NOTATION AGENTS ══════════════════════════════════════ */
-.star-picker{display:flex;gap:4px;margin:10px 0}
-.star-picker span{font-size:28px;cursor:pointer;transition:.15s;line-height:1;user-select:none}
-.star-picker span:hover,.star-picker span.on{transform:scale(1.2)}
-.review-card{background:#fff;border:1px solid var(--br);border-radius:12px;padding:14px;box-shadow:var(--sh)}
-.review-card+.review-card{margin-top:10px}
-.review-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.review-author{font-weight:700;font-size:13px}
-.review-date{font-size:10px;color:var(--mu)}
-.review-comment{font-size:12px;color:#374151;line-height:1.6;margin:0}
-.review-reply{margin-top:10px;background:var(--gl);border-left:3px solid var(--g);border-radius:0 8px 8px 0;padding:8px 12px;font-size:11px;color:#166534}
-.review-reply-label{font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.rating-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.rating-bar-track{flex:1;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden}
-.rating-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--au),#f59e0b);transition:width .6s ease}
-.rating-summary{display:grid;grid-template-columns:auto 1fr;gap:0 16px;align-items:center;background:var(--gl);border-radius:12px;padding:16px;margin-bottom:16px}
-.rating-big-score{font-family:var(--fd);font-size:52px;font-weight:800;color:var(--g);text-align:center;line-height:1;letter-spacing:-.04em}
-.rating-big-label{font-size:11px;color:var(--mu);text-align:center;margin-top:2px}
-.add-review-btn{display:inline-flex;align-items:center;gap:6px;background:var(--g);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:.18s}
-.add-review-btn:hover{background:#083d25}
-
-/* ══ TIMELINE DISPONIBILITÉ ══════════════════════════════= */
-.avail-calendar{background:#fff;border:1px solid var(--br);border-radius:var(--r);padding:16px;margin-bottom:20px;box-shadow:var(--sh)}
-.avail-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.avail-cal-title{font-family:var(--fd);font-weight:700;font-size:14px}
-.avail-month{margin-bottom:16px}
-.avail-month-name{font-size:12px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.avail-day-name{font-size:9px;color:var(--mu);text-align:center;padding:2px 0;font-weight:700}
-.avail-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;border-radius:5px;transition:.15s}
-.avail-day.empty{background:transparent}
-.avail-day.available{background:#dcfce7;color:#166534}
-.avail-day.occupied{background:#fee2e2;color:#991b1b}
-.avail-day.blocked{background:#f3f4f6;color:#9ca3af}
-.avail-day.today{outline:2px solid var(--g);outline-offset:-1px}
-.avail-legend{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-.avail-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mu)}
-.avail-legend-dot{width:10px;height:10px;border-radius:2px}
-.avail-add-btn{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1.5px dashed var(--br);color:var(--mu);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:.18s}
-.avail-add-btn:hover{border-color:var(--g);color:var(--g)}
-.avail-period-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.avail-period-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:8px;padding:8px 12px;font-size:12px}
-.avail-period-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* ══ DIASPORA — CONVERTISSEUR DEVISES ════════════════════ */
-.currency-widget{position:relative;margin-top:6px}
-.currency-toggle{width:100%;background:linear-gradient(135deg,#1e3a5f,#2d5a9e);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;text-align:left;transition:.18s;display:flex;align-items:center;gap:6px}
-.currency-toggle:hover{background:linear-gradient(135deg,#0f1e35,#1e3a5f)}
-.currency-panel{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--br);border-radius:14px;padding:14px;box-shadow:0 8px 32px rgba(0,0,0,.15);z-index:200;min-width:280px}
-.currency-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;border:1.5px solid var(--br);cursor:pointer;transition:.15s;background:#fff}
-.currency-item:hover{border-color:var(--g);background:var(--gl)}
-.currency-item.active{border-color:var(--g);background:var(--gl)}
-
-/* ══ DIASPORA — BADGE INVESTISSEMENT ══════════════════════ */
-/* (voir InvestBadge inline styles) */
-
-/* ══ DIASPORA — SECTION HOME ══════════════════════════════ */
-.diaspora-section{margin:0;overflow:hidden}
-.diaspora-hero{position:relative;background:linear-gradient(135deg,#0a5c36 0%,#1e3a5f 50%,#0a3d26 100%);min-height:380px;display:flex;align-items:center;padding:48px 24px;overflow:hidden}
-.diaspora-hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1600') center/cover no-repeat;opacity:.12;pointer-events:none}
-.diaspora-hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;width:100%;text-align:center}
-.diaspora-pill{display:inline-block;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:16px;backdrop-filter:blur(6px)}
-.diaspora-title{font-family:var(--fd);font-size:clamp(26px,5vw,44px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:14px;letter-spacing:-.025em}
-.diaspora-title span{color:var(--au)}
-.diaspora-sub{font-size:14px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto}
-.diaspora-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
-.diaspora-flags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.diaspora-flag-item{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.85);font-weight:600;backdrop-filter:blur(4px)}
-.diaspora-guide{background:#fff;padding:32px 24px}
-.diaspora-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.diaspora-step{display:flex;gap:14px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:16px;border:1px solid var(--br)}
-.diaspora-step-num{width:24px;height:24px;border-radius:50%;background:var(--g);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.diaspora-step-ico{font-size:22px;flex-shrink:0}
-.diaspora-trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;background:var(--nv)}
-.diaspora-trust-card{padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
-.diaspora-trust-card:last-child{border-right:none}
-.diaspora-trust-ico{font-size:32px;margin-bottom:10px}
-.diaspora-trust-card div:nth-child(2){color:#fff}
-.diaspora-trust-card div:nth-child(3){color:rgba(255,255,255,.6)!important}
-
-@media(max-width:768px){
-  .diaspora-hero{padding:36px 16px;min-height:auto}
-  .diaspora-actions{flex-direction:column;align-items:center}
-  .diaspora-guide{padding:24px 16px}
-  .diaspora-trust{grid-template-columns:1fr 1fr}
-  .diaspora-trust-card{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
-  .diaspora-trust-card:last-child{border-bottom:none}
-  .currency-panel{position:fixed;bottom:80px;left:12px;right:12px;top:auto}
-}
-
-/* ══ AUTH MODAL — CHOIX TYPE PROFIL ══════════════════════ */
-.auth-type-card{display:flex;flex-direction:column;align-items:center;padding:18px 12px;border:2px solid var(--br);border-radius:14px;background:#fff;cursor:pointer;transition:.18s;gap:8px;position:relative;text-align:center}
-.auth-type-card:hover{border-color:var(--gm);background:var(--bg)}
-.auth-type-card.selected{border-color:var(--g);background:var(--gl);box-shadow:0 0 0 3px var(--gl)}
-.auth-type-ico{font-size:34px;line-height:1}
-.auth-type-title{font-family:var(--fd);font-weight:800;font-size:13px;color:var(--tx)}
-.auth-type-desc{font-size:10px;color:var(--mu);line-height:1.5}
-.auth-type-check{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--g);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800}
-
-/* ══ AUTH SIGNUP — ÉTAPES ══════════════════════════════════ */
-.auth-step-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.auth-back{background:none;border:1px solid var(--br);border-radius:7px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;color:var(--mu);transition:.15s}
-.auth-back:hover{border-color:var(--g);color:var(--g)}
-.auth-step-title{flex:1;font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px}
-.auth-step-badge{font-size:10px;font-weight:800;padding:3px 9px;border-radius:100px;letter-spacing:.3px}
-.auth-step-badge.diaspora{background:linear-gradient(135deg,#0a5c36,#1e3a5f);color:#fff}
-.auth-step-badge.resident{background:var(--gl);color:var(--g);border:1px solid var(--gm)}
-.auth-step-dots{display:flex;gap:5px;align-items:center;margin-left:auto}
-.auth-step-dots .dot{width:8px;height:8px;border-radius:50%;background:var(--br);transition:.2s}
-.auth-step-dots .dot.on{background:var(--g);width:20px;border-radius:4px}
-
-/* ══ DIASPORA FORM SECTIONS ════════════════════════════════ */
-.diaspora-form-section{background:var(--bg);border:1px solid var(--br);border-radius:12px;padding:14px;margin-bottom:14px}
-.diaspora-form-title{font-weight:800;font-size:12px;color:var(--g);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
-
-@media(max-width:480px){
-  .auth-type-card{padding:14px 8px}
-  .auth-type-ico{font-size:26px}
-  .auth-type-title{font-size:12px}
-}
-
-
-
-/* ═══════════════════════════════════════════════════════════
-   MOBILE RESPONSIVE — SENEGALSEN IMMOBILIER
-   Mobile-first, 2025 standards
-   Breakpoints: 480 | 640 | 768 | 1024 | 1280
-   ═══════════════════════════════════════════════════════════ */
-
-/* ── SAFE AREA (notched phones) ── */
-:root {
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-top: env(safe-area-inset-top, 0px);
-  --mob-nav-h: 58px;
-}
-
-/* ── SCROLL SMOOTH ── */
-html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-
-/* ── TOUCH TARGETS (min 44px) ── */
-button, a, [role="button"] { min-height: 36px; }
-
-/* ══════════════════════════════════════════════════════════
-   HAMBURGER MENU + MOBILE NAV DRAWER
-   ══════════════════════════════════════════════════════════ */
-.ham-btn {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  width: 38px;
-  height: 38px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 8px;
-  transition: background .18s;
-  flex-shrink: 0;
-}
-.ham-btn:hover { background: var(--gl); }
-.ham-line {
-  width: 22px;
-  height: 2px;
-  background: var(--tx);
-  border-radius: 2px;
-  transition: transform .25s, opacity .25s;
-}
-.ham-btn.open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.ham-btn.open .ham-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.ham-btn.open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* DRAWER */
-.nav-drawer {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: min(300px, 85vw);
-  height: 100dvh;
-  background: #fff;
-  z-index: 600;
-  box-shadow: -8px 0 40px rgba(0,0,0,.18);
-  transition: right .3s cubic-bezier(.4,0,.2,1);
-  flex-direction: column;
-  overflow-y: auto;
-  padding-bottom: calc(20px + var(--safe-bottom));
-}
-.nav-drawer.open { right: 0; }
-.nav-drawer-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.42);
-  z-index: 590;
-  backdrop-filter: blur(3px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s;
-}
-.nav-drawer-overlay.open { opacity: 1; pointer-events: auto; }
-.nav-drawer-hd {
-  padding: 18px 18px 14px;
-  border-bottom: 1px solid var(--br);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 1;
-}
-.nav-drawer-logo {
-  font-family: var(--fd);
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--g);
-}
-.nav-drawer-logo span { color: var(--au); }
-.nav-drawer-close {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--bg);
-  cursor: pointer;
-  font-size: 15px;
-  display: flex; align-items: center; justify-content: center;
-}
-.nav-drawer-body { padding: 12px 10px; flex: 1; }
-.nav-drawer-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tx);
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  transition: background .15s, color .15s;
-  margin-bottom: 2px;
-}
-.nav-drawer-item:hover, .nav-drawer-item.on {
-  background: var(--gl);
-  color: var(--g);
-}
-.nav-drawer-item-ico { font-size: 18px; width: 28px; text-align: center; }
-.nav-drawer-sep {
-  height: 1px;
-  background: var(--br);
-  margin: 10px 14px;
-}
-.nav-drawer-cta {
-  margin: 14px;
-  padding: 13px;
-  background: var(--g);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  width: calc(100% - 28px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-}
-
-/* ══════════════════════════════════════════════════════════
-   BOTTOM NAVIGATION (mobile app style)
-   ══════════════════════════════════════════════════════════ */
-.bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(var(--mob-nav-h) + var(--safe-bottom));
-  background: #fff;
-  border-top: 1px solid var(--br);
-  z-index: 350;
-  padding-bottom: var(--safe-bottom);
-  box-shadow: 0 -4px 20px rgba(0,0,0,.08);
-}
-.bottom-nav-inner {
-  display: flex;
-  height: var(--mob-nav-h);
-  align-items: stretch;
-}
-.bnav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--mu);
-  font-size: 10px;
-  font-weight: 600;
-  transition: color .18s;
-  padding: 6px 0;
-  position: relative;
-}
-.bnav-item.on { color: var(--g); }
-.bnav-ico { font-size: 20px; line-height: 1; }
-.bnav-item.on .bnav-ico { transform: scale(1.1); }
-.bnav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  width: 32px;
-  height: 3px;
-  background: var(--g);
-  border-radius: 0 0 3px 3px;
-  transition: transform .22s cubic-bezier(.34,1.56,.64,1);
-}
-.bnav-item.on::before { transform: translateX(-50%) scaleX(1); }
-.bnav-badge {
-  position: absolute;
-  top: 4px;
-  right: calc(50% - 18px);
-  background: var(--rd);
-  color: #fff;
-  border-radius: 50%;
-  min-width: 15px;
-  height: 15px;
-  font-size: 9px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #fff;
-}
-
-/* Offset content for bottom nav */
-.page-content-with-bottom-nav {
-  padding-bottom: calc(var(--mob-nav-h) + var(--safe-bottom) + 8px);
-}
-
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-   ══════════════════════════════════════════════════════════ */
-
-/* ── 1024px — TABLET ── */
-@media (max-width: 1024px) {
-  .navl { gap: 0; }
-  .nb { padding: 6px 9px; font-size: 12px; }
-  .sec { padding: 36px 16px; }
-  .dashg { grid-template-columns: 180px 1fr; }
-  .kpig { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-}
-
-/* ── 768px — TABLET PORTRAIT ── */
-@media (max-width: 768px) {
-  /* NAV */
-  .navl { display: none; }
-  .ham-btn { display: flex; }
-  .nav-drawer { display: flex; }
-  .nav-drawer-overlay { display: block; pointer-events: none; }
-  .ncta { display: none; } /* replaced by drawer CTA */
-
-  /* HERO */
-  .hero { padding: 48px 16px 64px; }
-  .hero p { font-size: 14px; }
-  .sbox { border-radius: 14px; padding: 13px; }
-  .srow { flex-direction: column; gap: 8px; }
-  .si { min-width: 0; width: 100%; }
-  .sbtn { width: 100%; padding: 12px; font-size: 14px; }
-
-  /* STATS BAR */
-  .sbari { gap: 16px; padding: 0 8px; }
-  .stn { font-size: 18px; }
-
-  /* SECTIONS */
-  .sec { padding: 28px 14px; }
-  .sech { margin-bottom: 16px; }
-  .sectl { font-size: 19px; }
-
-  /* GRID */
-  .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-
-  /* DETAIL */
-  .detl { grid-template-columns: 1fr; padding: 12px 14px; gap: 16px; }
-  .gmain { height: 240px; border-radius: 12px; }
-  .ccrd { position: static; }
-
-  /* STICKY BOTTOM CTA on detail (mobile) */
-  .detail-sticky-cta {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 12px 16px calc(12px + var(--safe-bottom));
-    background: #fff;
-    border-top: 1px solid var(--br);
-    box-shadow: 0 -4px 20px rgba(0,0,0,.1);
-    z-index: 300;
-    display: flex;
-    gap: 8px;
-  }
-  .detail-sticky-cta .btn { flex: 1; }
-
-  /* DASHBOARD */
-  .dashg { grid-template-columns: 1fr; }
-  .dside { flex-direction: row; flex-wrap: wrap; overflow-x: auto; gap: 4px; padding-bottom: 4px; }
-  .dnb { font-size: 11px; padding: 6px 10px; white-space: nowrap; }
-  .dpc { display: none; }
-  .kpig { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .kpi { padding: 12px; }
-  .kpiv { font-size: 22px; }
-  .dash { padding: 14px 12px; }
-
-  /* MAP */
-  .mappage { padding: 12px; }
-  .mapsb { grid-template-columns: 1fr; height: auto; border-radius: 12px; }
-  .mlist { height: 200px; border-right: none; border-bottom: 1px solid var(--br); }
-  #lmap { height: 340px; }
-
-  /* MODAL — full bottom sheet on mobile */
-  .ov { align-items: flex-end; padding: 0; }
-  .modal {
-    border-radius: 20px 20px 0 0;
-    max-width: 100%;
-    max-height: 92dvh;
-    width: 100%;
-    animation: slideUp .3s cubic-bezier(.4,0,.2,1);
-  }
-  @keyframes slideUp {
-    from { transform: translateY(60px); opacity: .7; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  /* CHAT — full screen */
-  .chat-modal {
-    border-radius: 20px 20px 0 0;
-    max-width: 100%;
-    max-height: 92dvh;
-    width: 100%;
-  }
-
-  /* COMPARE */
-  .cmpbar { padding: 10px 14px; gap: 8px; flex-wrap: nowrap; overflow-x: auto; }
-  .cmpbar-title { font-size: 12px; }
-  .cmp-items { flex-wrap: nowrap; overflow-x: auto; min-width: 0; }
-  .cmp-modal { border-radius: 20px 20px 0 0; max-width: 100%; max-height: 92dvh; }
-
-  /* NOTIF PANEL */
-  .notif-panel { position: fixed; top: auto; bottom: 0; right: 0; left: 0; width: 100%; border-radius: 20px 20px 0 0; border: none; max-height: 70dvh; overflow-y: auto; }
-
-  /* PRICE TABLE */
-  .ptable-wrap { font-size: 11px; }
-
-  /* AGENCY PAGE */
-  .agpage { padding: 12px; }
-  .ag-hero { padding: 20px; gap: 14px; border-radius: 12px; }
-  .ag-logo { width: 56px; height: 56px; font-size: 22px; }
-  .ag-name { font-size: 18px; }
-
-  /* FOOTER */
-  .footer { padding: 24px 14px; }
-  .flinks { gap: 10px; }
-
-  /* TOAST */
-  .toast { bottom: calc(var(--mob-nav-h) + 10px + var(--safe-bottom)); left: 12px; right: 12px; max-width: 100%; }
-
-  /* COMPARE BAR — above bottom nav */
-  .cmpbar { bottom: calc(var(--mob-nav-h) + var(--safe-bottom)); }
-
-  /* BOTTOM NAV */
-  .bottom-nav { display: block; }
-
-  /* ADD PADDING to avoid bottom nav overlap */
-  .page-wrap { padding-bottom: calc(var(--mob-nav-h) + var(--safe-bottom)); }
-
-  /* PROMO */
-  .promo { padding: 32px 16px; }
-  .promo h2 { font-size: 19px; }
-}
-
-/* ── 480px — MOBILE ── */
-@media (max-width: 480px) {
-  /* NAV */
-  .navi { height: 54px; padding: 0 14px; }
-  .logo { font-size: 16px; }
-
-  /* HERO */
-  .hero { padding: 36px 14px 52px; }
-  .hero h1 { font-size: clamp(22px, 7vw, 32px); line-height: 1.15; }
-  .sbox { padding: 11px; }
-  .stabs { flex-wrap: nowrap; overflow-x: auto; }
-
-  /* STATS */
-  .sbar { padding: 12px 14px; }
-  .sbari { gap: 8px; }
-  .stn { font-size: 16px; }
-  .stl { font-size: 9px; }
-
-  /* GRID */
-  .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cimg { height: 150px; }
-  .cbod { padding: 9px; }
-  .cpri { font-size: 14px; }
-  .ctit { font-size: 11px; }
-  .cloc { font-size: 10px; }
-  .cmeta { gap: 5px; }
-  .cmi { font-size: 10px; }
-
-  /* FILTERS */
-  .fils { gap: 5px; }
-  .fbt { font-size: 10px; padding: 5px 10px; }
-  .advfilg { grid-template-columns: 1fr; gap: 8px; }
-
-  /* SECTIONS */
-  .sec { padding: 22px 12px; }
-  .sectl { font-size: 17px; }
-
-  /* DETAIL */
-  .detl { padding: 8px 12px; }
-  .gmain { height: 200px; }
-  .dtit { font-size: clamp(16px, 4.5vw, 22px); }
-  .dpri { font-size: clamp(18px, 5vw, 26px); }
-  .sgrid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .spec { padding: 8px; }
-  .spico { font-size: 16px; }
-  .spv { font-size: 12px; }
-  .spl { font-size: 9px; }
-
-  /* FORM STEPS */
-  .fgrid { grid-template-columns: repeat(2, 1fr); }
-  .steps { gap: 0; }
-  .stlb { display: none !important; }
-  .sim-grid { grid-template-columns: 1fr; }
-  .alert-filters { grid-template-columns: 1fr; }
-  .pedit-grid { grid-template-columns: 1fr; }
-
-  /* DASHBOARD */
-  .kpig { grid-template-columns: repeat(2, 1fr); gap: 7px; }
-  .kpi { padding: 10px; }
-  .kpiv { font-size: 20px; }
-  .kpil { font-size: 10px; }
-  .dtbl th, .dtbl td { padding: 7px 8px; font-size: 11px; }
-
-  /* TABLE SCROLL */
-  .dtbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-  /* MODAL */
-  .mbd { padding: 14px; }
-  .mhd { padding: 16px 16px 0; }
-  .mtit { font-size: 17px; }
-
-  /* COMPARE */
-  .cmpbar { padding: 8px 12px; }
-  .cmpbar-title { display: none; }
-
-  /* NOTIF */
-  .notif-panel { max-height: 80dvh; }
-
-  /* FOOTER */
-  .flinks { flex-direction: column; align-items: center; gap: 8px; }
-
-  /* AGENCY */
-  .ag-hero { flex-direction: column; text-align: center; }
-  .ag-badges { justify-content: center; }
-
-  /* BOTTOM NAV LABEL — hide on very small */
-  .bnav-label { display: none; }
-  .bnav-ico { font-size: 22px; }
-  .bottom-nav-inner { justify-content: space-around; }
-}
-
-/* ── LANDSCAPE MOBILE ── */
-@media (max-width: 768px) and (orientation: landscape) {
-  .hero { padding: 28px 20px 36px; }
-  .modal, .chat-modal { max-height: 95dvh; }
-  .bottom-nav { height: calc(50px + var(--safe-bottom)); }
-  .bnav-label { display: none; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PULL-TO-REFRESH INDICATOR
-   ══════════════════════════════════════════════════════════ */
-.ptr-indicator {
-  position: fixed;
-  top: 62px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-60px);
-  background: var(--g);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-  z-index: 400;
-  transition: transform .3s;
-  pointer-events: none;
-}
-
-/* ══════════════════════════════════════════════════════════
-   SWIPE HINT on cards
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .grid-scroll-hint {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    display: flex;
-    gap: 12px;
-    padding: 0 14px 12px;
-    scrollbar-width: none;
-  }
-  .grid-scroll-hint::-webkit-scrollbar { display: none; }
-  .grid-scroll-hint .card {
-    flex: 0 0 78vw;
-    max-width: 320px;
-    scroll-snap-align: start;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════
-   CARD HOVER — disable on touch
-   ══════════════════════════════════════════════════════════ */
-@media (hover: none) {
-  .card:hover { transform: none; box-shadow: var(--sh); }
-  .ncta:hover, .sbtn:hover { transform: none; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   DARK MODE (système)
-   ══════════════════════════════════════════════════════════ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1117;
-    --wh: #1a1d27;
-    --tx: #f1f5f9;
-    --mu: #94a3b8;
-    --br: #2d3148;
-    --sh: 0 2px 12px rgba(0,0,0,.3);
-    --shh: 0 8px 32px rgba(0,0,0,.5);
-    --gl: #0a2318;
-  }
-  .nav, .modal, .chat-modal, .notif-panel, .ccrd, .card, .advfil, .kpi, .dtbl, .dpc, .sim-result-wrap, .bottom-nav, .nav-drawer {
-    background: var(--wh);
-    border-color: var(--br);
-  }
-  .fi, .si { background: var(--bg); color: var(--tx); border-color: var(--br); }
-  .sbox { background: var(--wh); }
-  .stabs, .mtabs { background: var(--bg); }
-  .bg, .spec, .mitem, .ptable th, .cft { background: var(--bg); }
-  input::placeholder, textarea::placeholder { color: var(--mu); }
-  .hero::before { opacity: .05; }
-}
-
-
-</style>
-</head>
-<body>
-<div id="root"></div>
-<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script>
-window.useState=React.useState;
-window.useEffect=React.useEffect;
-window.useRef=React.useRef;
-window.useCallback=React.useCallback;
-window.useMemo=React.useMemo;
-</script>
-<script>
+// ── Supabase client (native fetch — no external lib) ──────────────
 const SB_URL = "https://rgwozhjpufgebaiygvhr.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnd296aGpwdWZnZWJhaXlndmhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzYwODksImV4cCI6MjA4ODI1MjA4OX0.d7ljAI5JiPon0jhYs_LGTN3JeKg9bD_rgnvvgGOQFDs";
-let _session = null;
+
+let _session = null; // in-memory auth session
+
 function sbHeaders(extra = {}) {
   const h = { "Content-Type": "application/json", apikey: SB_KEY, Authorization: `Bearer ${_session?.access_token || SB_KEY}`, ...extra };
   return h;
 }
+
+// Querybuilder — mirrors the supabase-js chainable API
 function qb(table) {
   let _url = `${SB_URL}/rest/v1/${table}`;
   let _params = [];
@@ -1164,250 +21,167 @@ function qb(table) {
   let _headers = {};
   let _single = false;
   let _count = null;
+
   const api = {
     select(cols = "*", opts = {}) {
       _params.push(`select=${encodeURIComponent(cols)}`);
-      if (opts.count) {
-        _count = opts.count;
-        _headers["Prefer"] = opts.head ? "count=exact" : "count=exact";
-        if (opts.head) _method = "HEAD";
-      }
+      if (opts.count) { _count = opts.count; _headers["Prefer"] = opts.head ? "count=exact" : "count=exact"; if (opts.head) _method = "HEAD"; }
       return api;
     },
-    eq(col, val) {
-      _params.push(`${col}=eq.${encodeURIComponent(val)}`);
-      return api;
-    },
-    neq(col, val) {
-      _params.push(`${col}=neq.${encodeURIComponent(val)}`);
-      return api;
-    },
-    gt(col, val) {
-      _params.push(`${col}=gt.${encodeURIComponent(val)}`);
-      return api;
-    },
-    gte(col, val) {
-      _params.push(`${col}=gte.${encodeURIComponent(val)}`);
-      return api;
-    },
-    lt(col, val) {
-      _params.push(`${col}=lt.${encodeURIComponent(val)}`);
-      return api;
-    },
-    lte(col, val) {
-      _params.push(`${col}=lte.${encodeURIComponent(val)}`);
-      return api;
-    },
-    like(col, val) {
-      _params.push(`${col}=like.${encodeURIComponent(val)}`);
-      return api;
-    },
-    ilike(col, val) {
-      _params.push(`${col}=ilike.${encodeURIComponent(val)}`);
-      return api;
-    },
-    is(col, val) {
-      _params.push(`${col}=is.${val}`);
-      return api;
-    },
-    not(col, op, val) {
-      _params.push(`${col}=not.${op}.${encodeURIComponent(val)}`);
-      return api;
-    },
-    or(expr) {
-      _params.push(`or=(${encodeURIComponent(expr)})`);
-      return api;
-    },
-    in(col, vals) {
-      _params.push(`${col}=in.(${vals.map((v) => encodeURIComponent(v)).join(",")})`);
-      return api;
-    },
-    order(col, opts = {}) {
-      _params.push(`order=${col}${opts.ascending === false ? ".desc" : ".asc"}`);
-      return api;
-    },
-    limit(n) {
-      _params.push(`limit=${n}`);
-      return api;
-    },
-    single() {
-      _single = true;
-      _headers["Accept"] = "application/vnd.pgrst.object+json";
-      return api;
-    },
-    insert(rows) {
-      _method = "POST";
-      _body = Array.isArray(rows) ? rows : [rows];
-      _headers["Prefer"] = "return=representation";
-      return api;
-    },
-    update(row) {
-      _method = "PATCH";
-      _body = row;
-      _headers["Prefer"] = "return=representation";
-      return api;
-    },
-    delete() {
-      _method = "DELETE";
-      _headers["Prefer"] = "return=representation";
-      return api;
-    },
-    upsert(row) {
-      _method = "POST";
-      _body = Array.isArray(row) ? row : [row];
-      _headers["Prefer"] = "resolution=merge-duplicates,return=representation";
-      return api;
-    },
+    eq(col, val) { _params.push(`${col}=eq.${encodeURIComponent(val)}`); return api; },
+    neq(col, val) { _params.push(`${col}=neq.${encodeURIComponent(val)}`); return api; },
+    gt(col, val) { _params.push(`${col}=gt.${encodeURIComponent(val)}`); return api; },
+    gte(col, val) { _params.push(`${col}=gte.${encodeURIComponent(val)}`); return api; },
+    lt(col, val) { _params.push(`${col}=lt.${encodeURIComponent(val)}`); return api; },
+    lte(col, val) { _params.push(`${col}=lte.${encodeURIComponent(val)}`); return api; },
+    like(col, val) { _params.push(`${col}=like.${encodeURIComponent(val)}`); return api; },
+    ilike(col, val) { _params.push(`${col}=ilike.${encodeURIComponent(val)}`); return api; },
+    is(col, val) { _params.push(`${col}=is.${val}`); return api; },
+    not(col, op, val) { _params.push(`${col}=not.${op}.${encodeURIComponent(val)}`); return api; },
+    or(expr) { _params.push(`or=(${encodeURIComponent(expr)})`); return api; },
+    in(col, vals) { _params.push(`${col}=in.(${vals.map(v => encodeURIComponent(v)).join(",")})`); return api; },
+    order(col, opts = {}) { _params.push(`order=${col}${opts.ascending === false ? ".desc" : ".asc"}`); return api; },
+    limit(n) { _params.push(`limit=${n}`); return api; },
+    single() { _single = true; _headers["Accept"] = "application/vnd.pgrst.object+json"; return api; },
+    insert(rows) { _method = "POST"; _body = Array.isArray(rows) ? rows : [rows]; _headers["Prefer"] = "return=representation"; return api; },
+    update(row) { _method = "PATCH"; _body = row; _headers["Prefer"] = "return=representation"; return api; },
+    delete() { _method = "DELETE"; _headers["Prefer"] = "return=representation"; return api; },
+    upsert(row) { _method = "POST"; _body = Array.isArray(row) ? row : [row]; _headers["Prefer"] = "resolution=merge-duplicates,return=representation"; return api; },
     async then(resolve, reject) {
-      const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
-      const timer = ctrl ? setTimeout(() => ctrl.abort(), 12e3) : null;
+      // Timeout 12s — évite les spinners bloqués si réseau lent
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 12000) : null;
       try {
         const qs = _params.length ? "?" + _params.join("&") : "";
         const res = await fetch(_url + qs, {
           method: _method,
           headers: { ...sbHeaders(), ..._headers },
-          body: _body ? JSON.stringify(_body) : void 0,
-          signal: ctrl?.signal
+          body: _body ? JSON.stringify(_body) : undefined,
+          signal: ctrl?.signal,
         });
         if (timer) clearTimeout(timer);
         if (_method === "HEAD") {
-          const count2 = parseInt(res.headers.get("Content-Range")?.split("/")?.[1] || "0");
-          return resolve({ count: count2, data: null, error: null });
+          const count = parseInt(res.headers.get("Content-Range")?.split("/")?.[1] || "0");
+          return resolve({ count, data: null, error: null });
         }
         const text = await res.text();
         const json = text ? JSON.parse(text) : null;
         if (!res.ok) return resolve({ data: null, error: json || { message: res.statusText }, count: null });
-        const data = _single ? json : Array.isArray(json) ? json : json ? [json] : [];
+        const data = _single ? json : (Array.isArray(json) ? json : (json ? [json] : []));
         const countHdr = res.headers.get("Content-Range");
         const count = countHdr ? parseInt(countHdr.split("/")[1]) : null;
-        resolve({ data: _single ? Array.isArray(data) ? data[0] : data : data, error: null, count });
+        resolve({ data: _single ? (Array.isArray(data) ? data[0] : data) : data, error: null, count });
       } catch (e) {
         if (timer) clearTimeout(timer);
-        resolve({ data: null, error: { message: e.name === "AbortError" ? "D\xE9lai r\xE9seau d\xE9pass\xE9" : e.message }, count: null });
+        resolve({ data: null, error: { message: e.name === 'AbortError' ? 'Délai réseau dépassé' : e.message }, count: null });
       }
     },
     // Fix: .catch() manquait sur le thenable — causa tous les spinners bloqués
-    catch(fn) {
-      return Promise.resolve(this).catch(fn);
-    },
-    finally(fn) {
-      return Promise.resolve(this).finally(fn);
-    }
+    catch(fn) { return Promise.resolve(this).catch(fn); },
+    finally(fn) { return Promise.resolve(this).finally(fn); }
   };
   return api;
 }
+
+// RPC helper
 async function rpc(fn, params = {}) {
   try {
     const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
-      method: "POST",
-      headers: sbHeaders(),
-      body: JSON.stringify(params)
+      method: "POST", headers: sbHeaders(),
+      body: JSON.stringify(params),
     });
     const text = await res.text();
     const data = text ? JSON.parse(text) : null;
     return { data, error: res.ok ? null : data };
-  } catch (e) {
-    return { data: null, error: { message: e.message } };
-  }
+  } catch (e) { return { data: null, error: { message: e.message } }; }
 }
+
+// Auth helpers (REST)
 const auth = {
   async getSession() {
     const raw = sessionStorage.getItem("sb_session");
-    if (raw) {
-      _session = JSON.parse(raw);
-      return { data: { session: _session } };
-    }
+    if (raw) { _session = JSON.parse(raw); return { data: { session: _session } }; }
     return { data: { session: null } };
   },
   async signInWithPassword({ email, password }) {
     const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email, password })
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY },
+      body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (!res.ok) return { data: null, error: data };
-    _session = data;
-    sessionStorage.setItem("sb_session", JSON.stringify(data));
-    _authListeners.forEach((fn) => fn("SIGNED_IN", data));
+    _session = data; sessionStorage.setItem("sb_session", JSON.stringify(data));
+    _authListeners.forEach(fn => fn("SIGNED_IN", data));
     return { data: { user: data.user }, error: null };
   },
   async signUp({ email, password, options }) {
     const res = await fetch(`${SB_URL}/auth/v1/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email, password, data: options?.data })
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY },
+      body: JSON.stringify({ email, password, data: options?.data }),
     });
     const data = await res.json();
     if (!res.ok) return { data: null, error: data };
     return { data, error: null };
   },
   async signOut() {
-    await fetch(`${SB_URL}/auth/v1/logout`, { method: "POST", headers: sbHeaders() }).catch(() => {
-    });
-    _session = null;
-    sessionStorage.removeItem("sb_session");
-    _authListeners.forEach((fn) => fn("SIGNED_OUT", null));
+    await fetch(`${SB_URL}/auth/v1/logout`, { method: "POST", headers: sbHeaders() }).catch(() => {});
+    _session = null; sessionStorage.removeItem("sb_session");
+    _authListeners.forEach(fn => fn("SIGNED_OUT", null));
     return { error: null };
   },
   async resetPasswordForEmail(email) {
     await fetch(`${SB_URL}/auth/v1/recover`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", apikey: SB_KEY },
-      body: JSON.stringify({ email })
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY },
+      body: JSON.stringify({ email }),
     });
     return { error: null };
   },
   onAuthStateChange(fn) {
     _authListeners.push(fn);
-    return { data: { subscription: { unsubscribe: () => {
-      _authListeners = _authListeners.filter((f) => f !== fn);
-    } } } };
-  }
+    return { data: { subscription: { unsubscribe: () => { _authListeners = _authListeners.filter(f => f !== fn); } } } };
+  },
 };
+
 let _authListeners = [];
-async function withAsync(setLoading, fn, onErr) {
+
+// ─── Helper async robuste : setSaving(true) ... finally setSaving(false) ───
+// Utilisé partout pour éviter les spinners bloqués en cas d'erreur réseau
+async function withAsync(setLoading, fn, onErr){
   setLoading(true);
-  try {
-    return await fn();
-  } catch (e) {
-    onErr?.(e?.message || "Erreur r\xE9seau");
-  } finally {
-    setLoading(false);
-  }
+  try{ return await fn(); }
+  catch(e){ onErr?.(e?.message||"Erreur réseau"); }
+  finally{ setLoading(false); }
 }
-async function withLoading(setFn, asyncFn, onError) {
+
+// ─────────────────────────────────────────────────────────
+// Helper utilitaire : async avec setLoading/setSaving garanti
+// Évite les spinners bloqués en cas d'erreur réseau inattendue
+// ─────────────────────────────────────────────────────────
+async function withLoading(setFn, asyncFn, onError){
   setFn(true);
-  try {
-    await asyncFn();
-  } catch (e) {
-    onError && onError(e);
-  } finally {
-    setFn(false);
-  }
+  try{ await asyncFn(); }
+  catch(e){ onError&&onError(e); }
+  finally{ setFn(false); }
 }
+
+// Realtime (WebSocket-based, no library needed)
 const _channels = {};
 function channel(name) {
   let _handlers = [];
   let _ws = null;
   const ch = {
-    on(event, config, fn) {
-      _handlers.push({ event, config, fn });
-      return ch;
-    },
+    on(event, config, fn) { _handlers.push({ event, config, fn }); return ch; },
     subscribe() {
       try {
         const wsUrl = SB_URL.replace("https://", "wss://") + "/realtime/v1/websocket?apikey=" + SB_KEY + "&vsn=1.0.0";
         _ws = new WebSocket(wsUrl);
         _ws.onopen = () => {
           _ws.send(JSON.stringify({ topic: "realtime:*", event: "phx_join", payload: { config: { broadcast: { self: false }, presence: { key: "" } } }, ref: null }));
-          _handlers.forEach((h) => {
+          _handlers.forEach(h => {
             if (h.config?.table) {
               _ws.send(JSON.stringify({
                 topic: `realtime:${h.config.schema || "public"}:${h.config.table}${h.config.filter ? ":" + h.config.filter : ""}`,
-                event: "phx_join",
-                payload: { config: { broadcast: { self: false } } },
-                ref: null
+                event: "phx_join", payload: { config: { broadcast: { self: false } } }, ref: null,
               }));
             }
           });
@@ -1416,1095 +190,1965 @@ function channel(name) {
           try {
             const msg = JSON.parse(e.data);
             if (msg.event === "postgres_changes") {
-              _handlers.forEach((h) => {
-                if (h.event === "INSERT" || h.event === "*") h.fn({ new: msg.payload.record });
-              });
+              _handlers.forEach(h => { if (h.event === "INSERT" || h.event === "*") h.fn({ new: msg.payload.record }); });
             }
-          } catch (_) {
-          }
+          } catch (_) {}
         };
-        _ws.onerror = () => {
-        };
+        _ws.onerror = () => {};
         _channels[name] = _ws;
-      } catch (_) {
-      }
+      } catch (_) {}
       return ch;
-    }
+    },
   };
   return ch;
 }
-function removeChannel(ch) {
-  try {
-    ch?._ws?.close();
-  } catch (_) {
-  }
-}
+function removeChannel(ch) { try { ch?._ws?.close(); } catch (_) {} }
+
+// Main sb object — mirrors supabase-js surface used in this app
 const sb = {
   from: (table) => qb(table),
   rpc: (fn, params) => rpc(fn, params),
   auth,
   channel,
-  removeChannel
+  removeChannel,
 };
-const fmt = (v) => new Intl.NumberFormat("fr-SN", { style: "currency", currency: "XOF", maximumFractionDigits: 0 }).format(v);
-const fmtM = (v) => (v >= 1e9 ? (v / 1e9).toFixed(1) + "Md" : v >= 1e6 ? (v / 1e6).toFixed(0) + "M" : v >= 1e3 ? (v / 1e3).toFixed(0) + "K" : v) + " FCFA";
-const ago = (d) => {
-  const s = Math.floor((Date.now() - new Date(d)) / 1e3);
-  return s < 60 ? "\xC0 l'instant" : s < 3600 ? Math.floor(s / 60) + "min" : s < 86400 ? Math.floor(s / 3600) + "h" : Math.floor(s / 86400) + "j";
-};
-const DOC = { titre_foncier: { l: "Titre Foncier", c: "#16a34a", b: "#dcfce7" }, bail: { l: "Bail", c: "#2563eb", b: "#dbeafe" }, permis_occuper: { l: "Permis d'occuper", c: "#d97706", b: "#fef3c7" }, deliberation: { l: "D\xE9lib\xE9ration", c: "#d97706", b: "#fef3c7" }, autre: { l: "Autre doc.", c: "#6b7280", b: "#f3f4f6" } };
-const PICO = { appartement: "\u{1F3E2}", maison: "\u{1F3E0}", villa: "\u{1F3E1}", terrain: "\u{1F33F}", bureau: "\u{1F4BC}", commerce: "\u{1F3EA}" };
-const TXL = { vente: "Vente", location: "Location", location_saisonniere: "Saisonnier" };
-const TXC = { vente: { bg: "#1e3a5f", color: "#fff" }, location: { bg: "#0a5c36", color: "#fff" }, location_saisonniere: { bg: "#92400e", color: "#fff" } };
-const REGIONS = ["Dakar", "Thi\xE8s", "Saint-Louis", "Ziguinchor", "Kaolack", "Diourbel", "Louga", "Fatick", "Kolda", "Tambacounda", "K\xE9dougou", "S\xE9dhiou", "Kaffrine", "Matam"];
-const QUARTIERS = ["Almadies", "Ngor", "Ouakam", "Plateau", "Point E", "Sacr\xE9-C\u0153ur", "Mermoz", "Libert\xE9 6", "HLM", "Fann", "M\xE9dina", "Gueule Tap\xE9e", "Grand Dakar", "Parcelles Assainies", "Pikine", "Gu\xE9diawaye", "Thiaroye", "Rufisque", "Mbao"];
-const FEATS = [{ k: "piscine", l: "\u{1F3CA} Piscine" }, { k: "jardin", l: "\u{1F33F} Jardin" }, { k: "parking", l: "\u{1F697} Parking" }, { k: "gardien", l: "\u{1F46E} Gardien" }, { k: "climatisation", l: "\u2744\uFE0F Clim" }, { k: "ascenseur", l: "\u{1F6D7} Ascenseur" }, { k: "meuble", l: "\u{1F6CB}\uFE0F Meubl\xE9" }, { k: "wifi", l: "\u{1F4F6} Wifi" }, { k: "terrasse", l: "\u{1F3D7}\uFE0F Terrasse" }, { k: "balcon", l: "\u{1F305} Balcon" }, { k: "vue_mer", l: "\u{1F30A} Vue mer" }, { k: "fibre_optique", l: "\u{1F50C} Fibre" }];
-const FL = { piscine: "\u{1F3CA} Piscine", jardin: "\u{1F33F} Jardin", parking: "\u{1F697} Parking", gardien: "\u{1F46E} Gardien", climatisation: "\u2744\uFE0F Clim", ascenseur: "\u{1F6D7} Ascenseur", meuble: "\u{1F6CB}\uFE0F Meubl\xE9", wifi: "\u{1F4F6} Wifi", terrasse: "\u{1F3D7}\uFE0F Terrasse", balcon: "\u{1F305} Balcon", vue_mer: "\u{1F30A} Vue mer", fibre_optique: "\u{1F50C} Fibre", viabilise: "\u26A1 Viabilis\xE9", permis_construire: "\u{1F4CB} PC" };
-const STEPS = ["Type", "D\xE9tails", "Photos", "\xC9quipements", "Localisation"];
-const CSS = ``;
-function Trust({ score, lg, listing }) {
-  const c = score >= 80 ? "#16a34a" : score >= 60 ? "#d97706" : "#dc2626";
-  if (lg) return /* @__PURE__ */ React.createElement("div", { className: "trdet" }, /* @__PURE__ */ React.createElement("div", { className: "trcir", style: { background: c + "20", color: c, fontFamily: "var(--fd)", fontWeight: 800 } }, score), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 12, color: c, marginBottom: 4 } }, score >= 80 ? "\u2705 Annonce de confiance" : score >= 60 ? "\u26A0\uFE0F Confiance mod\xE9r\xE9e" : "\u2757 Non v\xE9rifi\xE9e"), listing && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, flexWrap: "wrap" } }, [
-    [listing.cover_image, "\u{1F4F8} Photo"],
-    [listing.description && listing.description.length > 50, "\u{1F4DD} Description"],
-    [listing.document_type, "\u{1F4C4} Document"],
-    [listing.is_verified, "\u2705 Agence certifi\xE9e"],
-    [listing.is_physically_verified, "\u{1F3C5} V\xE9rifi\xE9 terrain"],
-    [listing.latitude, "\u{1F4CD} G\xE9olocalis\xE9"],
-    [listing.video_url, "\u{1F4F9} Vid\xE9o"]
-  ].map(([ok, lbl]) => /* @__PURE__ */ React.createElement("span", { key: lbl, style: { fontSize: 9, padding: "2px 6px", borderRadius: 100, background: ok ? "#dcfce7" : "#f3f4f6", color: ok ? "#166534" : "#9ca3af", fontWeight: 600 } }, ok ? "\u2713" : "\u2717", " ", lbl)))));
-  return /* @__PURE__ */ React.createElement("div", { className: "trsm" }, /* @__PURE__ */ React.createElement("div", { className: "tbar" }, /* @__PURE__ */ React.createElement("div", { className: "tfil", style: { width: score + "%", background: c } })), /* @__PURE__ */ React.createElement("span", { style: { color: c, fontWeight: 700, fontSize: 10 } }, score));
+
+// ── Helpers ────────────────────────────────────────────────────────
+const fmt = v => new Intl.NumberFormat("fr-SN",{style:"currency",currency:"XOF",maximumFractionDigits:0}).format(v);
+const fmtM = v => (v >= 1e9 ? (v/1e9).toFixed(1)+"Md" : v >= 1e6 ? (v/1e6).toFixed(0)+"M" : v >= 1e3 ? (v/1e3).toFixed(0)+"K" : v)+" FCFA";
+const ago = d => { const s=Math.floor((Date.now()-new Date(d))/1000); return s<60?"À l'instant":s<3600?Math.floor(s/60)+"min":s<86400?Math.floor(s/3600)+"h":Math.floor(s/86400)+"j"; };
+const DOC={titre_foncier:{l:"Titre Foncier",c:"#16a34a",b:"#dcfce7"},bail:{l:"Bail",c:"#2563eb",b:"#dbeafe"},permis_occuper:{l:"Permis d'occuper",c:"#d97706",b:"#fef3c7"},deliberation:{l:"Délibération",c:"#d97706",b:"#fef3c7"},autre:{l:"Autre doc.",c:"#6b7280",b:"#f3f4f6"}};
+const PICO={appartement:"🏢",maison:"🏠",villa:"🏡",terrain:"🌿",bureau:"💼",commerce:"🏪"};
+const TXL={vente:"Vente",location:"Location",location_saisonniere:"Saisonnier"};
+const TXC={vente:{bg:"#1e3a5f",color:"#fff"},location:{bg:"#0a5c36",color:"#fff"},location_saisonniere:{bg:"#92400e",color:"#fff"}};
+const REGIONS=["Dakar","Thiès","Saint-Louis","Ziguinchor","Kaolack","Diourbel","Louga","Fatick","Kolda","Tambacounda","Kédougou","Sédhiou","Kaffrine","Matam"];
+const QUARTIERS=["Almadies","Ngor","Ouakam","Plateau","Point E","Sacré-Cœur","Mermoz","Liberté 6","HLM","Fann","Médina","Gueule Tapée","Grand Dakar","Parcelles Assainies","Pikine","Guédiawaye","Thiaroye","Rufisque","Mbao"];
+const FEATS=[{k:"piscine",l:"🏊 Piscine"},{k:"jardin",l:"🌿 Jardin"},{k:"parking",l:"🚗 Parking"},{k:"gardien",l:"👮 Gardien"},{k:"climatisation",l:"❄️ Clim"},{k:"ascenseur",l:"🛗 Ascenseur"},{k:"meuble",l:"🛋️ Meublé"},{k:"wifi",l:"📶 Wifi"},{k:"terrasse",l:"🏗️ Terrasse"},{k:"balcon",l:"🌅 Balcon"},{k:"vue_mer",l:"🌊 Vue mer"},{k:"fibre_optique",l:"🔌 Fibre"}];
+const FL={piscine:"🏊 Piscine",jardin:"🌿 Jardin",parking:"🚗 Parking",gardien:"👮 Gardien",climatisation:"❄️ Clim",ascenseur:"🛗 Ascenseur",meuble:"🛋️ Meublé",wifi:"📶 Wifi",terrasse:"🏗️ Terrasse",balcon:"🌅 Balcon",vue_mer:"🌊 Vue mer",fibre_optique:"🔌 Fibre",viabilise:"⚡ Viabilisé",permis_construire:"📋 PC"};
+const STEPS=["Type","Détails","Photos","Équipements","Localisation"];
+
+// ══════════════════════════════════════════════════════════
+// CSS
+// ══════════════════════════════════════════════════════════
+const CSS=``;
+
+// ══════════════════════════════════════════════════════════
+// TRUST
+// ══════════════════════════════════════════════════════════
+function Trust({score,lg,listing}){
+  const c=score>=80?"#16a34a":score>=60?"#d97706":"#dc2626";
+  if(lg)return(
+    <div className="trdet">
+      <div className="trcir" style={{background:c+"20",color:c,fontFamily:"var(--fd)",fontWeight:800}}>{score}</div>
+      <div style={{flex:1}}>
+        <div style={{fontWeight:700,fontSize:12,color:c,marginBottom:4}}>{score>=80?"✅ Annonce de confiance":score>=60?"⚠️ Confiance modérée":"❗ Non vérifiée"}</div>
+        {listing&&<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{[
+          [listing.cover_image,"📸 Photo"],[listing.description&&listing.description.length>50,"📝 Description"],
+          [listing.document_type,"📄 Document"],[listing.is_verified,"✅ Agence certifiée"],
+          [listing.is_physically_verified,"🏅 Vérifié terrain"],[listing.latitude,"📍 Géolocalisé"],
+          [listing.video_url,"📹 Vidéo"],
+        ].map(([ok,lbl])=><span key={lbl} style={{fontSize:9,padding:"2px 6px",borderRadius:100,background:ok?"#dcfce7":"#f3f4f6",color:ok?"#166534":"#9ca3af",fontWeight:600}}>{ok?"✓":"✗"} {lbl}</span>)}</div>}
+      </div>
+    </div>
+  );
+  return(<div className="trsm"><div className="tbar"><div className="tfil" style={{width:score+"%",background:c}}/></div><span style={{color:c,fontWeight:700,fontSize:10}}>{score}</span></div>);
 }
-function Card({ l, onClick, favIds = [], onFav }) {
-  const isFav = favIds.includes(l.id);
-  const tx = TXC[l.transaction_type] || TXC.vente;
-  const doc = DOC[l.document_type];
-  return /* @__PURE__ */ React.createElement("div", { className: "card", onClick }, /* @__PURE__ */ React.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ React.createElement("img", { className: "cimg", src: l.cover_image || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600", alt: l.title, loading: "lazy", onError: (e) => e.target.src = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600" }), /* @__PURE__ */ React.createElement("div", { className: "cbdg" }, /* @__PURE__ */ React.createElement("span", { className: "bdg", style: { background: tx.bg, color: tx.color } }, TXL[l.transaction_type]), l.is_premium && /* @__PURE__ */ React.createElement("span", { className: "bdg bprem" }, "\u2B50 Premium"), l.is_physically_verified && /* @__PURE__ */ React.createElement(PhysicalBadge, null), l.is_investment_deal && /* @__PURE__ */ React.createElement(InvestBadge, { yield_pct: l.expected_yield })), /* @__PURE__ */ React.createElement("button", { className: "cfav", onClick: (e) => {
-    e.stopPropagation();
-    onFav && onFav(l.id, !isFav);
-  }, title: isFav ? "Retirer des favoris" : "Ajouter aux favoris" }, isFav ? "\u2764\uFE0F" : "\u{1F90D}")), /* @__PURE__ */ React.createElement("div", { className: "cbod" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 4 } }, /* @__PURE__ */ React.createElement("div", { className: "cpri" }, fmt(l.price), l.transaction_type === "location" && /* @__PURE__ */ React.createElement("small", null, "/mois")), l.surface > 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", fontWeight: 600, flexShrink: 0 } }, Math.round(l.price / l.surface).toLocaleString("fr"), " F/m\xB2")), /* @__PURE__ */ React.createElement("div", { className: "ctit" }, PICO[l.property_type], " ", l.title), /* @__PURE__ */ React.createElement("div", { className: "cloc" }, "\u{1F4CD} ", l.quartier, ", ", l.city), /* @__PURE__ */ React.createElement("div", { className: "cmeta" }, l.surface && /* @__PURE__ */ React.createElement("div", { className: "cmi" }, "\u{1F4D0}", /* @__PURE__ */ React.createElement("strong", null, l.surface), "m\xB2"), l.rooms && /* @__PURE__ */ React.createElement("div", { className: "cmi" }, "\u{1F3E0}", /* @__PURE__ */ React.createElement("strong", null, l.rooms), "p."), l.bedrooms && /* @__PURE__ */ React.createElement("div", { className: "cmi" }, "\u{1F6CF}", /* @__PURE__ */ React.createElement("strong", null, l.bedrooms)), l.tour_360_url && /* @__PURE__ */ React.createElement("div", { className: "cmi", title: "Visite 360\xB0" }, /* @__PURE__ */ React.createElement("span", { style: { background: "#7c3aed22", color: "#7c3aed", borderRadius: 3, padding: "1px 5px", fontSize: 9, fontWeight: 700 } }, "360\xB0")), l.video_url && /* @__PURE__ */ React.createElement("div", { className: "cmi", title: "Vid\xE9o disponible" }, /* @__PURE__ */ React.createElement("span", { style: { background: "#0ea5e922", color: "#0ea5e9", borderRadius: 3, padding: "1px 5px", fontSize: 9, fontWeight: 700 } }, "\u25B6")), doc && /* @__PURE__ */ React.createElement("div", { className: "cmi" }, /* @__PURE__ */ React.createElement("span", { style: { background: doc.b, color: doc.c, borderRadius: 3, padding: "1px 5px", fontSize: 9, fontWeight: 700 } }, doc.l)))), /* @__PURE__ */ React.createElement("div", { className: "cft" }, /* @__PURE__ */ React.createElement(Trust, { score: l.trust_score || 0 }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 10, color: "var(--mu)" } }, "\u{1F441} ", l.views_count || 0)));
+
+// ══════════════════════════════════════════════════════════
+// CARD
+// ══════════════════════════════════════════════════════════
+function Card({l,onClick,favIds=[],onFav}){
+  const isFav=favIds.includes(l.id);
+  const tx=TXC[l.transaction_type]||TXC.vente;
+  const doc=DOC[l.document_type];
+  return(
+    <div className="card" onClick={onClick}>
+      <div style={{position:"relative"}}>
+        <img className="cimg" src={l.cover_image||"https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600"} alt={l.title} loading="lazy" onError={e=>e.target.src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600"}/>
+        <div className="cbdg">
+          <span className="bdg" style={{background:tx.bg,color:tx.color}}>{TXL[l.transaction_type]}</span>
+          {l.is_premium&&<span className="bdg bprem">⭐ Premium</span>}
+          {l.is_physically_verified&&<PhysicalBadge/>}
+          {l.is_investment_deal&&<InvestBadge yield_pct={l.expected_yield}/>}
+        </div>
+        <button className="cfav" onClick={e=>{e.stopPropagation();onFav&&onFav(l.id,!isFav)}} title={isFav?"Retirer des favoris":"Ajouter aux favoris"}>
+          {isFav?"❤️":"🤍"}
+        </button>
+      </div>
+      <div className="cbod">
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:4}}>
+          <div className="cpri">{fmt(l.price)}{l.transaction_type==="location"&&<small>/mois</small>}</div>
+          {l.surface>0&&<div style={{fontSize:10,color:"var(--mu)",fontWeight:600,flexShrink:0}}>{Math.round(l.price/l.surface).toLocaleString("fr")} F/m²</div>}
+        </div>
+        <div className="ctit">{PICO[l.property_type]} {l.title}</div>
+        <div className="cloc">📍 {l.quartier}, {l.city}</div>
+        <div className="cmeta">
+          {l.surface&&<div className="cmi">📐<strong>{l.surface}</strong>m²</div>}
+          {l.rooms&&<div className="cmi">🏠<strong>{l.rooms}</strong>p.</div>}
+          {l.bedrooms&&<div className="cmi">🛏<strong>{l.bedrooms}</strong></div>}
+          {l.tour_360_url&&<div className="cmi" title="Visite 360°"><span style={{background:"#7c3aed22",color:"#7c3aed",borderRadius:3,padding:"1px 5px",fontSize:9,fontWeight:700}}>360°</span></div>}
+          {l.video_url&&<div className="cmi" title="Vidéo disponible"><span style={{background:"#0ea5e922",color:"#0ea5e9",borderRadius:3,padding:"1px 5px",fontSize:9,fontWeight:700}}>▶</span></div>}
+          {doc&&<div className="cmi"><span style={{background:doc.b,color:doc.c,borderRadius:3,padding:"1px 5px",fontSize:9,fontWeight:700}}>{doc.l}</span></div>}
+        </div>
+      </div>
+      <div className="cft"><Trust score={l.trust_score||0}/><span style={{fontSize:10,color:"var(--mu)"}}>👁 {l.views_count||0}</span></div>
+    </div>
+  );
 }
-function Skel() {
-  return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("div", { className: "sk skimg" }), /* @__PURE__ */ React.createElement("div", { className: "cbod" }, /* @__PURE__ */ React.createElement("div", { className: "sk", style: { height: 19, width: "55%", marginBottom: 6 } }), /* @__PURE__ */ React.createElement("div", { className: "sk", style: { height: 13, width: "90%", marginBottom: 5 } }), /* @__PURE__ */ React.createElement("div", { className: "sk", style: { height: 11, width: "42%" } })));
+function Skel(){
+  return(<div className="card"><div className="sk skimg"/><div className="cbod"><div className="sk" style={{height:19,width:"55%",marginBottom:6}}/><div className="sk" style={{height:13,width:"90%",marginBottom:5}}/><div className="sk" style={{height:11,width:"42%"}}/></div></div>);
 }
-function Stars({ n }) {
-  return /* @__PURE__ */ React.createElement("div", { className: "stars" }, [1, 2, 3, 4, 5].map((i) => /* @__PURE__ */ React.createElement("span", { key: i, className: `star ${i <= n ? "on" : ""}` }, "\u2605")));
-}
-const DEMO_ACCOUNTS = [
-  { role: "admin", icon: "\u{1F510}", label: "Admin", email: "admin@senegalsen.sn", name: "Amadou Diallo", color: "#dc2626" },
-  { role: "agence", icon: "\u{1F3E2}", label: "Agence", email: "agence@senegalsen.sn", name: "Fatou Sall", color: "#0a5c36" },
-  { role: "agent", icon: "\u{1F3E1}", label: "Agent", email: "agent@senegalsen.sn", name: "Moussa Ndiaye", color: "#2563eb" },
-  { role: "promoteur", icon: "\u{1F3D7}\uFE0F", label: "Promoteur", email: "promoteur@senegalsen.sn", name: "Ibrahima Kane", color: "#7c3aed" }
+function Stars({n}){return(<div className="stars">{[1,2,3,4,5].map(i=><span key={i} className={`star ${i<=n?"on":""}`}>★</span>)}</div>);}
+
+// ══════════════════════════════════════════════════════════
+// AUTH MODAL
+// ══════════════════════════════════════════════════════════
+const DEMO_ACCOUNTS=[
+  {role:"admin",   icon:"🔐", label:"Admin",     email:"admin@senegalsen.sn",    name:"Amadou Diallo",  color:"#dc2626"},
+  {role:"agence",  icon:"🏢", label:"Agence",    email:"agence@senegalsen.sn",   name:"Fatou Sall",     color:"#0a5c36"},
+  {role:"agent",   icon:"🏡", label:"Agent",     email:"agent@senegalsen.sn",    name:"Moussa Ndiaye",  color:"#2563eb"},
+  {role:"promoteur",icon:"🏗️",label:"Promoteur", email:"promoteur@senegalsen.sn",name:"Ibrahima Kane",  color:"#7c3aed"},
 ];
-const DIASPORA_COUNTRIES = [
-  "France",
-  "Belgique",
-  "Canada",
-  "\xC9tats-Unis",
-  "Italie",
-  "Espagne",
-  "Allemagne",
-  "Suisse",
-  "Portugal",
-  "Pays-Bas",
-  "Royaume-Uni",
-  "Maroc",
-  "C\xF4te d'Ivoire",
-  "Guin\xE9e",
-  "Mauritanie",
-  "Gabon",
-  "Cameroun",
-  "S\xE9n\xE9gal (autre ville)",
-  "Autre"
+
+// ══════════════════════════════════════════════════════════
+// AUTH MODAL — inscription multi-étapes Résident / Diaspora
+// ══════════════════════════════════════════════════════════
+const DIASPORA_COUNTRIES=[
+  "France","Belgique","Canada","États-Unis","Italie","Espagne","Allemagne","Suisse","Portugal",
+  "Pays-Bas","Royaume-Uni","Maroc","Côte d'Ivoire","Guinée","Mauritanie","Gabon","Cameroun",
+  "Sénégal (autre ville)","Autre"
 ];
-const NATIONALITIES = ["S\xE9n\xE9galaise", "Fran\xE7aise", "Belge", "Canadienne", "Am\xE9ricaine", "Italienne", "Espagnole", "Autre"];
-const INVEST_TYPES = [
-  { k: "terrain", l: "\u{1F33F} Terrain" },
-  { k: "appartement", l: "\u{1F3E2} Appartement" },
-  { k: "maison", l: "\u{1F3E0} Maison" },
-  { k: "villa", l: "\u{1F3E1} Villa" },
-  { k: "locatif", l: "\u{1F4B0} Investissement locatif" },
-  { k: "commerce", l: "\u{1F3EA} Local commercial" }
+const NATIONALITIES=["Sénégalaise","Française","Belge","Canadienne","Américaine","Italienne","Espagnole","Autre"];
+const INVEST_TYPES=[
+  {k:"terrain",l:"🌿 Terrain"},
+  {k:"appartement",l:"🏢 Appartement"},
+  {k:"maison",l:"🏠 Maison"},
+  {k:"villa",l:"🏡 Villa"},
+  {k:"locatif",l:"💰 Investissement locatif"},
+  {k:"commerce",l:"🏪 Local commercial"},
 ];
-const BUDGET_RANGES = [
-  { v: "", l: "Non d\xE9fini" },
-  { v: "10000000", l: "< 10M FCFA (< 15K\u20AC)" },
-  { v: "30000000", l: "10\u201330M FCFA (15\u201345K\u20AC)" },
-  { v: "60000000", l: "30\u201360M FCFA (45\u201390K\u20AC)" },
-  { v: "100000000", l: "60\u2013100M FCFA (90\u2013150K\u20AC)" },
-  { v: "200000000", l: "100\u2013200M FCFA (150\u2013300K\u20AC)" },
-  { v: "500000000", l: "> 200M FCFA (> 300K\u20AC)" }
+const BUDGET_RANGES=[
+  {v:"",l:"Non défini"},
+  {v:"10000000",l:"< 10M FCFA (< 15K€)"},
+  {v:"30000000",l:"10–30M FCFA (15–45K€)"},
+  {v:"60000000",l:"30–60M FCFA (45–90K€)"},
+  {v:"100000000",l:"60–100M FCFA (90–150K€)"},
+  {v:"200000000",l:"100–200M FCFA (150–300K€)"},
+  {v:"500000000",l:"> 200M FCFA (> 300K€)"},
 ];
-function AuthModal({ onClose, onSuccess }) {
-  const [tab, setTab] = useState("login");
-  const [signupStep, setSignupStep] = useState(0);
-  const [userType, setUserType] = useState(null);
-  const [firstName, setFirstName] = useState(""), [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState(""), [pass, setPass] = useState(""), [passConfirm, setPassConfirm] = useState("");
-  const [countryRes, setCountryRes] = useState("France");
-  const [cityRes, setCityRes] = useState(""), [nationality, setNationality] = useState("S\xE9n\xE9galaise");
-  const [budget, setBudget] = useState(""), [propTypes, setPropTypes] = useState([]);
-  const [zone, setZone] = useState("");
-  const [loading, setLoading] = useState(false), [err, setErr] = useState(""), [ok, setOk] = useState("");
-  const [demoLoading, setDemoLoading] = useState(null);
-  const [showPass, setShowPass] = useState(false);
-  function togglePropType(k) {
-    setPropTypes((t) => t.includes(k) ? t.filter((x) => x !== k) : [...t, k]);
-  }
-  function goToStep(n) {
-    setSignupStep(n);
-    setErr("");
-    setOk("");
-  }
-  function goToTab(t) {
-    setTab(t);
-    setErr("");
-    setOk("");
-    setSignupStep(0);
-  }
-  async function login(e) {
-    e.preventDefault();
-    setErr("");
-    setLoading(true);
-    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+function AuthModal({onClose,onSuccess}){
+  const [tab,setTab]=useState("login");
+  // Signup multi-étapes
+  const [signupStep,setSignupStep]=useState(0); // 0=choix type, 1=infos base, 2=diaspora extras
+  const [userType,setUserType]=useState(null); // "resident" | "diaspora"
+  // Champs communs
+  const [firstName,setFirstName]=useState(""), [lastName,setLastName]=useState("");
+  const [email,setEmail]=useState(""), [pass,setPass]=useState(""), [passConfirm,setPassConfirm]=useState("");
+  // Champs diaspora
+  const [countryRes,setCountryRes]=useState("France");
+  const [cityRes,setCityRes]=useState(""), [nationality,setNationality]=useState("Sénégalaise");
+  const [budget,setBudget]=useState(""), [propTypes,setPropTypes]=useState([]);
+  const [zone,setZone]=useState("");
+  // États
+  const [loading,setLoading]=useState(false), [err,setErr]=useState(""), [ok,setOk]=useState("");
+  const [demoLoading,setDemoLoading]=useState(null);
+  const [showPass,setShowPass]=useState(false);
+
+  function togglePropType(k){setPropTypes(t=>t.includes(k)?t.filter(x=>x!==k):[...t,k]);}
+  function goToStep(n){setSignupStep(n);setErr("");setOk("");}
+  function goToTab(t){setTab(t);setErr("");setOk("");setSignupStep(0);}
+
+  async function login(e){
+    e.preventDefault();setErr("");setLoading(true);
+    const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
     setLoading(false);
-    if (error) {
-      setErr(error.message || "Identifiants incorrects");
-      return;
-    }
+    if(error){setErr(error.message||"Identifiants incorrects");return;}
     onSuccess(data.user);
   }
-  async function signup(e) {
-    if (e && e.preventDefault) e.preventDefault();
+
+  async function signup(e){
+    if(e&&e.preventDefault)e.preventDefault();
     setErr("");
-    if (!userType) {
-      setErr("Veuillez s\xE9lectionner votre type de compte.");
-      return;
-    }
-    if (pass !== passConfirm) {
-      setErr("Les mots de passe ne correspondent pas.");
-      return;
-    }
-    if (pass.length < 8) {
-      setErr("Mot de passe trop court (min. 8 caract\xE8res).");
-      return;
-    }
-    if (!firstName.trim() || !lastName.trim()) {
-      setErr("Pr\xE9nom et nom requis.");
-      return;
-    }
+    // Validation: type de compte obligatoire
+    if(!userType){setErr("Veuillez sélectionner votre type de compte.");return;}
+    if(pass!==passConfirm){setErr("Les mots de passe ne correspondent pas.");return;}
+    if(pass.length<8){setErr("Mot de passe trop court (min. 8 caractères).");return;}
+    if(!firstName.trim()||!lastName.trim()){setErr("Prénom et nom requis.");return;}
     setLoading(true);
-    const fullName = `${firstName.trim()} ${lastName.trim()}`;
+    const fullName=`${firstName.trim()} ${lastName.trim()}`;
+
+    // Tous les champs passés en metadata — le trigger handle_new_user les persiste
+    // dans public.profiles et auto-confirme l'email (connexion immédiate possible)
+    // Sécurité: userType ne peut jamais être null en DB
     const safeUserType = userType || "resident";
-    const metadata = {
-      full_name: fullName,
-      user_type: safeUserType,
-      ...safeUserType === "diaspora" && {
-        country_residence: countryRes || null,
-        city_residence: cityRes || null,
-        nationality: nationality || "S\xE9n\xE9galaise",
-        investment_budget: budget || null,
-        property_type_interest: propTypes.length > 0 ? propTypes : null,
-        zone_interest: zone || null
-      }
+    const metadata={
+      full_name:fullName,
+      user_type:safeUserType,
+      ...(safeUserType==="diaspora"&&{
+        country_residence:countryRes||null,
+        city_residence:cityRes||null,
+        nationality:nationality||"Sénégalaise",
+        investment_budget:budget||null,
+        property_type_interest:propTypes.length>0?propTypes:null,
+        zone_interest:zone||null,
+      })
     };
-    const { error: signUpError } = await sb.auth.signUp({ email, password: pass, options: { data: metadata } });
-    if (signUpError) {
-      setErr(signUpError.message || "Erreur lors de l'inscription.");
-      setLoading(false);
-      return;
-    }
-    const { data: loginData, error: loginError } = await sb.auth.signInWithPassword({ email, password: pass });
+
+    const{error:signUpError}=await sb.auth.signUp({email,password:pass,options:{data:metadata}});
+    if(signUpError){setErr(signUpError.message||"Erreur lors de l\'inscription.");setLoading(false);return;}
+
+    // Connexion immédiate — le trigger DB a auto-confirmé l'email
+    const{data:loginData,error:loginError}=await sb.auth.signInWithPassword({email,password:pass});
     setLoading(false);
-    if (loginError) {
-      setOk(userType === "diaspora" ? "\u{1F389} Compte Diaspora cr\xE9\xE9 ! Cliquez le lien re\xE7u par email puis reconnectez-vous." : "\u2705 Compte cr\xE9\xE9 ! V\xE9rifiez vos emails puis reconnectez-vous.");
+
+    if(loginError){
+      // Fallback : compte créé mais connexion différée (email non encore confirmé)
+      setOk(userType==="diaspora"
+        ?"🎉 Compte Diaspora créé ! Cliquez le lien reçu par email puis reconnectez-vous."
+        :"✅ Compte créé ! Vérifiez vos emails puis reconnectez-vous.");
       return;
     }
+
+    // Succès — connexion immédiate
     onSuccess(loginData.user);
+    // Note: DiasporaWelcome sera déclenché dans App.onSuccess via profil DB
   }
-  async function demoLogin(account) {
-    setDemoLoading(account.role);
-    setErr("");
-    const { data, error } = await sb.auth.signInWithPassword({ email: account.email, password: "Demo1234!" });
+  async function demoLogin(account){
+    setDemoLoading(account.role);setErr("");
+    const{data,error}=await sb.auth.signInWithPassword({email:account.email,password:"Demo1234!"});
     setDemoLoading(null);
-    if (error) {
-      setErr("Erreur d\xE9mo : " + error.message);
-      return;
-    }
+    if(error){setErr("Erreur démo : "+error.message);return;}
     onSuccess(data.user);
   }
-  const passOk = !passConfirm || pass === passConfirm;
-  const step1Valid = firstName.trim() && lastName.trim() && email.trim() && pass.length >= 8 && pass === passConfirm;
-  const DemoBlock = () => /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,#0a5c36 0%,#1a3a5c 100%)", borderRadius: 12, padding: "14px 16px", marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { color: "#fff", fontWeight: 800, fontSize: 12, marginBottom: 10, display: "flex", alignItems: "center", gap: 6, textTransform: "uppercase", letterSpacing: ".5px" } }, "\u26A1 Connexion d\xE9mo rapide"), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 } }, DEMO_ACCOUNTS.map((acc) => /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      key: acc.role,
-      onClick: () => demoLogin(acc),
-      disabled: demoLoading !== null,
-      style: { background: "rgba(255,255,255,.12)", border: "1.5px solid rgba(255,255,255,.25)", borderRadius: 9, padding: "9px 10px", cursor: "pointer", transition: ".18s", textAlign: "left", opacity: demoLoading && demoLoading !== acc.role ? 0.5 : 1 }
-    },
-    /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 18 } }, acc.icon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { color: "#fff", fontWeight: 700, fontSize: 12 } }, demoLoading === acc.role ? "Connexion..." : acc.label), /* @__PURE__ */ React.createElement("div", { style: { color: "rgba(255,255,255,.6)", fontSize: 9 } }, acc.name)))
-  ))), /* @__PURE__ */ React.createElement("div", { style: { color: "rgba(255,255,255,.45)", fontSize: 9, marginTop: 9, textAlign: "center" } }, "Mot de passe d\xE9mo : Demo1234!"));
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal", style: { maxWidth: tab === "signup" && signupStep === 2 ? 500 : 440 } }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtit" }, tab === "signup" ? signupStep === 0 ? "\u{1F464} Cr\xE9er un compte" : signupStep === 1 ? "\u{1F4DD} Inscription" : "\u{1F30D} Profil Diaspora" : "\u{1F3E1} SeneGalsen"), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, (tab === "login" || tab === "signup" && signupStep === 0) && /* @__PURE__ */ React.createElement(DemoBlock, null), (tab === "login" || tab === "signup" && signupStep === 0) && /* @__PURE__ */ React.createElement("div", { className: "divd" }, tab === "login" ? "ou connectez-vous avec votre compte" : "ou cr\xE9ez un compte gratuitement"), (tab === "login" || tab === "signup" && signupStep === 0) && /* @__PURE__ */ React.createElement("div", { className: "mtabs" }, /* @__PURE__ */ React.createElement("button", { className: `mtab ${tab === "login" ? "on" : ""}`, onClick: () => goToTab("login") }, "Connexion"), /* @__PURE__ */ React.createElement("button", { className: `mtab ${tab === "signup" ? "on" : ""}`, onClick: () => goToTab("signup") }, "Inscription")), err && /* @__PURE__ */ React.createElement("div", { className: "al ale" }, "\u274C ", err), ok && /* @__PURE__ */ React.createElement("div", { className: "al alo" }, ok), tab === "login" && /* @__PURE__ */ React.createElement("form", { onSubmit: login }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Email ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "email", placeholder: "votre@email.com", value: email, onChange: (e) => setEmail(e.target.value), required: true })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Mot de passe ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "password", placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", value: pass, onChange: (e) => setPass(e.target.value), required: true })), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", type: "submit", disabled: loading }, loading ? "Connexion..." : "Se connecter"), /* @__PURE__ */ React.createElement("p", { style: { textAlign: "center", fontSize: 11, color: "var(--mu)", marginTop: 10 } }, "Pas de compte ? ", /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => goToTab("signup"), style: { color: "var(--g)", fontWeight: 700, background: "none", border: "none", cursor: "pointer" } }, "S'inscrire gratuitement"))), tab === "signup" && signupStep === 0 && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 17, marginBottom: 6 } }, "Quel est votre profil ?"), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 12 } }, "Choisissez pour personnaliser votre exp\xE9rience")), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 } }, /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      type: "button",
-      onClick: () => setUserType("resident"),
-      className: `auth-type-card${userType === "resident" ? " selected" : ""}`
-    },
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-ico" }, "\u{1F1F8}\u{1F1F3}"),
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-title" }, "R\xE9sident"),
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-desc" }, "Je vis au S\xE9n\xE9gal et souhaite acheter, vendre ou louer un bien."),
-    userType === "resident" && /* @__PURE__ */ React.createElement("div", { className: "auth-type-check" }, "\u2713")
-  ), /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      type: "button",
-      onClick: () => setUserType("diaspora"),
-      className: `auth-type-card${userType === "diaspora" ? " selected" : ""}`
-    },
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-ico" }, "\u{1F30D}"),
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-title" }, "Diaspora / Expatri\xE9"),
-    /* @__PURE__ */ React.createElement("div", { className: "auth-type-desc" }, "Je vis \xE0 l'\xE9tranger et souhaite investir ou acqu\xE9rir un bien au S\xE9n\xE9gal."),
-    userType === "diaspora" && /* @__PURE__ */ React.createElement("div", { className: "auth-type-check" }, "\u2713")
-  )), userType && /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", onClick: () => goToStep(1) }, userType === null ? "Choisissez votre profil \u2191" : userType === "diaspora" ? "\u{1F30D} Continuer \u2014 Diaspora / Expatri\xE9" : "\u{1F1F8}\u{1F1F3} Continuer \u2014 R\xE9sident \u2192")), tab === "signup" && signupStep === 1 && /* @__PURE__ */ React.createElement("form", { onSubmit: userType === "diaspora" ? (e) => {
-    e.preventDefault();
-    if (step1Valid) goToStep(2);
-  } : signup }, /* @__PURE__ */ React.createElement("div", { className: "auth-step-header" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "auth-back", onClick: () => goToStep(0) }, "\u2190 Retour"), /* @__PURE__ */ React.createElement("div", { className: "auth-step-title" }, userType === "diaspora" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "auth-step-badge diaspora" }, "\u{1F30D} Diaspora"), " Vos informations") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "auth-step-badge resident" }, "\u{1F1F8}\u{1F1F3} R\xE9sident"), " Vos informations")), /* @__PURE__ */ React.createElement("div", { className: "auth-step-dots" }, /* @__PURE__ */ React.createElement("span", { className: "dot on" }), /* @__PURE__ */ React.createElement("span", { className: `dot${userType === "diaspora" ? " on" : ""}` }))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Pr\xE9nom ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", autoFocus: true, placeholder: "Ibrahima", value: firstName, onChange: (e) => setFirstName(e.target.value), required: true })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Nom ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Diallo", value: lastName, onChange: (e) => setLastName(e.target.value), required: true }))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Email ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "email", placeholder: "votre@email.com", value: email, onChange: (e) => setEmail(e.target.value), required: true })), /* @__PURE__ */ React.createElement("div", { className: "fg", style: { position: "relative" } }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Mot de passe ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", type: showPass ? "text" : "password", placeholder: "Min. 8 caract\xE8res", value: pass, onChange: (e) => setPass(e.target.value), minLength: 8, required: true, style: { paddingRight: 42 } }), /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => setShowPass((s) => !s), style: { position: "absolute", right: 10, top: 32, background: "none", border: "none", cursor: "pointer", fontSize: 15, color: "var(--mu)" } }, showPass ? "\u{1F648}" : "\u{1F441}")), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Confirmer le mot de passe ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement(
-    "input",
-    {
-      className: "fi",
-      type: "password",
-      placeholder: "R\xE9p\xE9tez le mot de passe",
-      value: passConfirm,
-      onChange: (e) => setPassConfirm(e.target.value),
-      required: true,
-      style: { borderColor: passConfirm && !passOk ? "#ef4444" : void 0 }
-    }
-  ), passConfirm && !passOk && /* @__PURE__ */ React.createElement("div", { style: { color: "#ef4444", fontSize: 10, marginTop: 3 } }, "Les mots de passe ne correspondent pas")), userType === "diaspora" ? /* @__PURE__ */ React.createElement("button", { type: "submit", className: "fbt2 fbg", disabled: !step1Valid }, "Continuer \u2014 Profil Diaspora \u2192") : /* @__PURE__ */ React.createElement("button", { type: "submit", className: "fbt2 fbg", disabled: loading || !step1Valid }, loading ? "Cr\xE9ation du compte..." : "\u{1F1F8}\u{1F1F3} Cr\xE9er mon compte")), tab === "signup" && signupStep === 2 && /* @__PURE__ */ React.createElement("form", { onSubmit: signup }, /* @__PURE__ */ React.createElement("div", { className: "auth-step-header" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "auth-back", onClick: () => goToStep(1) }, "\u2190 Retour"), /* @__PURE__ */ React.createElement("div", { className: "auth-step-title" }, /* @__PURE__ */ React.createElement("span", { className: "auth-step-badge diaspora" }, "\u{1F30D} Diaspora"), " Profil investisseur"), /* @__PURE__ */ React.createElement("div", { className: "auth-step-dots" }, /* @__PURE__ */ React.createElement("span", { className: "dot on" }), /* @__PURE__ */ React.createElement("span", { className: "dot on" }))), /* @__PURE__ */ React.createElement("div", { className: "diaspora-form-section" }, /* @__PURE__ */ React.createElement("div", { className: "diaspora-form-title" }, "\u{1F4CD} Localisation"), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Pays de r\xE9sidence ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("select", { className: "fi", value: countryRes, onChange: (e) => setCountryRes(e.target.value), required: true }, DIASPORA_COUNTRIES.map((c) => /* @__PURE__ */ React.createElement("option", { key: c }, c)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Ville de r\xE9sidence"), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Paris, Bruxelles...", value: cityRes, onChange: (e) => setCityRes(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Nationalit\xE9"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: nationality, onChange: (e) => setNationality(e.target.value) }, NATIONALITIES.map((n) => /* @__PURE__ */ React.createElement("option", { key: n }, n)))))), /* @__PURE__ */ React.createElement("div", { className: "diaspora-form-section" }, /* @__PURE__ */ React.createElement("div", { className: "diaspora-form-title" }, "\u{1F3E0} Projet immobilier ", /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 400, color: "var(--mu)" } }, "(optionnel mais recommand\xE9)")), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Budget d'investissement"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: budget, onChange: (e) => setBudget(e.target.value) }, BUDGET_RANGES.map((b) => /* @__PURE__ */ React.createElement("option", { key: b.v, value: b.v }, b.l)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Type(s) de bien recherch\xE9(s)"), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginTop: 4 } }, INVEST_TYPES.map(({ k, l }) => /* @__PURE__ */ React.createElement("div", { key: k, className: `fchip${propTypes.includes(k) ? " on" : ""}`, onClick: () => togglePropType(k), style: { fontSize: 11, padding: "7px 5px", textAlign: "center", cursor: "pointer" } }, l)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Zone d'int\xE9r\xEAt au S\xE9n\xE9gal"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: zone, onChange: (e) => setZone(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Non pr\xE9cis\xE9"), REGIONS.map((r) => /* @__PURE__ */ React.createElement("option", { key: r }, r)), /* @__PURE__ */ React.createElement("option", { value: "Almadies / Ngor" }, "Almadies / Ngor (Dakar)"), /* @__PURE__ */ React.createElement("option", { value: "Plateau / Centre" }, "Plateau / Centre (Dakar)"), /* @__PURE__ */ React.createElement("option", { value: "Saly / Mbour" }, "Saly / Mbour (baln\xE9aire)"), /* @__PURE__ */ React.createElement("option", { value: "Thi\xE8s / Ziguinchor" }, "Thi\xE8s / Ziguinchor")))), /* @__PURE__ */ React.createElement("button", { type: "submit", className: "fbt2 fbg", disabled: loading || !countryRes, style: { background: "linear-gradient(135deg,#0a5c36,#1e3a5f)" } }, loading ? "Cr\xE9ation du compte..." : "\u{1F30D} Cr\xE9er mon compte Diaspora"), /* @__PURE__ */ React.createElement("p", { style: { textAlign: "center", fontSize: 10, color: "var(--mu)", marginTop: 8 } }, "Vous pourrez compl\xE9ter ces informations depuis votre tableau de bord.")))));
+
+  const passOk = !passConfirm || pass===passConfirm;
+  const step1Valid = firstName.trim()&&lastName.trim()&&email.trim()&&pass.length>=8&&pass===passConfirm;
+
+  const DemoBlock=()=>(
+    <div style={{background:"linear-gradient(135deg,#0a5c36 0%,#1a3a5c 100%)",borderRadius:12,padding:"14px 16px",marginBottom:18}}>
+      <div style={{color:"#fff",fontWeight:800,fontSize:12,marginBottom:10,display:"flex",alignItems:"center",gap:6,textTransform:"uppercase",letterSpacing:".5px"}}>⚡ Connexion démo rapide</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
+        {DEMO_ACCOUNTS.map(acc=>(
+          <button key={acc.role} onClick={()=>demoLogin(acc)} disabled={demoLoading!==null}
+            style={{background:"rgba(255,255,255,.12)",border:"1.5px solid rgba(255,255,255,.25)",borderRadius:9,padding:"9px 10px",cursor:"pointer",transition:".18s",textAlign:"left",opacity:demoLoading&&demoLoading!==acc.role?.5:1}}>
+            <div style={{display:"flex",alignItems:"center",gap:7}}>
+              <span style={{fontSize:18}}>{acc.icon}</span>
+              <div>
+                <div style={{color:"#fff",fontWeight:700,fontSize:12}}>{demoLoading===acc.role?"Connexion...":acc.label}</div>
+                <div style={{color:"rgba(255,255,255,.6)",fontSize:9}}>{acc.name}</div>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+      <div style={{color:"rgba(255,255,255,.45)",fontSize:9,marginTop:9,textAlign:"center"}}>Mot de passe démo : Demo1234!</div>
+    </div>
+  );
+
+  return(
+    <div className="ov" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:tab==="signup"&&signupStep===2?500:440}}>
+        <div className="mhd">
+          <div className="mtit">
+            {tab==="signup"
+              ?signupStep===0?"👤 Créer un compte":signupStep===1?"📝 Inscription":"🌍 Profil Diaspora"
+              :"🏡 SeneGalsen"}
+          </div>
+          <button className="mcls" onClick={onClose}>✕</button>
+        </div>
+        <div className="mbd">
+
+          {/* ── DÉMO + TABS (login et step 0 uniquement) ── */}
+          {(tab==="login"||(tab==="signup"&&signupStep===0))&&<DemoBlock/>}
+          {(tab==="login"||(tab==="signup"&&signupStep===0))&&(
+            <div className="divd">{tab==="login"?"ou connectez-vous avec votre compte":"ou créez un compte gratuitement"}</div>
+          )}
+          {(tab==="login"||(tab==="signup"&&signupStep===0))&&(
+            <div className="mtabs">
+              <button className={`mtab ${tab==="login"?"on":""}`} onClick={()=>goToTab("login")}>Connexion</button>
+              <button className={`mtab ${tab==="signup"?"on":""}`} onClick={()=>goToTab("signup")}>Inscription</button>
+            </div>
+          )}
+
+          {err&&<div className="al ale">❌ {err}</div>}
+          {ok&&<div className="al alo">{ok}</div>}
+
+          {/* ── LOGIN ── */}
+          {tab==="login"&&(
+            <form onSubmit={login}>
+              <div className="fg"><label className="fl">Email <span>*</span></label><input className="fi" type="email" placeholder="votre@email.com" value={email} onChange={e=>setEmail(e.target.value)} required/></div>
+              <div className="fg"><label className="fl">Mot de passe <span>*</span></label><input className="fi" type="password" placeholder="••••••••" value={pass} onChange={e=>setPass(e.target.value)} required/></div>
+              <button className="fbt2 fbg" type="submit" disabled={loading}>{loading?"Connexion...":"Se connecter"}</button>
+              <p style={{textAlign:"center",fontSize:11,color:"var(--mu)",marginTop:10}}>Pas de compte ? <button type="button" onClick={()=>goToTab("signup")} style={{color:"var(--g)",fontWeight:700,background:"none",border:"none",cursor:"pointer"}}>S'inscrire gratuitement</button></p>
+            </form>
+          )}
+
+          {/* ── STEP 0 : Choix profil ── */}
+          {tab==="signup"&&signupStep===0&&(
+            <div>
+              <div style={{textAlign:"center",marginBottom:20}}>
+                <div style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:17,marginBottom:6}}>Quel est votre profil ?</div>
+                <div style={{color:"var(--mu)",fontSize:12}}>Choisissez pour personnaliser votre expérience</div>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:20}}>
+                <button type="button" onClick={()=>setUserType("resident")}
+                  className={`auth-type-card${userType==="resident"?" selected":""}`}>
+                  <div className="auth-type-ico">🇸🇳</div>
+                  <div className="auth-type-title">Résident</div>
+                  <div className="auth-type-desc">Je vis au Sénégal et souhaite acheter, vendre ou louer un bien.</div>
+                  {userType==="resident"&&<div className="auth-type-check">✓</div>}
+                </button>
+                <button type="button" onClick={()=>setUserType("diaspora")}
+                  className={`auth-type-card${userType==="diaspora"?" selected":""}`}>
+                  <div className="auth-type-ico">🌍</div>
+                  <div className="auth-type-title">Diaspora / Expatrié</div>
+                  <div className="auth-type-desc">Je vis à l'étranger et souhaite investir ou acquérir un bien au Sénégal.</div>
+                  {userType==="diaspora"&&<div className="auth-type-check">✓</div>}
+                </button>
+              </div>
+              {userType&&(
+                <button className="fbt2 fbg" onClick={()=>goToStep(1)}>
+                  {userType===null?"Choisissez votre profil ↑":userType==="diaspora"?"🌍 Continuer — Diaspora / Expatrié":"🇸🇳 Continuer — Résident →"}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ── STEP 1 : Infos de base ── */}
+          {tab==="signup"&&signupStep===1&&(
+            <form onSubmit={userType==="diaspora"?e=>{e.preventDefault();if(step1Valid)goToStep(2);}:signup}>
+              <div className="auth-step-header">
+                <button type="button" className="auth-back" onClick={()=>goToStep(0)}>← Retour</button>
+                <div className="auth-step-title">
+                  {userType==="diaspora"
+                    ?<><span className="auth-step-badge diaspora">🌍 Diaspora</span> Vos informations</>
+                    :<><span className="auth-step-badge resident">🇸🇳 Résident</span> Vos informations</>}
+                </div>
+                <div className="auth-step-dots">
+                  <span className="dot on"/>
+                  <span className={`dot${userType==="diaspora"?" on":""}`}/>
+                </div>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+                <div className="fg"><label className="fl">Prénom <span>*</span></label><input className="fi" autoFocus placeholder="Ibrahima" value={firstName} onChange={e=>setFirstName(e.target.value)} required/></div>
+                <div className="fg"><label className="fl">Nom <span>*</span></label><input className="fi" placeholder="Diallo" value={lastName} onChange={e=>setLastName(e.target.value)} required/></div>
+              </div>
+              <div className="fg"><label className="fl">Email <span>*</span></label><input className="fi" type="email" placeholder="votre@email.com" value={email} onChange={e=>setEmail(e.target.value)} required/></div>
+              <div className="fg" style={{position:"relative"}}>
+                <label className="fl">Mot de passe <span>*</span></label>
+                <input className="fi" type={showPass?"text":"password"} placeholder="Min. 8 caractères" value={pass} onChange={e=>setPass(e.target.value)} minLength={8} required style={{paddingRight:42}}/>
+                <button type="button" onClick={()=>setShowPass(s=>!s)} style={{position:"absolute",right:10,top:32,background:"none",border:"none",cursor:"pointer",fontSize:15,color:"var(--mu)"}}>{showPass?"🙈":"👁"}</button>
+              </div>
+              <div className="fg">
+                <label className="fl">Confirmer le mot de passe <span>*</span></label>
+                <input className="fi" type="password" placeholder="Répétez le mot de passe" value={passConfirm} onChange={e=>setPassConfirm(e.target.value)} required
+                  style={{borderColor:passConfirm&&!passOk?"#ef4444":undefined}}/>
+                {passConfirm&&!passOk&&<div style={{color:"#ef4444",fontSize:10,marginTop:3}}>Les mots de passe ne correspondent pas</div>}
+              </div>
+              {userType==="diaspora"?(
+                <button type="submit" className="fbt2 fbg" disabled={!step1Valid}>
+                  Continuer — Profil Diaspora →
+                </button>
+              ):(
+                <button type="submit" className="fbt2 fbg" disabled={loading||!step1Valid}>
+                  {loading?"Création du compte...":"🇸🇳 Créer mon compte"}
+                </button>
+              )}
+            </form>
+          )}
+
+          {/* ── STEP 2 : Profil Diaspora ── */}
+          {tab==="signup"&&signupStep===2&&(
+            <form onSubmit={signup}>
+              <div className="auth-step-header">
+                <button type="button" className="auth-back" onClick={()=>goToStep(1)}>← Retour</button>
+                <div className="auth-step-title"><span className="auth-step-badge diaspora">🌍 Diaspora</span> Profil investisseur</div>
+                <div className="auth-step-dots"><span className="dot on"/><span className="dot on"/></div>
+              </div>
+
+              <div className="diaspora-form-section">
+                <div className="diaspora-form-title">📍 Localisation</div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+                  <div className="fg">
+                    <label className="fl">Pays de résidence <span>*</span></label>
+                    <select className="fi" value={countryRes} onChange={e=>setCountryRes(e.target.value)} required>
+                      {DIASPORA_COUNTRIES.map(c=><option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="fg"><label className="fl">Ville de résidence</label><input className="fi" placeholder="Paris, Bruxelles..." value={cityRes} onChange={e=>setCityRes(e.target.value)}/></div>
+                  <div className="fg">
+                    <label className="fl">Nationalité</label>
+                    <select className="fi" value={nationality} onChange={e=>setNationality(e.target.value)}>
+                      {NATIONALITIES.map(n=><option key={n}>{n}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="diaspora-form-section">
+                <div className="diaspora-form-title">🏠 Projet immobilier <span style={{fontWeight:400,color:"var(--mu)"}}>(optionnel mais recommandé)</span></div>
+                <div className="fg">
+                  <label className="fl">Budget d'investissement</label>
+                  <select className="fi" value={budget} onChange={e=>setBudget(e.target.value)}>
+                    {BUDGET_RANGES.map(b=><option key={b.v} value={b.v}>{b.l}</option>)}
+                  </select>
+                </div>
+                <div className="fg">
+                  <label className="fl">Type(s) de bien recherché(s)</label>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6,marginTop:4}}>
+                    {INVEST_TYPES.map(({k,l})=>(
+                      <div key={k} className={`fchip${propTypes.includes(k)?" on":""}`} onClick={()=>togglePropType(k)} style={{fontSize:11,padding:"7px 5px",textAlign:"center",cursor:"pointer"}}>
+                        {l}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="fg">
+                  <label className="fl">Zone d'intérêt au Sénégal</label>
+                  <select className="fi" value={zone} onChange={e=>setZone(e.target.value)}>
+                    <option value="">Non précisé</option>
+                    {REGIONS.map(r=><option key={r}>{r}</option>)}
+                    <option value="Almadies / Ngor">Almadies / Ngor (Dakar)</option>
+                    <option value="Plateau / Centre">Plateau / Centre (Dakar)</option>
+                    <option value="Saly / Mbour">Saly / Mbour (balnéaire)</option>
+                    <option value="Thiès / Ziguinchor">Thiès / Ziguinchor</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" className="fbt2 fbg" disabled={loading||!countryRes} style={{background:"linear-gradient(135deg,#0a5c36,#1e3a5f)"}}>
+                {loading?"Création du compte...":"🌍 Créer mon compte Diaspora"}
+              </button>
+              <p style={{textAlign:"center",fontSize:10,color:"var(--mu)",marginTop:8}}>
+                Vous pourrez compléter ces informations depuis votre tableau de bord.
+              </p>
+            </form>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
 }
-function DiasporaWelcomeModal({ profile, onClose, onBrowse, onEstim }) {
-  const steps = [
-    { ico: "\u{1F50D}", t: "Explorez les annonces", d: "Filtrez par ville, budget, type de bien. Toutes les annonces affichent le score de confiance SeneGalsen." },
-    { ico: "\u{1F4E1}", t: "Demandez une visite vid\xE9o", d: "Sur n'importe quelle annonce, cliquez 'Visite \xE0 distance' pour une visite WhatsApp ou Zoom." },
-    { ico: "\u{1F4B1}", t: "Consultez les prix en devises", d: "Chaque prix est convertible en EUR, USD, CAD et GBP directement sur la fiche du bien." },
-    { ico: "\u{1F4B0}", t: "Simulez votre rentabilit\xE9", d: "Notre calculateur estime le rendement locatif brut et net de votre investissement." },
-    { ico: "\u2705", t: "Biens v\xE9rifi\xE9s physiquement", d: "Le badge \u{1F3C5} confirme qu'un agent SeneGalsen a visit\xE9 le bien et authentifi\xE9 les documents." }
+
+// ══════════════════════════════════════════════════════════
+// MODAL BIENVENUE DIASPORA
+// ══════════════════════════════════════════════════════════
+function DiasporaWelcomeModal({profile,onClose,onBrowse,onEstim}){
+  const steps=[
+    {ico:"🔍",t:"Explorez les annonces",d:"Filtrez par ville, budget, type de bien. Toutes les annonces affichent le score de confiance SeneGalsen."},
+    {ico:"📡",t:"Demandez une visite vidéo",d:"Sur n'importe quelle annonce, cliquez 'Visite à distance' pour une visite WhatsApp ou Zoom."},
+    {ico:"💱",t:"Consultez les prix en devises",d:"Chaque prix est convertible en EUR, USD, CAD et GBP directement sur la fiche du bien."},
+    {ico:"💰",t:"Simulez votre rentabilité",d:"Notre calculateur estime le rendement locatif brut et net de votre investissement."},
+    {ico:"✅",t:"Biens vérifiés physiquement",d:"Le badge 🏅 confirme qu'un agent SeneGalsen a visité le bien et authentifié les documents."},
   ];
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", style: { zIndex: 9999 }, onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal", style: { maxWidth: 520 } }, /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,#0a5c36,#1e3a5f)", borderRadius: "12px 12px 0 0", padding: "28px 24px", textAlign: "center", position: "relative" } }, /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose, style: { position: "absolute", top: 12, right: 12, color: "rgba(255,255,255,.7)" } }, "\u2715"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 52, marginBottom: 10 } }, "\u{1F30D}"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 6 } }, "Bienvenue, ", profile?.full_name?.split(" ")[0] || "cher membre", " !"), /* @__PURE__ */ React.createElement("div", { style: { color: "rgba(255,255,255,.75)", fontSize: 13, lineHeight: 1.6 } }, "Votre compte Diaspora est cr\xE9\xE9. Voici comment investir en toute s\xE9curit\xE9 au S\xE9n\xE9gal depuis ", profile?.country_residence || "l'\xE9tranger", ".")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, profile?.country_residence && /* @__PURE__ */ React.createElement("div", { style: { background: "var(--gl)", border: "1.5px solid var(--gm)", borderRadius: 10, padding: "10px 14px", marginBottom: 16, display: "flex", gap: 10, alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 22 } }, "\u{1F4CD}"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--g)" } }, /* @__PURE__ */ React.createElement("strong", null, "Profil Diaspora \u2014 ", profile.country_residence), profile.zone_interest && /* @__PURE__ */ React.createElement("span", null, " \xB7 Zone : ", profile.zone_interest), profile.investment_budget && /* @__PURE__ */ React.createElement("span", null, " \xB7 Budget : ", parseInt(profile.investment_budget).toLocaleString("fr"), " FCFA"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 } }, steps.map((s, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", gap: 12, alignItems: "flex-start", padding: "10px 12px", background: "var(--bg)", borderRadius: 10, border: "1px solid var(--br)" } }, /* @__PURE__ */ React.createElement("div", { style: { width: 32, height: 32, borderRadius: 50, background: "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14 } }, s.ico), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 2 } }, s.t), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", lineHeight: 1.5 } }, s.d))))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", onClick: onBrowse }, "\u{1F3E0} Voir les annonces"), /* @__PURE__ */ React.createElement("button", { className: "fbt2", style: { background: "var(--bg)", border: "1.5px solid var(--br)", color: "var(--tx)", fontWeight: 700 }, onClick: onEstim }, "\u{1F4B0} Simuler un investissement")), /* @__PURE__ */ React.createElement("p", { style: { textAlign: "center", fontSize: 10, color: "var(--mu)", marginTop: 12 } }, "\u{1F4E7} Un email de confirmation a \xE9t\xE9 envoy\xE9 \xE0 votre adresse. V\xE9rifiez vos spams si n\xE9cessaire."))));
+  return(
+    <div className="ov" style={{zIndex:9999}} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:520}}>
+        <div style={{background:"linear-gradient(135deg,#0a5c36,#1e3a5f)",borderRadius:"12px 12px 0 0",padding:"28px 24px",textAlign:"center",position:"relative"}}>
+          <button className="mcls" onClick={onClose} style={{position:"absolute",top:12,right:12,color:"rgba(255,255,255,.7)"}}>✕</button>
+          <div style={{fontSize:52,marginBottom:10}}>🌍</div>
+          <div style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:22,color:"#fff",marginBottom:6}}>
+            Bienvenue, {profile?.full_name?.split(" ")[0]||"cher membre"} !
+          </div>
+          <div style={{color:"rgba(255,255,255,.75)",fontSize:13,lineHeight:1.6}}>
+            Votre compte Diaspora est créé. Voici comment investir en toute sécurité au Sénégal depuis {profile?.country_residence||"l'étranger"}.
+          </div>
+        </div>
+        <div className="mbd">
+          {profile?.country_residence&&(
+            <div style={{background:"var(--gl)",border:"1.5px solid var(--gm)",borderRadius:10,padding:"10px 14px",marginBottom:16,display:"flex",gap:10,alignItems:"center"}}>
+              <span style={{fontSize:22}}>📍</span>
+              <div style={{fontSize:12,color:"var(--g)"}}>
+                <strong>Profil Diaspora — {profile.country_residence}</strong>
+                {profile.zone_interest&&<span> · Zone : {profile.zone_interest}</span>}
+                {profile.investment_budget&&<span> · Budget : {parseInt(profile.investment_budget).toLocaleString("fr")} FCFA</span>}
+              </div>
+            </div>
+          )}
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:18}}>
+            {steps.map((s,i)=>(
+              <div key={i} style={{display:"flex",gap:12,alignItems:"flex-start",padding:"10px 12px",background:"var(--bg)",borderRadius:10,border:"1px solid var(--br)"}}>
+                <div style={{width:32,height:32,borderRadius:50,background:"var(--g)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:14}}>{s.ico}</div>
+                <div><div style={{fontWeight:700,fontSize:13,marginBottom:2}}>{s.t}</div><div style={{fontSize:11,color:"var(--mu)",lineHeight:1.5}}>{s.d}</div></div>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+            <button className="fbt2 fbg" onClick={onBrowse}>🏠 Voir les annonces</button>
+            <button className="fbt2" style={{background:"var(--bg)",border:"1.5px solid var(--br)",color:"var(--tx)",fontWeight:700}} onClick={onEstim}>💰 Simuler un investissement</button>
+          </div>
+          <p style={{textAlign:"center",fontSize:10,color:"var(--mu)",marginTop:12}}>
+            📧 Un email de confirmation a été envoyé à votre adresse. Vérifiez vos spams si nécessaire.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
-function ListingForm({ user, onClose, onSuccess }) {
-  const [step, setStep] = useState(0), [loading, setLoading] = useState(false), [err, setErr] = useState("");
-  const [form, setForm] = useState({ transaction_type: "vente", property_type: "appartement", title: "", description: "", price: "", surface: "", rooms: "", bedrooms: "", bathrooms: "", document_type: "titre_foncier", is_negotiable: false, region: "Dakar", city: "Dakar", commune: "", quartier: "", cover_image: "", features: {} });
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-  const tog = (k) => setForm((f) => ({ ...f, features: { ...f.features, [k]: !f.features[k] } }));
-  const valid = [() => form.transaction_type && form.property_type, () => form.title && form.price, () => true, () => true, () => form.city && form.quartier];
-  async function submit() {
-    setErr("");
-    setLoading(true);
-    const p = { owner_id: user.id, transaction_type: form.transaction_type, property_type: form.property_type, title: form.title, description: form.description, price: parseInt(String(form.price).replace(/\D/g, "")) || 0, surface: parseFloat(form.surface) || null, rooms: parseInt(form.rooms) || null, bedrooms: parseInt(form.bedrooms) || null, bathrooms: parseInt(form.bathrooms) || null, document_type: form.document_type, is_negotiable: form.is_negotiable, region: form.region, city: form.city, commune: form.commune, quartier: form.quartier, cover_image: form.cover_image || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800", features: form.features, trust_score: 40, status: "active" };
-    const { data, error } = await sb.from("listings").insert([p]).select().single();
+
+// ══════════════════════════════════════════════════════════
+// LISTING FORM
+// ══════════════════════════════════════════════════════════
+function ListingForm({user,onClose,onSuccess}){
+  const [step,setStep]=useState(0), [loading,setLoading]=useState(false), [err,setErr]=useState("");
+  const [form,setForm]=useState({transaction_type:"vente",property_type:"appartement",title:"",description:"",price:"",surface:"",rooms:"",bedrooms:"",bathrooms:"",document_type:"titre_foncier",is_negotiable:false,region:"Dakar",city:"Dakar",commune:"",quartier:"",cover_image:"",features:{}});
+  const set=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const tog=k=>setForm(f=>({...f,features:{...f.features,[k]:!f.features[k]}}));
+  const valid=[()=>form.transaction_type&&form.property_type,()=>form.title&&form.price,()=>true,()=>true,()=>form.city&&form.quartier];
+
+  async function submit(){
+    setErr("");setLoading(true);
+    const p={owner_id:user.id,transaction_type:form.transaction_type,property_type:form.property_type,title:form.title,description:form.description,price:parseInt(String(form.price).replace(/\D/g,""))||0,surface:parseFloat(form.surface)||null,rooms:parseInt(form.rooms)||null,bedrooms:parseInt(form.bedrooms)||null,bathrooms:parseInt(form.bathrooms)||null,document_type:form.document_type,is_negotiable:form.is_negotiable,region:form.region,city:form.city,commune:form.commune,quartier:form.quartier,cover_image:form.cover_image||"https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800",features:form.features,trust_score:40,status:"active"};
+    const{data,error}=await sb.from("listings").insert([p]).select().single();
     setLoading(false);
-    if (error) {
-      setErr(error.message);
-      return;
-    }
+    if(error){setErr(error.message);return;}
     onSuccess(data);
   }
-  const S0 = () => /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Type de transaction ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 7 } }, Object.entries(TXL).map(([v, l]) => /* @__PURE__ */ React.createElement("button", { key: v, type: "button", onClick: () => set("transaction_type", v), style: { flex: 1, padding: "9px 5px", borderRadius: 9, border: `2px solid ${form.transaction_type === v ? "var(--g)" : "var(--br)"}`, background: form.transaction_type === v ? "var(--gl)" : "#fff", color: form.transaction_type === v ? "var(--g)" : "var(--mu)", fontWeight: 700, cursor: "pointer", fontSize: 12 } }, l)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Type de bien ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 7 } }, Object.entries(PICO).map(([v, ico]) => /* @__PURE__ */ React.createElement("button", { key: v, type: "button", onClick: () => set("property_type", v), style: { padding: "10px 5px", borderRadius: 9, border: `2px solid ${form.property_type === v ? "var(--g)" : "var(--br)"}`, background: form.property_type === v ? "var(--gl)" : "#fff", color: form.property_type === v ? "var(--g)" : "var(--tx)", fontWeight: 700, cursor: "pointer", textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 19 } }, ico), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, marginTop: 2 } }, v.charAt(0).toUpperCase() + v.slice(1)))))));
-  const S1 = () => /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Titre ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Belle villa avec piscine \u2014 Almadies", value: form.title, onChange: (e) => set("title", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Description"), /* @__PURE__ */ React.createElement("textarea", { className: "fi", rows: 3, placeholder: "D\xE9crivez votre bien en d\xE9tail...", value: form.description, onChange: (e) => set("description", e.target.value), style: { resize: "vertical" } })), /* @__PURE__ */ React.createElement("div", { className: "prow" }, /* @__PURE__ */ React.createElement("div", { className: "fg", style: { flex: 1 } }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Prix (FCFA) ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Ex: 45000000", value: form.price, onChange: (e) => set("price", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "psuf" }, form.transaction_type === "location" ? "/mois" : "XOF")), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Surface (m\xB2)"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", placeholder: "120", value: form.surface, onChange: (e) => set("surface", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Pi\xE8ces"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", placeholder: "5", value: form.rooms, onChange: (e) => set("rooms", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Chambres"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", placeholder: "3", value: form.bedrooms, onChange: (e) => set("bedrooms", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Sdb"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", placeholder: "2", value: form.bathrooms, onChange: (e) => set("bathrooms", e.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Document"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: form.document_type, onChange: (e) => set("document_type", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "titre_foncier" }, "\u{1F4D7} Titre Foncier"), /* @__PURE__ */ React.createElement("option", { value: "bail" }, "\u{1F4D8} Bail"), /* @__PURE__ */ React.createElement("option", { value: "permis_occuper" }, "\u{1F4D9} Permis d'occuper"), /* @__PURE__ */ React.createElement("option", { value: "deliberation" }, "\u{1F4D2} D\xE9lib\xE9ration"), /* @__PURE__ */ React.createElement("option", { value: "autre" }, "\u{1F4C4} Autre"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7 } }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", id: "ng", checked: form.is_negotiable, onChange: (e) => set("is_negotiable", e.target.checked), style: { width: 14, height: 14, cursor: "pointer" } }), /* @__PURE__ */ React.createElement("label", { htmlFor: "ng", style: { fontSize: 13, cursor: "pointer" } }, "Prix n\xE9gociable")));
-  const S2 = () => /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "URL photo de couverture"), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "https://images.unsplash.com/...", value: form.cover_image, onChange: (e) => set("cover_image", e.target.value) }), /* @__PURE__ */ React.createElement("p", { style: { fontSize: 10, color: "var(--mu)", marginTop: 3 } }, "Collez l'URL d'une image h\xE9berg\xE9e")), form.cover_image && /* @__PURE__ */ React.createElement("div", { style: { borderRadius: 9, overflow: "hidden", marginTop: 8 } }, /* @__PURE__ */ React.createElement("img", { src: form.cover_image, alt: "preview", style: { width: "100%", height: 150, objectFit: "cover", display: "block" }, onError: (e) => e.target.style.display = "none" })), /* @__PURE__ */ React.createElement("div", { className: "iuz", style: { marginTop: 11 }, onClick: () => alert("Upload Supabase Storage disponible en production.") }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 24, marginBottom: 4 } }, "\u{1F4F8}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13 } }, "Ajouter des photos"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", marginTop: 2 } }, "JPG, PNG, WebP \xB7 Max 20 photos")));
-  const S3 = () => /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl", style: { marginBottom: 10 } }, "\xC9quipements"), /* @__PURE__ */ React.createElement("div", { className: "fgrid" }, FEATS.map(({ k, l }) => /* @__PURE__ */ React.createElement("div", { key: k, className: `fchip ${form.features[k] ? "on" : ""}`, onClick: () => tog(k) }, l))));
-  const S4 = () => /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "R\xE9gion ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("select", { className: "fi", value: form.region, onChange: (e) => set("region", e.target.value) }, REGIONS.map((r) => /* @__PURE__ */ React.createElement("option", { key: r }, r)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Ville ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Dakar", value: form.city, onChange: (e) => set("city", e.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Commune"), /* @__PURE__ */ React.createElement("input", { className: "fi", placeholder: "Almadies", value: form.commune, onChange: (e) => set("commune", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Quartier ", /* @__PURE__ */ React.createElement("span", null, "*")), /* @__PURE__ */ React.createElement("input", { className: "fi", list: "ql", placeholder: "Almadies, Point E...", value: form.quartier, onChange: (e) => set("quartier", e.target.value) }), /* @__PURE__ */ React.createElement("datalist", { id: "ql" }, QUARTIERS.map((q) => /* @__PURE__ */ React.createElement("option", { key: q, value: q })))));
-  const stepsComp = [/* @__PURE__ */ React.createElement(S0, null), /* @__PURE__ */ React.createElement(S1, null), /* @__PURE__ */ React.createElement(S2, null), /* @__PURE__ */ React.createElement(S3, null), /* @__PURE__ */ React.createElement(S4, null)];
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal", style: { maxWidth: 530 } }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtit" }, "+ D\xE9poser une annonce"), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, /* @__PURE__ */ React.createElement("div", { className: "steps" }, STEPS.map((s, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: `sti ${i < step ? "dn" : ""} ${i === step ? "ac" : ""}` }, /* @__PURE__ */ React.createElement("div", { className: "stci" }, i < step ? "\u2713" : i + 1), /* @__PURE__ */ React.createElement("div", { className: "stlb" }, s)))), /* @__PURE__ */ React.createElement("div", { style: { minHeight: 250 } }, stepsComp[step]), err && /* @__PURE__ */ React.createElement("div", { className: "al ale", style: { marginTop: 8 } }, "\u274C ", err), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginTop: 16 } }, step > 0 && /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbo", style: { flex: 1 }, onClick: () => setStep((s) => s - 1) }, "\u2190 Pr\xE9c\xE9dent"), step < STEPS.length - 1 ? /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 2 }, onClick: () => valid[step]() && setStep((s) => s + 1), disabled: !valid[step]() }, "Suivant \u2192") : /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 2 }, onClick: submit, disabled: loading || !valid[step]() }, loading ? "Publication..." : "\u{1F4E4} Publier l'annonce")), /* @__PURE__ */ React.createElement("p", { style: { textAlign: "center", fontSize: 10, color: "var(--mu)", marginTop: 7 } }, "\xC9tape ", step + 1, "/", STEPS.length, " \xB7 ", STEPS[step]))));
+  const S0=()=>(
+    <div>
+      <div className="fg">
+        <label className="fl">Type de transaction <span>*</span></label>
+        <div style={{display:"flex",gap:7}}>{Object.entries(TXL).map(([v,l])=>(<button key={v} type="button" onClick={()=>set("transaction_type",v)} style={{flex:1,padding:"9px 5px",borderRadius:9,border:`2px solid ${form.transaction_type===v?"var(--g)":"var(--br)"}`,background:form.transaction_type===v?"var(--gl)":"#fff",color:form.transaction_type===v?"var(--g)":"var(--mu)",fontWeight:700,cursor:"pointer",fontSize:12}}>{l}</button>))}</div>
+      </div>
+      <div className="fg">
+        <label className="fl">Type de bien <span>*</span></label>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7}}>{Object.entries(PICO).map(([v,ico])=>(<button key={v} type="button" onClick={()=>set("property_type",v)} style={{padding:"10px 5px",borderRadius:9,border:`2px solid ${form.property_type===v?"var(--g)":"var(--br)"}`,background:form.property_type===v?"var(--gl)":"#fff",color:form.property_type===v?"var(--g)":"var(--tx)",fontWeight:700,cursor:"pointer",textAlign:"center"}}><div style={{fontSize:19}}>{ico}</div><div style={{fontSize:10,marginTop:2}}>{v.charAt(0).toUpperCase()+v.slice(1)}</div></button>))}</div>
+      </div>
+    </div>
+  );
+  const S1=()=>(<div>
+    <div className="fg"><label className="fl">Titre <span>*</span></label><input className="fi" placeholder="Belle villa avec piscine — Almadies" value={form.title} onChange={e=>set("title",e.target.value)}/></div>
+    <div className="fg"><label className="fl">Description</label><textarea className="fi" rows={3} placeholder="Décrivez votre bien en détail..." value={form.description} onChange={e=>set("description",e.target.value)} style={{resize:"vertical"}}/></div>
+    <div className="prow"><div className="fg" style={{flex:1}}><label className="fl">Prix (FCFA) <span>*</span></label><input className="fi" placeholder="Ex: 45000000" value={form.price} onChange={e=>set("price",e.target.value)}/></div><div className="psuf">{form.transaction_type==="location"?"/mois":"XOF"}</div></div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+      <div className="fg"><label className="fl">Surface (m²)</label><input className="fi" type="number" placeholder="120" value={form.surface} onChange={e=>set("surface",e.target.value)}/></div>
+      <div className="fg"><label className="fl">Pièces</label><input className="fi" type="number" placeholder="5" value={form.rooms} onChange={e=>set("rooms",e.target.value)}/></div>
+      <div className="fg"><label className="fl">Chambres</label><input className="fi" type="number" placeholder="3" value={form.bedrooms} onChange={e=>set("bedrooms",e.target.value)}/></div>
+      <div className="fg"><label className="fl">Sdb</label><input className="fi" type="number" placeholder="2" value={form.bathrooms} onChange={e=>set("bathrooms",e.target.value)}/></div>
+    </div>
+    <div className="fg"><label className="fl">Document</label><select className="fi" value={form.document_type} onChange={e=>set("document_type",e.target.value)}><option value="titre_foncier">📗 Titre Foncier</option><option value="bail">📘 Bail</option><option value="permis_occuper">📙 Permis d'occuper</option><option value="deliberation">📒 Délibération</option><option value="autre">📄 Autre</option></select></div>
+    <div style={{display:"flex",alignItems:"center",gap:7}}><input type="checkbox" id="ng" checked={form.is_negotiable} onChange={e=>set("is_negotiable",e.target.checked)} style={{width:14,height:14,cursor:"pointer"}}/><label htmlFor="ng" style={{fontSize:13,cursor:"pointer"}}>Prix négociable</label></div>
+  </div>);
+  const S2=()=>(<div>
+    <div className="fg"><label className="fl">URL photo de couverture</label><input className="fi" placeholder="https://images.unsplash.com/..." value={form.cover_image} onChange={e=>set("cover_image",e.target.value)}/><p style={{fontSize:10,color:"var(--mu)",marginTop:3}}>Collez l'URL d'une image hébergée</p></div>
+    {form.cover_image&&<div style={{borderRadius:9,overflow:"hidden",marginTop:8}}><img src={form.cover_image} alt="preview" style={{width:"100%",height:150,objectFit:"cover",display:"block"}} onError={e=>e.target.style.display="none"}/></div>}
+    <div className="iuz" style={{marginTop:11}} onClick={()=>alert("Upload Supabase Storage disponible en production.")}><div style={{fontSize:24,marginBottom:4}}>📸</div><div style={{fontWeight:700,fontSize:13}}>Ajouter des photos</div><div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>JPG, PNG, WebP · Max 20 photos</div></div>
+  </div>);
+  const S3=()=>(<div><label className="fl" style={{marginBottom:10}}>Équipements</label><div className="fgrid">{FEATS.map(({k,l})=>(<div key={k} className={`fchip ${form.features[k]?"on":""}`} onClick={()=>tog(k)}>{l}</div>))}</div></div>);
+  const S4=()=>(<div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+      <div className="fg"><label className="fl">Région <span>*</span></label><select className="fi" value={form.region} onChange={e=>set("region",e.target.value)}>{REGIONS.map(r=><option key={r}>{r}</option>)}</select></div>
+      <div className="fg"><label className="fl">Ville <span>*</span></label><input className="fi" placeholder="Dakar" value={form.city} onChange={e=>set("city",e.target.value)}/></div>
+    </div>
+    <div className="fg"><label className="fl">Commune</label><input className="fi" placeholder="Almadies" value={form.commune} onChange={e=>set("commune",e.target.value)}/></div>
+    <div className="fg"><label className="fl">Quartier <span>*</span></label><input className="fi" list="ql" placeholder="Almadies, Point E..." value={form.quartier} onChange={e=>set("quartier",e.target.value)}/><datalist id="ql">{QUARTIERS.map(q=><option key={q} value={q}/>)}</datalist></div>
+  </div>);
+  const stepsComp=[<S0/>,<S1/>,<S2/>,<S3/>,<S4/>];
+  return(
+    <div className="ov" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:530}}>
+        <div className="mhd"><div className="mtit">+ Déposer une annonce</div><button className="mcls" onClick={onClose}>✕</button></div>
+        <div className="mbd">
+          <div className="steps">{STEPS.map((s,i)=>(<div key={i} className={`sti ${i<step?"dn":""} ${i===step?"ac":""}`}><div className="stci">{i<step?"✓":i+1}</div><div className="stlb">{s}</div></div>))}</div>
+          <div style={{minHeight:250}}>{stepsComp[step]}</div>
+          {err&&<div className="al ale" style={{marginTop:8}}>❌ {err}</div>}
+          <div style={{display:"flex",gap:8,marginTop:16}}>
+            {step>0&&<button className="fbt2 fbo" style={{flex:1}} onClick={()=>setStep(s=>s-1)}>← Précédent</button>}
+            {step<STEPS.length-1?(<button className="fbt2 fbg" style={{flex:2}} onClick={()=>valid[step]()&&setStep(s=>s+1)} disabled={!valid[step]()}>Suivant →</button>):(<button className="fbt2 fbg" style={{flex:2}} onClick={submit} disabled={loading||!valid[step]()}>{loading?"Publication...":"📤 Publier l'annonce"}</button>)}
+          </div>
+          <p style={{textAlign:"center",fontSize:10,color:"var(--mu)",marginTop:7}}>Étape {step+1}/{STEPS.length} · {STEPS[step]}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
-function ChatModal({ user, listing, ownerProfile, onClose }) {
-  const [msgs, setMsgs] = useState([]);
-  const [text, setText] = useState("");
-  const [convId, setConvId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
-  const endRef = useRef(null);
-  const channelRef = useRef(null);
-  useEffect(() => {
-    if (!user || !listing?.owner_id) return;
+
+// ══════════════════════════════════════════════════════════
+// MESSAGING
+// ══════════════════════════════════════════════════════════
+function ChatModal({user,listing,ownerProfile,onClose}){
+  const [msgs,setMsgs]=useState([]);
+  const [text,setText]=useState("");
+  const [convId,setConvId]=useState(null);
+  const [loading,setLoading]=useState(true);
+  const [sending,setSending]=useState(false);
+  const endRef=useRef(null);
+  const channelRef=useRef(null);
+
+  useEffect(()=>{
+    if(!user||!listing?.owner_id)return;
     initConv();
-    return () => {
-      if (channelRef.current) sb.removeChannel(channelRef.current);
-    };
-  }, []);
-  async function initConv() {
+    return()=>{if(channelRef.current)sb.removeChannel(channelRef.current);};
+  },[]);
+
+  async function initConv(){
     setLoading(true);
-    const { data: id } = await sb.rpc("get_or_create_conversation", { p_listing_id: listing.id, p_user_a: user.id, p_user_b: listing.owner_id });
-    if (!id) {
-      setLoading(false);
-      return;
-    }
+    const{data:id}=await sb.rpc("get_or_create_conversation",{p_listing_id:listing.id,p_user_a:user.id,p_user_b:listing.owner_id});
+    if(!id){setLoading(false);return;}
     setConvId(id);
-    await sb.rpc("mark_messages_read", { p_conv_id: id, p_uid: user.id }).catch(() => {
-    });
-    const { data: m } = await sb.from("messages").select("*").eq("conversation_id", id).order("created_at");
-    setMsgs(m || []);
+    await sb.rpc("mark_messages_read",{p_conv_id:id,p_uid:user.id}).catch(()=>{});
+    const{data:m}=await sb.from("messages").select("*").eq("conversation_id",id).order("created_at");
+    setMsgs(m||[]);
     setLoading(false);
-    const ch = sb.channel(`conv:${id}`).on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${id}` }, (payload) => {
-      setMsgs((prev) => [...prev, payload.new]);
+    // Realtime
+    const ch=sb.channel(`conv:${id}`).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages",filter:`conversation_id=eq.${id}`},payload=>{
+      setMsgs(prev=>[...prev,payload.new]);
     }).subscribe();
-    channelRef.current = ch;
+    channelRef.current=ch;
   }
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [msgs]);
-  async function send() {
-    if (!text.trim() || !convId || sending) return;
+
+  useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"});},[msgs]);
+
+  async function send(){
+    if(!text.trim()||!convId||sending)return;
     setSending(true);
-    const msg = { conversation_id: convId, listing_id: listing.id, sender_id: user.id, receiver_id: listing.owner_id, content: text.trim() };
-    const { data } = await sb.from("messages").insert([msg]).select().single();
-    if (data) setMsgs((m) => [...m, data]);
-    setText("");
-    setSending(false);
-    await sb.rpc("increment_contacts", { listing_uuid: listing.id }).catch(() => {
+    const msg={conversation_id:convId,listing_id:listing.id,sender_id:user.id,receiver_id:listing.owner_id,content:text.trim()};
+    const{data}=await sb.from("messages").insert([msg]).select().single();
+    if(data)setMsgs(m=>[...m,data]);
+    setText("");setSending(false);
+    await sb.rpc("increment_contacts",{listing_uuid:listing.id}).catch(()=>{});
+  }
+
+  const ownerName=ownerProfile?.full_name||listing?.quartier||"Annonceur";
+  const ownerIni=(ownerName[0]||"?").toUpperCase();
+
+  return(
+    <div className="ov" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="chat-modal">
+        <div className="chat-hd">
+          <div className="chat-av">{ownerIni}</div>
+          <div className="chat-info">
+            <div className="chat-name">{ownerName}</div>
+            <div className="chat-sub">📍 {PICO[listing.property_type]} {listing.title?.slice(0,40)}</div>
+          </div>
+          <button className="mcls" onClick={onClose}>✕</button>
+        </div>
+        <div className="chat-msgs">
+          {loading?<div className="ldr"><div className="spin"/></div>:(
+            <>
+              {msgs.length===0&&<div style={{textAlign:"center",color:"var(--mu)",fontSize:13,padding:"20px 0"}}>💬 Commencez la conversation</div>}
+              {msgs.map(m=>{
+                const isMe=m.sender_id===user.id;
+                return(<div key={m.id} style={{display:"flex",justifyContent:isMe?"flex-end":"flex-start"}}><div className={`msg ${isMe?"msg-me":"msg-them"}`}>{m.content}<div className="msg-time" style={{textAlign:isMe?"right":"left"}}>{ago(m.created_at)}</div></div></div>);
+              })}
+              <div ref={endRef}/>
+            </>
+          )}
+        </div>
+        <div className="chat-inp">
+          <textarea className="fi" placeholder="Votre message..." value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}}/>
+          <button className="chat-send" onClick={send} disabled={!text.trim()||sending}>➤</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════
+// RENTAL SIMULATOR
+// ══════════════════════════════════════════════════════════
+function Simulator({listing,onClose}){
+  const defPrice=listing?.price||50000000;
+  const [prix,setPrix]=useState(String(defPrice));
+  const [surf,setSurf]=useState(String(listing?.surface||100));
+  const [loyerMois,setLoyerMois]=useState(String(Math.round(defPrice*0.006/1000)*1000));
+  const [charges,setCharges]=useState("15");
+  const [txImpo,setTxImpo]=useState("15");
+
+  const p=parseInt(String(prix).replace(/\D/g,""))||1;
+  const l=parseInt(String(loyerMois).replace(/\D/g,""))||0;
+  const s=parseFloat(surf)||1;
+  const ch=parseFloat(charges)/100;
+  const tx=parseFloat(txImpo)/100;
+  const loyerBrut=l*12;
+  const rendBrut=loyerBrut/p*100;
+  const loyerNet=loyerBrut*(1-ch)*(1-tx);
+  const rendNet=loyerNet/p*100;
+  const payback=loyerNet>0?Math.round(p/loyerNet):0;
+  const prixM2=p/s;
+
+  return(
+    <div className="ov" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:500}}>
+        <div className="mhd"><div className="mtit">📊 Simulateur de rentabilité</div><button className="mcls" onClick={onClose}>✕</button></div>
+        <div className="mbd">
+          <div className="al awi">💡 Estimez le rendement locatif de votre investissement en FCFA</div>
+          <div className="sim-grid">
+            <div className="fg"><label className="fl">Prix d'achat (FCFA)</label><input className="fi" value={prix} onChange={e=>setPrix(e.target.value)} placeholder="50000000"/></div>
+            <div className="fg"><label className="fl">Surface (m²)</label><input className="fi" type="number" value={surf} onChange={e=>setSurf(e.target.value)} placeholder="100"/></div>
+            <div className="fg"><label className="fl">Loyer mensuel (FCFA)</label><input className="fi" value={loyerMois} onChange={e=>setLoyerMois(e.target.value)} placeholder="350000"/></div>
+            <div className="fg"><label className="fl">Charges + frais (%)</label><input className="fi" type="number" value={charges} onChange={e=>setCharges(e.target.value)} min="0" max="50" step="1"/></div>
+            <div className="fg"><label className="fl">Imposition IRL (%)</label><input className="fi" type="number" value={txImpo} onChange={e=>setTxImpo(e.target.value)} min="0" max="40" step="1"/></div>
+          </div>
+          <div className="sim-result">
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1px 1fr 1px 1fr",gap:0}}>
+              <div className="sim-kpi"><div className="sim-val">{rendBrut.toFixed(2)}%</div><div className="sim-lbl">Rendement brut</div></div>
+              <div className="sim-divid"/>
+              <div className="sim-kpi"><div className="sim-val">{rendNet.toFixed(2)}%</div><div className="sim-lbl">Rendement net</div></div>
+              <div className="sim-divid"/>
+              <div className="sim-kpi"><div className="sim-val">{payback > 0 ? payback+"ans" : "—"}</div><div className="sim-lbl">Retour invest.</div></div>
+            </div>
+            <div style={{borderTop:"1px solid rgba(255,255,255,.2)",marginTop:12,paddingTop:12,display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+              <div style={{textAlign:"center"}}><div style={{fontSize:14,fontFamily:"var(--fd)",fontWeight:800}}>{fmt(Math.round(loyerNet/12))}</div><div style={{fontSize:10,opacity:.75}}>Revenu net/mois</div></div>
+              <div style={{textAlign:"center"}}><div style={{fontSize:14,fontFamily:"var(--fd)",fontWeight:800}}>{fmt(Math.round(prixM2))}</div><div style={{fontSize:10,opacity:.75}}>Prix/m²</div></div>
+            </div>
+          </div>
+          <p style={{fontSize:10,color:"var(--mu)",marginTop:10,lineHeight:1.5}}>* Simulation indicative. Consultez un notaire ou un conseiller fiscal pour des données précises. IRL = Impôt sur les Revenus Locatifs (Sénégal).</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════
+// NOTIFICATIONS PANEL
+// ══════════════════════════════════════════════════════════
+function NotifPanel({user,notifs,onClose,onMarkAll}){
+  const icoMap={message:"💬",listing_view:"👁",alert_match:"🔔",system:"📢"};
+  const bgMap={message:"#dcfce7",listing_view:"#dbeafe",alert_match:"#fef3c7",system:"#f3f4f6"};
+  return(
+    <div style={{position:"relative"}}>
+      <div className="notif-panel">
+        <div className="notif-hd">
+          <span className="notif-tit">🔔 Notifications</span>
+          {notifs.some(n=>!n.is_read)&&<button onClick={onMarkAll} style={{fontSize:11,color:"var(--g)",fontWeight:700,background:"none",border:"none",cursor:"pointer"}}>Tout marquer lu</button>}
+        </div>
+        {notifs.length===0?(
+          <div className="notif-empty">Aucune notification</div>
+        ):notifs.slice(0,8).map(n=>(
+          <div key={n.id} className={`notif-item ${!n.is_read?"unr":""}`} onClick={()=>{sb.from("notifications").update({is_read:true}).eq("id",n.id);onClose();}}>
+            <div className="notif-ico" style={{background:bgMap[n.type]||"#f3f4f6"}}>{icoMap[n.type]||"📢"}</div>
+            <div className="notif-body">
+              <div className="notif-ttl">{n.title}</div>
+              {n.body&&<div className="notif-txt">{n.body}</div>}
+              <div className="notif-age">{ago(n.created_at)}</div>
+            </div>
+            {!n.is_read&&<div style={{width:7,height:7,borderRadius:"50%",background:"var(--g)",flexShrink:0,marginTop:4}}/>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════
+// MAP PAGE
+// ══════════════════════════════════════════════════════════
+function MapPage({listings,onSelect}){
+  const mapRef=useRef(null);
+  const leafRef=useRef(null);
+  const [selId,setSelId]=useState(null);
+  const listRef=useRef(null);
+  const geo=listings.filter(l=>l.latitude&&l.longitude);
+  useEffect(()=>{
+    if(!window.L){const s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.onload=init;document.head.appendChild(s);}
+    else init();
+    return()=>{if(leafRef.current){leafRef.current.remove();leafRef.current=null;}};
+  },[]);
+  useEffect(()=>{if(leafRef.current&&geo.length)addMarkers();},[listings]);
+  function init(){
+    if(leafRef.current||!mapRef.current)return;
+    const L=window.L;
+    const map=L.map(mapRef.current,{center:[14.72,-17.45],zoom:12});
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap",maxZoom:19}).addTo(map);
+    leafRef.current=map;addMarkers();
+  }
+  function addMarkers(){
+    const L=window.L,map=leafRef.current;
+    geo.forEach(l=>{
+      const tx=TXC[l.transaction_type]||TXC.vente;
+      const ico=L.divIcon({className:"",html:`<div style="background:${tx.bg};color:${tx.color};padding:3px 8px;border-radius:100px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.28);font-family:'Plus Jakarta Sans',sans-serif;border:2px solid rgba(255,255,255,.5)">${l.price>=1e6?(l.price/1e6).toFixed(0)+"M":(l.price/1e3).toFixed(0)+"K"}</div>`,iconAnchor:[0,0]});
+      const mk=L.marker([l.latitude,l.longitude],{icon:ico}).addTo(map);
+      mk.bindPopup(`<img class="pimg" src="${l.cover_image||""}" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300'"/><div class="pbd"><div class="ppri">${fmt(l.price)}${l.transaction_type==="location"?"/mois":""}</div><div class="ptit">${PICO[l.property_type]||""} ${l.title||""}</div><div style="font-size:9px;color:#6b7280;margin-top:2px">📍 ${l.quartier||""}, ${l.city||""}</div></div>`,{maxWidth:200});
+      mk.on("click",()=>{setSelId(l.id);const el=listRef.current?.querySelector(`[data-id="${l.id}"]`);el?.scrollIntoView({behavior:"smooth",block:"nearest"});});
     });
   }
-  const ownerName = ownerProfile?.full_name || listing?.quartier || "Annonceur";
-  const ownerIni = (ownerName[0] || "?").toUpperCase();
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "chat-modal" }, /* @__PURE__ */ React.createElement("div", { className: "chat-hd" }, /* @__PURE__ */ React.createElement("div", { className: "chat-av" }, ownerIni), /* @__PURE__ */ React.createElement("div", { className: "chat-info" }, /* @__PURE__ */ React.createElement("div", { className: "chat-name" }, ownerName), /* @__PURE__ */ React.createElement("div", { className: "chat-sub" }, "\u{1F4CD} ", PICO[listing.property_type], " ", listing.title?.slice(0, 40))), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "chat-msgs" }, loading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, msgs.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", color: "var(--mu)", fontSize: 13, padding: "20px 0" } }, "\u{1F4AC} Commencez la conversation"), msgs.map((m) => {
-    const isMe = m.sender_id === user.id;
-    return /* @__PURE__ */ React.createElement("div", { key: m.id, style: { display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" } }, /* @__PURE__ */ React.createElement("div", { className: `msg ${isMe ? "msg-me" : "msg-them"}` }, m.content, /* @__PURE__ */ React.createElement("div", { className: "msg-time", style: { textAlign: isMe ? "right" : "left" } }, ago(m.created_at))));
-  }), /* @__PURE__ */ React.createElement("div", { ref: endRef }))), /* @__PURE__ */ React.createElement("div", { className: "chat-inp" }, /* @__PURE__ */ React.createElement("textarea", { className: "fi", placeholder: "Votre message...", value: text, onChange: (e) => setText(e.target.value), onKeyDown: (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
-  } }), /* @__PURE__ */ React.createElement("button", { className: "chat-send", onClick: send, disabled: !text.trim() || sending }, "\u27A4"))));
+  return(
+    <div className="mappage">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}>
+        <h1 style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:20}}>🗺️ Carte des annonces</h1>
+        <span style={{fontSize:12,color:"var(--mu)"}}>{geo.length} biens géolocalisés sur OpenStreetMap</span>
+      </div>
+      <div className="mapsb">
+        <div className="mlist" ref={listRef}>
+          {geo.map(l=>(<div key={l.id} data-id={l.id} className={`mitem ${selId===l.id?"sel":""}`} onClick={()=>{setSelId(l.id);onSelect(l);}}>
+            <img className="mthumb" src={l.cover_image||""} alt="" onError={e=>e.target.src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200"}/>
+            <div className="minfo"><div className="mpri">{fmt(l.price)}{l.transaction_type==="location"&&<span style={{fontWeight:400,fontSize:9,color:"var(--mu)"}}>/m</span>}</div><div className="mnam">{PICO[l.property_type]} {l.title}</div><div className="mloc">📍 {l.quartier}, {l.city}</div></div>
+          </div>))}
+        </div>
+        <div id="lmap" ref={mapRef}/>
+      </div>
+    </div>
+  );
 }
-function Simulator({ listing, onClose }) {
-  const defPrice = listing?.price || 5e7;
-  const [prix, setPrix] = useState(String(defPrice));
-  const [surf, setSurf] = useState(String(listing?.surface || 100));
-  const [loyerMois, setLoyerMois] = useState(String(Math.round(defPrice * 6e-3 / 1e3) * 1e3));
-  const [charges, setCharges] = useState("15");
-  const [txImpo, setTxImpo] = useState("15");
-  const p = parseInt(String(prix).replace(/\D/g, "")) || 1;
-  const l = parseInt(String(loyerMois).replace(/\D/g, "")) || 0;
-  const s = parseFloat(surf) || 1;
-  const ch = parseFloat(charges) / 100;
-  const tx = parseFloat(txImpo) / 100;
-  const loyerBrut = l * 12;
-  const rendBrut = loyerBrut / p * 100;
-  const loyerNet = loyerBrut * (1 - ch) * (1 - tx);
-  const rendNet = loyerNet / p * 100;
-  const payback = loyerNet > 0 ? Math.round(p / loyerNet) : 0;
-  const prixM2 = p / s;
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal", style: { maxWidth: 500 } }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtit" }, "\u{1F4CA} Simulateur de rentabilit\xE9"), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, /* @__PURE__ */ React.createElement("div", { className: "al awi" }, "\u{1F4A1} Estimez le rendement locatif de votre investissement en FCFA"), /* @__PURE__ */ React.createElement("div", { className: "sim-grid" }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Prix d'achat (FCFA)"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: prix, onChange: (e) => setPrix(e.target.value), placeholder: "50000000" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Surface (m\xB2)"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: surf, onChange: (e) => setSurf(e.target.value), placeholder: "100" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Loyer mensuel (FCFA)"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: loyerMois, onChange: (e) => setLoyerMois(e.target.value), placeholder: "350000" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Charges + frais (%)"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: charges, onChange: (e) => setCharges(e.target.value), min: "0", max: "50", step: "1" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Imposition IRL (%)"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: txImpo, onChange: (e) => setTxImpo(e.target.value), min: "0", max: "40", step: "1" }))), /* @__PURE__ */ React.createElement("div", { className: "sim-result" }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1px 1fr 1px 1fr", gap: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "sim-kpi" }, /* @__PURE__ */ React.createElement("div", { className: "sim-val" }, rendBrut.toFixed(2), "%"), /* @__PURE__ */ React.createElement("div", { className: "sim-lbl" }, "Rendement brut")), /* @__PURE__ */ React.createElement("div", { className: "sim-divid" }), /* @__PURE__ */ React.createElement("div", { className: "sim-kpi" }, /* @__PURE__ */ React.createElement("div", { className: "sim-val" }, rendNet.toFixed(2), "%"), /* @__PURE__ */ React.createElement("div", { className: "sim-lbl" }, "Rendement net")), /* @__PURE__ */ React.createElement("div", { className: "sim-divid" }), /* @__PURE__ */ React.createElement("div", { className: "sim-kpi" }, /* @__PURE__ */ React.createElement("div", { className: "sim-val" }, payback > 0 ? payback + "ans" : "\u2014"), /* @__PURE__ */ React.createElement("div", { className: "sim-lbl" }, "Retour invest."))), /* @__PURE__ */ React.createElement("div", { style: { borderTop: "1px solid rgba(255,255,255,.2)", marginTop: 12, paddingTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontFamily: "var(--fd)", fontWeight: 800 } }, fmt(Math.round(loyerNet / 12))), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, opacity: 0.75 } }, "Revenu net/mois")), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontFamily: "var(--fd)", fontWeight: 800 } }, fmt(Math.round(prixM2))), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, opacity: 0.75 } }, "Prix/m\xB2")))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: 10, color: "var(--mu)", marginTop: 10, lineHeight: 1.5 } }, "* Simulation indicative. Consultez un notaire ou un conseiller fiscal pour des donn\xE9es pr\xE9cises. IRL = Imp\xF4t sur les Revenus Locatifs (S\xE9n\xE9gal)."))));
+
+// ══════════════════════════════════════════════════════════
+// PRICE TABLE (neighborhood stats)
+// ══════════════════════════════════════════════════════════
+function PriceTable(){
+  const [data,setData]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [txF,setTxF]=useState("vente");
+  useEffect(()=>{
+    sb.from("neighborhood_prices").select("*").eq("transaction_type",txF).order("avg_price",{ascending:false}).limit(20).then(({data:d})=>{setData(d||[]);setLoading(false);});
+  },[txF]);
+  return(
+    <div className="sec" style={{paddingTop:0}}>
+      <div className="sech">
+        <h2 className="sectl">Prix <span>par quartier</span></h2>
+        <div style={{display:"flex",gap:6}}>
+          {[["vente","Vente"],["location","Location"]].map(([v,l])=>(<button key={v} className={`fbt ${txF===v?"on":""}`} onClick={()=>{setTxF(v);setLoading(true);}}>{l}</button>))}
+        </div>
+      </div>
+      {loading?<div className="ldr"><div className="spin"/></div>:(
+        <div className="ptable-wrap">
+          <table className="ptable">
+            <thead><tr><th>Quartier</th><th>Ville</th><th>Type</th><th>Annonces</th><th>Prix médian</th><th>Prix moyen</th><th>Prix/m²</th><th>Min</th><th>Max</th></tr></thead>
+            <tbody>{data.map((r,i)=>(
+              <tr key={i}>
+                <td style={{fontWeight:700}}>{r.quartier||"—"}</td>
+                <td style={{color:"var(--mu)"}}>{r.city||"—"}</td>
+                <td><span className="bdg" style={{background:TXC[r.transaction_type]?.bg||"#e5e7eb",color:TXC[r.transaction_type]?.color||"#374151",display:"inline-block"}}>{TXL[r.transaction_type]||r.transaction_type}</span></td>
+                <td>{r.listing_count}</td>
+                <td className="price-cell">{fmtM(r.median_price)}</td>
+                <td className="price-cell">{fmtM(r.avg_price)}</td>
+                <td style={{color:"var(--mu)",fontSize:11}}>{r.avg_price_per_m2?fmtM(r.avg_price_per_m2)+"/m²":"—"}</td>
+                <td style={{color:"var(--mu)",fontSize:11}}>{fmtM(r.min_price)}</td>
+                <td style={{color:"var(--mu)",fontSize:11}}>{fmtM(r.max_price)}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
 }
-function NotifPanel({ user, notifs, onClose, onMarkAll }) {
-  const icoMap = { message: "\u{1F4AC}", listing_view: "\u{1F441}", alert_match: "\u{1F514}", system: "\u{1F4E2}" };
-  const bgMap = { message: "#dcfce7", listing_view: "#dbeafe", alert_match: "#fef3c7", system: "#f3f4f6" };
-  return /* @__PURE__ */ React.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ React.createElement("div", { className: "notif-panel" }, /* @__PURE__ */ React.createElement("div", { className: "notif-hd" }, /* @__PURE__ */ React.createElement("span", { className: "notif-tit" }, "\u{1F514} Notifications"), notifs.some((n) => !n.is_read) && /* @__PURE__ */ React.createElement("button", { onClick: onMarkAll, style: { fontSize: 11, color: "var(--g)", fontWeight: 700, background: "none", border: "none", cursor: "pointer" } }, "Tout marquer lu")), notifs.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "notif-empty" }, "Aucune notification") : notifs.slice(0, 8).map((n) => /* @__PURE__ */ React.createElement("div", { key: n.id, className: `notif-item ${!n.is_read ? "unr" : ""}`, onClick: () => {
-    sb.from("notifications").update({ is_read: true }).eq("id", n.id);
-    onClose();
-  } }, /* @__PURE__ */ React.createElement("div", { className: "notif-ico", style: { background: bgMap[n.type] || "#f3f4f6" } }, icoMap[n.type] || "\u{1F4E2}"), /* @__PURE__ */ React.createElement("div", { className: "notif-body" }, /* @__PURE__ */ React.createElement("div", { className: "notif-ttl" }, n.title), n.body && /* @__PURE__ */ React.createElement("div", { className: "notif-txt" }, n.body), /* @__PURE__ */ React.createElement("div", { className: "notif-age" }, ago(n.created_at))), !n.is_read && /* @__PURE__ */ React.createElement("div", { style: { width: 7, height: 7, borderRadius: "50%", background: "var(--g)", flexShrink: 0, marginTop: 4 } })))));
-}
-function MapPage({ listings, onSelect }) {
-  const mapRef = useRef(null);
-  const leafRef = useRef(null);
-  const [selId, setSelId] = useState(null);
-  const listRef = useRef(null);
-  const geo = listings.filter((l) => l.latitude && l.longitude);
-  useEffect(() => {
-    if (!window.L) {
-      const s = document.createElement("script");
-      s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-      s.onload = init;
-      document.head.appendChild(s);
-    } else init();
-    return () => {
-      if (leafRef.current) {
-        leafRef.current.remove();
-        leafRef.current = null;
-      }
-    };
-  }, []);
-  useEffect(() => {
-    if (leafRef.current && geo.length) addMarkers();
-  }, [listings]);
-  function init() {
-    if (leafRef.current || !mapRef.current) return;
-    const L = window.L;
-    const map = L.map(mapRef.current, { center: [14.72, -17.45], zoom: 12 });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "\xA9 OpenStreetMap", maxZoom: 19 }).addTo(map);
-    leafRef.current = map;
-    addMarkers();
-  }
-  function addMarkers() {
-    const L = window.L, map = leafRef.current;
-    geo.forEach((l) => {
-      const tx = TXC[l.transaction_type] || TXC.vente;
-      const ico = L.divIcon({ className: "", html: `<div style="background:${tx.bg};color:${tx.color};padding:3px 8px;border-radius:100px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.28);font-family:'Plus Jakarta Sans',sans-serif;border:2px solid rgba(255,255,255,.5)">${l.price >= 1e6 ? (l.price / 1e6).toFixed(0) + "M" : (l.price / 1e3).toFixed(0) + "K"}</div>`, iconAnchor: [0, 0] });
-      const mk = L.marker([l.latitude, l.longitude], { icon: ico }).addTo(map);
-      mk.bindPopup(`<img class="pimg" src="${l.cover_image || ""}" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300'"/><div class="pbd"><div class="ppri">${fmt(l.price)}${l.transaction_type === "location" ? "/mois" : ""}</div><div class="ptit">${PICO[l.property_type] || ""} ${l.title || ""}</div><div style="font-size:9px;color:#6b7280;margin-top:2px">\u{1F4CD} ${l.quartier || ""}, ${l.city || ""}</div></div>`, { maxWidth: 200 });
-      mk.on("click", () => {
-        setSelId(l.id);
-        const el = listRef.current?.querySelector(`[data-id="${l.id}"]`);
-        el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      });
-    });
-  }
-  return /* @__PURE__ */ React.createElement("div", { className: "mappage" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 8 } }, /* @__PURE__ */ React.createElement("h1", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 20 } }, "\u{1F5FA}\uFE0F Carte des annonces"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--mu)" } }, geo.length, " biens g\xE9olocalis\xE9s sur OpenStreetMap")), /* @__PURE__ */ React.createElement("div", { className: "mapsb" }, /* @__PURE__ */ React.createElement("div", { className: "mlist", ref: listRef }, geo.map((l) => /* @__PURE__ */ React.createElement("div", { key: l.id, "data-id": l.id, className: `mitem ${selId === l.id ? "sel" : ""}`, onClick: () => {
-    setSelId(l.id);
-    onSelect(l);
-  } }, /* @__PURE__ */ React.createElement("img", { className: "mthumb", src: l.cover_image || "", alt: "", onError: (e) => e.target.src = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200" }), /* @__PURE__ */ React.createElement("div", { className: "minfo" }, /* @__PURE__ */ React.createElement("div", { className: "mpri" }, fmt(l.price), l.transaction_type === "location" && /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 400, fontSize: 9, color: "var(--mu)" } }, "/m")), /* @__PURE__ */ React.createElement("div", { className: "mnam" }, PICO[l.property_type], " ", l.title), /* @__PURE__ */ React.createElement("div", { className: "mloc" }, "\u{1F4CD} ", l.quartier, ", ", l.city))))), /* @__PURE__ */ React.createElement("div", { id: "lmap", ref: mapRef })));
-}
-function PriceTable() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [txF, setTxF] = useState("vente");
-  useEffect(() => {
-    sb.from("neighborhood_prices").select("*").eq("transaction_type", txF).order("avg_price", { ascending: false }).limit(20).then(({ data: d }) => {
-      setData(d || []);
-      setLoading(false);
-    });
-  }, [txF]);
-  return /* @__PURE__ */ React.createElement("div", { className: "sec", style: { paddingTop: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "sech" }, /* @__PURE__ */ React.createElement("h2", { className: "sectl" }, "Prix ", /* @__PURE__ */ React.createElement("span", null, "par quartier")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6 } }, [["vente", "Vente"], ["location", "Location"]].map(([v, l]) => /* @__PURE__ */ React.createElement("button", { key: v, className: `fbt ${txF === v ? "on" : ""}`, onClick: () => {
-    setTxF(v);
-    setLoading(true);
-  } }, l)))), loading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : /* @__PURE__ */ React.createElement("div", { className: "ptable-wrap" }, /* @__PURE__ */ React.createElement("table", { className: "ptable" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Quartier"), /* @__PURE__ */ React.createElement("th", null, "Ville"), /* @__PURE__ */ React.createElement("th", null, "Type"), /* @__PURE__ */ React.createElement("th", null, "Annonces"), /* @__PURE__ */ React.createElement("th", null, "Prix m\xE9dian"), /* @__PURE__ */ React.createElement("th", null, "Prix moyen"), /* @__PURE__ */ React.createElement("th", null, "Prix/m\xB2"), /* @__PURE__ */ React.createElement("th", null, "Min"), /* @__PURE__ */ React.createElement("th", null, "Max"))), /* @__PURE__ */ React.createElement("tbody", null, data.map((r, i) => /* @__PURE__ */ React.createElement("tr", { key: i }, /* @__PURE__ */ React.createElement("td", { style: { fontWeight: 700 } }, r.quartier || "\u2014"), /* @__PURE__ */ React.createElement("td", { style: { color: "var(--mu)" } }, r.city || "\u2014"), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "bdg", style: { background: TXC[r.transaction_type]?.bg || "#e5e7eb", color: TXC[r.transaction_type]?.color || "#374151", display: "inline-block" } }, TXL[r.transaction_type] || r.transaction_type)), /* @__PURE__ */ React.createElement("td", null, r.listing_count), /* @__PURE__ */ React.createElement("td", { className: "price-cell" }, fmtM(r.median_price)), /* @__PURE__ */ React.createElement("td", { className: "price-cell" }, fmtM(r.avg_price)), /* @__PURE__ */ React.createElement("td", { style: { color: "var(--mu)", fontSize: 11 } }, r.avg_price_per_m2 ? fmtM(r.avg_price_per_m2) + "/m\xB2" : "\u2014"), /* @__PURE__ */ React.createElement("td", { style: { color: "var(--mu)", fontSize: 11 } }, fmtM(r.min_price)), /* @__PURE__ */ React.createElement("td", { style: { color: "var(--mu)", fontSize: 11 } }, fmtM(r.max_price))))))));
-}
-function AgencyPage({ agencyId, onBack, onOpenListing, favIds, onFav, user, showToast }) {
-  const [agency, setAgency] = useState(null);
-  const [listings, setListings] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
+
+// ══════════════════════════════════════════════════════════
+// AGENCY PAGE
+// ══════════════════════════════════════════════════════════
+function AgencyPage({agencyId,onBack,onOpenListing,favIds,onFav,user,showToast}){
+  const [agency,setAgency]=useState(null);
+  const [listings,setListings]=useState([]);
+  const [reviews,setReviews]=useState([]);
+  const [loading,setLoading]=useState(true);
+  useEffect(()=>{
     Promise.all([
-      sb.from("agencies").select("*").eq("id", agencyId).single(),
-      sb.from("listings").select("*").eq("agency_id", agencyId).eq("status", "active").order("is_premium", { ascending: false }),
-      sb.from("reviews").select("*").eq("agency_id", agencyId).order("created_at", { ascending: false })
-    ]).then(([{ data: a }, { data: l }, { data: r }]) => {
-      setAgency(a);
-      setListings(l || []);
-      setReviews(r || []);
-      setLoading(false);
+      sb.from("agencies").select("*").eq("id",agencyId).single(),
+      sb.from("listings").select("*").eq("agency_id",agencyId).eq("status","active").order("is_premium",{ascending:false}),
+      sb.from("reviews").select("*").eq("agency_id",agencyId).order("created_at",{ascending:false}),
+    ]).then(([{data:a},{data:l},{data:r}])=>{
+      setAgency(a);setListings(l||[]);setReviews(r||[]);setLoading(false);
     });
-  }, [agencyId]);
-  if (loading) return /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" }));
-  if (!agency) return /* @__PURE__ */ React.createElement("div", { style: { padding: 32, textAlign: "center", color: "var(--mu)" } }, "Agence introuvable.");
-  const avgRating = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
-  const planColor = { free: "#6b7280", basic: "#2563eb", premium: "#d97706", vip: "#7c3aed" };
-  return /* @__PURE__ */ React.createElement("div", { className: "agpage" }, /* @__PURE__ */ React.createElement("button", { className: "bkb", style: { marginBottom: 16 }, onClick: onBack }, "\u2190 Retour"), /* @__PURE__ */ React.createElement("div", { className: "ag-hero" }, /* @__PURE__ */ React.createElement("div", { className: "ag-logo" }, agency.name?.[0] || "A"), /* @__PURE__ */ React.createElement("div", { className: "ag-info" }, /* @__PURE__ */ React.createElement("div", { className: "ag-name" }, agency.name), agency.description && /* @__PURE__ */ React.createElement("div", { className: "ag-meta" }, agency.description), /* @__PURE__ */ React.createElement("div", { className: "ag-badges" }, agency.is_verified && /* @__PURE__ */ React.createElement("span", { className: "ag-badge" }, "\u2705 Agence v\xE9rifi\xE9e"), /* @__PURE__ */ React.createElement("span", { className: "ag-badge", style: { background: `${planColor[agency.subscription_plan]}30`, borderColor: `${planColor[agency.subscription_plan]}60`, color: planColor[agency.subscription_plan] } }, "\u2B50 Plan ", agency.subscription_plan), agency.phone && /* @__PURE__ */ React.createElement("span", { className: "ag-badge" }, "\u{1F4DE} ", agency.phone)), reviews.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginTop: 10 } }, /* @__PURE__ */ React.createElement(Stars, { n: Math.round(avgRating) }), /* @__PURE__ */ React.createElement("span", { style: { color: "rgba(255,255,255,.8)", fontSize: 13 } }, avgRating.toFixed(1), " (", reviews.length, " avis)")))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 300px", gap: 24 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F3E0} Annonces de l'agence (", listings.length, ")"), listings.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: 28, color: "var(--mu)" } }, "Aucune annonce active.") : /* @__PURE__ */ React.createElement("div", { className: "grid" }, listings.map((l) => /* @__PURE__ */ React.createElement(Card, { key: l.id, l, onClick: () => onOpenListing(l), favIds, onFav })))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u2B50 Avis clients (", reviews.length, ")"), reviews.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: 24, color: "var(--mu)", background: "#fff", borderRadius: "var(--r)", border: "1px solid var(--br)" } }, "Aucun avis pour le moment.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10 } }, reviews.map((r, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { background: "#fff", border: "1px solid var(--br)", borderRadius: 12, padding: 14, boxShadow: "var(--sh)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 } }, /* @__PURE__ */ React.createElement(Stars, { n: r.rating }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 10, color: "var(--mu)" } }, ago(r.created_at))), r.comment && /* @__PURE__ */ React.createElement("p", { style: { fontSize: 13, color: "#374151", lineHeight: 1.5 } }, r.comment)))))));
+  },[agencyId]);
+  if(loading)return <div className="ldr"><div className="spin"/></div>;
+  if(!agency)return <div style={{padding:32,textAlign:"center",color:"var(--mu)"}}>Agence introuvable.</div>;
+  const avgRating=reviews.length?reviews.reduce((s,r)=>s+r.rating,0)/reviews.length:0;
+  const planColor={free:"#6b7280",basic:"#2563eb",premium:"#d97706",vip:"#7c3aed"};
+  return(
+    <div className="agpage">
+      <button className="bkb" style={{marginBottom:16}} onClick={onBack}>← Retour</button>
+      <div className="ag-hero">
+        <div className="ag-logo">{agency.name?.[0]||"A"}</div>
+        <div className="ag-info">
+          <div className="ag-name">{agency.name}</div>
+          {agency.description&&<div className="ag-meta">{agency.description}</div>}
+          <div className="ag-badges">
+            {agency.is_verified&&<span className="ag-badge">✅ Agence vérifiée</span>}
+            <span className="ag-badge" style={{background:`${planColor[agency.subscription_plan]}30`,borderColor:`${planColor[agency.subscription_plan]}60`,color:planColor[agency.subscription_plan]}}>⭐ Plan {agency.subscription_plan}</span>
+            {agency.phone&&<span className="ag-badge">📞 {agency.phone}</span>}
+          </div>
+          {reviews.length>0&&<div style={{display:"flex",alignItems:"center",gap:8,marginTop:10}}>
+            <Stars n={Math.round(avgRating)}/><span style={{color:"rgba(255,255,255,.8)",fontSize:13}}>{avgRating.toFixed(1)} ({reviews.length} avis)</span>
+          </div>}
+        </div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:24}}>
+        <div>
+          <div className="dtit2">🏠 Annonces de l'agence ({listings.length})</div>
+          {listings.length===0?<div style={{textAlign:"center",padding:28,color:"var(--mu)"}}>Aucune annonce active.</div>:(
+            <div className="grid">{listings.map(l=><Card key={l.id} l={l} onClick={()=>onOpenListing(l)} favIds={favIds} onFav={onFav}/>)}</div>
+          )}
+        </div>
+        <div>
+          <div className="dtit2">⭐ Avis clients ({reviews.length})</div>
+          {reviews.length===0?<div style={{textAlign:"center",padding:24,color:"var(--mu)",background:"#fff",borderRadius:"var(--r)",border:"1px solid var(--br)"}}>Aucun avis pour le moment.</div>:(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              {reviews.map((r,i)=>(
+                <div key={i} style={{background:"#fff",border:"1px solid var(--br)",borderRadius:12,padding:14,boxShadow:"var(--sh)"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><Stars n={r.rating}/><span style={{fontSize:10,color:"var(--mu)"}}>{ago(r.created_at)}</span></div>
+                  {r.comment&&<p style={{fontSize:13,color:"#374151",lineHeight:1.5}}>{r.comment}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
-function DetailPage({ l, user, onBack, onOpenListing, onShowAgency, favIds, onFav, showToast }) {
-  const tx = TXC[l.transaction_type] || TXC.vente;
-  const doc = DOC[l.document_type];
-  const feats = l.features || {};
-  const [similar, setSimilar] = useState([]);
-  const [agency, setAgency] = useState(null);
-  const [showChat, setShowChat] = useState(false);
-  const [showSim, setShowSim] = useState(false);
-  const [showVisit, setShowVisit] = useState(false);
-  const [ownerProfile, setOwnerProfile] = useState(null);
-  const [showReport, setShowReport] = useState(false);
-  const [showMortgage, setShowMortgage] = useState(false);
-  const [mktStats, setMktStats] = useState(null);
-  useEffect(() => {
-    sb.rpc("increment_listing_views", { listing_uuid: l.id }).catch(() => {
-    });
-    sb.rpc("get_similar_listings", { p_listing_id: l.id, p_property_type: l.property_type, p_transaction_type: l.transaction_type, p_quartier: l.quartier || "", p_price: l.price, p_limit: 4 }).then(({ data }) => setSimilar(data || []));
-    if (l.agency_id) sb.from("agencies").select("*").eq("id", l.agency_id).single().then(({ data }) => setAgency(data));
-    if (l.owner_id) sb.from("profiles").select("*").eq("id", l.owner_id).single().then(({ data }) => setOwnerProfile(data));
-    if (user) {
-      sb.from("recently_viewed").upsert({ user_id: user.id, listing_id: l.id, viewed_at: (/* @__PURE__ */ new Date()).toISOString() }, { onConflict: "user_id,listing_id" }).catch(() => {
-      });
+
+// ══════════════════════════════════════════════════════════
+// DETAIL PAGE
+// ══════════════════════════════════════════════════════════
+function DetailPage({l,user,onBack,onOpenListing,onShowAgency,favIds,onFav,showToast}){
+  const tx=TXC[l.transaction_type]||TXC.vente;
+  const doc=DOC[l.document_type];
+  const feats=l.features||{};
+  const [similar,setSimilar]=useState([]);
+  const [agency,setAgency]=useState(null);
+  const [showChat,setShowChat]=useState(false);
+  const [showSim,setShowSim]=useState(false);
+  const [showVisit,setShowVisit]=useState(false);
+  const [ownerProfile,setOwnerProfile]=useState(null);
+  const [showReport,setShowReport]=useState(false);
+  const [showMortgage,setShowMortgage]=useState(false);
+  const [mktStats,setMktStats]=useState(null);
+  useEffect(()=>{
+    sb.rpc("increment_listing_views",{listing_uuid:l.id}).catch(()=>{});
+    sb.rpc("get_similar_listings",{p_listing_id:l.id,p_property_type:l.property_type,p_transaction_type:l.transaction_type,p_quartier:l.quartier||"",p_price:l.price,p_limit:4}).then(({data})=>setSimilar(data||[]));
+    if(l.agency_id)sb.from("agencies").select("*").eq("id",l.agency_id).single().then(({data})=>setAgency(data));
+    if(l.owner_id)sb.from("profiles").select("*").eq("id",l.owner_id).single().then(({data})=>setOwnerProfile(data));
+    // Track recently viewed (if logged in)
+    if(user){sb.from("recently_viewed").upsert({user_id:user.id,listing_id:l.id,viewed_at:new Date().toISOString()},{onConflict:"user_id,listing_id"}).catch(()=>{});}
+    // Load market stats for this neighborhood
+    if(l.quartier){
+      sb.from("market_stats").select("*").eq("quartier",l.quartier).eq("property_type",l.property_type).eq("transaction_type",l.transaction_type).single()
+        .then(({data})=>{if(data)setMktStats(data);});
     }
-    if (l.quartier) {
-      sb.from("market_stats").select("*").eq("quartier", l.quartier).eq("property_type", l.property_type).eq("transaction_type", l.transaction_type).single().then(({ data }) => {
-        if (data) setMktStats(data);
-      });
-    }
-  }, [l.id]);
-  function handleContact() {
-    if (!user) {
-      showToast("Connectez-vous pour contacter l'annonceur", "err");
-      return;
-    }
-    if (l.owner_id === user.id) {
-      showToast("C'est votre propre annonce", "err");
-      return;
-    }
+  },[l.id]);
+
+  function handleContact(){
+    if(!user){showToast("Connectez-vous pour contacter l'annonceur","err");return;}
+    if(l.owner_id===user.id){showToast("C'est votre propre annonce","err");return;}
     setShowChat(true);
   }
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, showChat && /* @__PURE__ */ React.createElement(ChatModal, { user, listing: l, ownerProfile, onClose: () => setShowChat(false) }), showSim && /* @__PURE__ */ React.createElement(Simulator, { listing: l, onClose: () => setShowSim(false) }), showVisit && /* @__PURE__ */ React.createElement(VisitRequestModal, { listing: l, user, onClose: () => setShowVisit(false), showToast }), showReport && /* @__PURE__ */ React.createElement(ReportModal, { listing: l, user, onClose: () => setShowReport(false), showToast }), showMortgage && /* @__PURE__ */ React.createElement(MortgageModal, { price: l.price, onClose: () => setShowMortgage(false) }), /* @__PURE__ */ React.createElement("button", { className: "bkb", onClick: onBack }, "\u2190 Retour"), /* @__PURE__ */ React.createElement("div", { className: "detl" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(ImageGallery, { listing: l }), /* @__PURE__ */ React.createElement("div", { className: "dtags" }, /* @__PURE__ */ React.createElement("span", { className: "bdg", style: { ...tx, padding: "5px 12px", borderRadius: 7, fontSize: 12 } }, TXL[l.transaction_type]), /* @__PURE__ */ React.createElement("span", { className: "tag", style: { background: "#f3f4f6", color: "#374151" } }, PICO[l.property_type], " ", l.property_type), l.is_verified && /* @__PURE__ */ React.createElement("span", { className: "tag", style: { background: "#dcfce7", color: "#166534" } }, "\u2705 V\xE9rifi\xE9"), l.is_physically_verified && /* @__PURE__ */ React.createElement(PhysicalBadge, null), l.is_premium && /* @__PURE__ */ React.createElement("span", { className: "tag", style: { background: "var(--al)", color: "#92400e" } }, "\u2B50 Premium")), l.video_url && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12, borderRadius: "var(--r)", overflow: "hidden", border: "1px solid var(--br)" } }, /* @__PURE__ */ React.createElement("div", { style: { background: "#000", borderRadius: "var(--r)", padding: "8px 12px 6px", display: "flex", alignItems: "center", gap: 6, marginBottom: 0 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "#ef4444", fontSize: 12 } }, "\u25B6"), /* @__PURE__ */ React.createElement("span", { style: { color: "#fff", fontSize: 11, fontWeight: 700 } }, "Vid\xE9o de pr\xE9sentation")), /* @__PURE__ */ React.createElement("video", { controls: true, style: { width: "100%", display: "block", maxHeight: 320, background: "#000" }, src: l.video_url, poster: l.cover_image }, "Votre navigateur ne supporte pas la vid\xE9o.")), l.tour_360_url && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12, border: "1px solid #c4b5fd", borderRadius: "var(--r)", overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,#7c3aed,#6d28d9)", padding: "8px 14px", display: "flex", alignItems: "center", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 16 } }, "\u{1F310}"), /* @__PURE__ */ React.createElement("span", { style: { color: "#fff", fontWeight: 700, fontSize: 12 } }, "Visite virtuelle 360\xB0")), /* @__PURE__ */ React.createElement("a", { href: l.tour_360_url, target: "_blank", rel: "noopener noreferrer", style: { color: "#e9d5ff", fontSize: 10, fontWeight: 700 } }, "Ouvrir en plein \xE9cran \u2197")), /* @__PURE__ */ React.createElement("iframe", { src: l.tour_360_url, style: { width: "100%", height: 280, border: "none", display: "block" }, title: "Visite 360\xB0", allow: "fullscreen" })), /* @__PURE__ */ React.createElement("h1", { className: "dtit" }, l.title), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 12, marginBottom: 14, display: "flex", alignItems: "center", gap: 4 } }, "\u{1F4CD} ", [l.quartier, l.commune, l.city, l.region].filter(Boolean).join(", ")), /* @__PURE__ */ React.createElement("div", { className: "sgrid" }, l.surface && /* @__PURE__ */ React.createElement("div", { className: "spec" }, /* @__PURE__ */ React.createElement("div", { className: "spico" }, "\u{1F4D0}"), /* @__PURE__ */ React.createElement("div", { className: "spv" }, l.surface), /* @__PURE__ */ React.createElement("div", { className: "spl" }, "m\xB2")), l.rooms && /* @__PURE__ */ React.createElement("div", { className: "spec" }, /* @__PURE__ */ React.createElement("div", { className: "spico" }, "\u{1F3E0}"), /* @__PURE__ */ React.createElement("div", { className: "spv" }, l.rooms), /* @__PURE__ */ React.createElement("div", { className: "spl" }, "Pi\xE8ces")), l.bedrooms && /* @__PURE__ */ React.createElement("div", { className: "spec" }, /* @__PURE__ */ React.createElement("div", { className: "spico" }, "\u{1F6CF}"), /* @__PURE__ */ React.createElement("div", { className: "spv" }, l.bedrooms), /* @__PURE__ */ React.createElement("div", { className: "spl" }, "Chambres")), l.bathrooms && /* @__PURE__ */ React.createElement("div", { className: "spec" }, /* @__PURE__ */ React.createElement("div", { className: "spico" }, "\u{1F6BF}"), /* @__PURE__ */ React.createElement("div", { className: "spv" }, l.bathrooms), /* @__PURE__ */ React.createElement("div", { className: "spl" }, "Sdb"))), Object.keys(feats).filter((k) => feats[k]).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 14, marginBottom: 8 } }, "\xC9quipements"), /* @__PURE__ */ React.createElement("div", { className: "frow" }, Object.keys(feats).filter((k) => feats[k]).map((k) => /* @__PURE__ */ React.createElement("div", { className: "ftag", key: k }, FL[k] || k)))), /* @__PURE__ */ React.createElement(PriceSparkline, { listingId: l.id, currentPrice: l.price }), (l.transaction_type === "location" || l.transaction_type === "location_saisonniere") && /* @__PURE__ */ React.createElement(AvailabilityCalendar, { listingId: l.id, isOwner: !!(user && user.id === l.owner_id), showToast }), l.description && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 14, marginBottom: 8 } }, "Description"), /* @__PURE__ */ React.createElement("p", { style: { fontSize: 13, lineHeight: 1.75, color: "#374151" } }, l.description)), doc && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 14, marginBottom: 8 } }, "Document de propri\xE9t\xE9"), /* @__PURE__ */ React.createElement("span", { style: { background: doc.b, color: doc.c, padding: "5px 12px", borderRadius: 6, fontSize: 11, display: "inline-flex", alignItems: "center", gap: 5, fontWeight: 700 } }, "\u{1F4C4} ", doc.l)), agency && /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1px solid var(--br)", borderRadius: "var(--r)", padding: 15, marginBottom: 20, cursor: "pointer", transition: ".18s", boxShadow: "var(--sh)" }, onClick: () => onShowAgency(agency.id) }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 44, height: 44, borderRadius: 9, background: "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fd)", fontWeight: 800, fontSize: 17, flexShrink: 0 } }, agency.name?.[0] || "A"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", gap: 6 } }, agency.name, agency.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 4 } }, "\u2705")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, "Voir toutes les annonces de l'agence \u2192"))))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ccrd" }, /* @__PURE__ */ React.createElement("div", { className: "cchd" }, /* @__PURE__ */ React.createElement("div", { className: "ccpri" }, fmt(l.price)), /* @__PURE__ */ React.createElement("div", { className: "ccsub" }, l.transaction_type === "location" ? "par mois" : "Prix de vente", l.is_negotiable && " \xB7 N\xE9gociable"), /* @__PURE__ */ React.createElement(CurrencyWidget, { amountXOF: l.price })), /* @__PURE__ */ React.createElement("div", { className: "ccbd" }, l.surface > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "var(--bg)", borderRadius: 8, padding: "8px 12px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: "var(--mu)", fontWeight: 600 } }, "Prix au m\xB2"), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 13, color: "var(--g)" } }, Math.round(l.price / l.surface).toLocaleString("fr"), " FCFA")), mktStats && /* @__PURE__ */ React.createElement("div", { style: { background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, padding: "8px 12px", marginBottom: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, fontWeight: 800, color: "#1e3a5f", marginBottom: 4 } }, "\u{1F4CA} March\xE9 ", l.quartier), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--tx)" } }, /* @__PURE__ */ React.createElement("span", null, "M\xE9diane : ", /* @__PURE__ */ React.createElement("strong", null, (mktStats.median_price || 0).toLocaleString("fr"), " F")), /* @__PURE__ */ React.createElement("span", null, mktStats.listing_count, " annonces")), mktStats.avg_price_per_m2 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", marginTop: 2 } }, "Moy. ", mktStats.avg_price_per_m2.toLocaleString("fr"), " F/m\xB2 dans ce quartier")), /* @__PURE__ */ React.createElement(Trust, { score: l.trust_score || 0, lg: true, listing: l }), l.is_physically_verified && /* @__PURE__ */ React.createElement(PhysicalBadge, { lg: true }), l.is_investment_deal && /* @__PURE__ */ React.createElement(InvestBadge, { yield_pct: l.expected_yield, lg: true }), /* @__PURE__ */ React.createElement("button", { className: "btn btg" }, "\u{1F4DE} Appeler l'annonceur"), /* @__PURE__ */ React.createElement(WaBtnPro, { listing: l, ownerProfile, showToast }), /* @__PURE__ */ React.createElement("button", { className: "btn bto", onClick: handleContact }, "\u2709\uFE0F Envoyer un message"), /* @__PURE__ */ React.createElement("button", { className: "btn", style: { background: "linear-gradient(135deg,#0ea5e9,#0284c7)", color: "#fff", fontWeight: 700, fontSize: 13 }, onClick: () => setShowVisit(true) }, "\u{1F4E1} Visite \xE0 distance"), l.transaction_type !== "location" && /* @__PURE__ */ React.createElement("button", { className: "btn bty", onClick: () => setShowSim(true) }, "\u{1F4CA} Simuler la rentabilit\xE9"), l.transaction_type !== "location" && /* @__PURE__ */ React.createElement("button", { className: "btn", style: { background: "linear-gradient(135deg,#0a5c36,#16a34a)", color: "#fff", fontWeight: 700, fontSize: 13 }, onClick: () => setShowMortgage(true) }, "\u{1F3E6} Calculer mon cr\xE9dit"), /* @__PURE__ */ React.createElement(ShareBtn, { listing: l, showToast }), /* @__PURE__ */ React.createElement("button", { className: "btn", style: { background: "var(--bg)", color: "var(--tx)", border: "1.5px solid var(--br)", fontWeight: 600, fontSize: 12 }, onClick: () => onFav(l.id, !favIds.includes(l.id)) }, favIds.includes(l.id) ? "\u2764\uFE0F Retirer des favoris" : "\u{1F90D} Ajouter aux favoris"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", textAlign: "center" } }, "\u{1F441} ", l.views_count, " vues \xB7 \u{1F4E9} ", l.contacts_count, " contacts"), /* @__PURE__ */ React.createElement("button", { onClick: () => setShowReport(true), style: { background: "none", border: "none", fontSize: 10, color: "#ef4444", cursor: "pointer", width: "100%", textAlign: "center", marginTop: 4, padding: "4px 0" } }, "\u{1F6A9} Signaler cette annonce"))), l.latitude && /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1px solid var(--br)", borderRadius: "var(--r)", padding: 13, marginTop: 11 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 12, marginBottom: 7 } }, "\u{1F4CD} Localisation"), /* @__PURE__ */ React.createElement("div", { style: { background: "var(--bg)", borderRadius: 8, height: 120, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "var(--mu)", fontSize: 11, gap: 2 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, "\u{1F5FA}\uFE0F"), /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 700 } }, l.quartier, ", ", l.city), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9 } }, l.latitude.toFixed(4), ", ", l.longitude.toFixed(4)))))), similar.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "similar" }, /* @__PURE__ */ React.createElement("div", { className: "sech", style: { marginBottom: 18 } }, /* @__PURE__ */ React.createElement("h2", { className: "sectl" }, "Annonces ", /* @__PURE__ */ React.createElement("span", null, "similaires"))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, similar.map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, l: s, onClick: () => onOpenListing(s), favIds, onFav })))), (l.agency_id || l.owner_id) && /* @__PURE__ */ React.createElement("div", { style: { padding: "0 0 40px" } }, /* @__PURE__ */ React.createElement("div", { className: "sech", style: { marginBottom: 18, paddingTop: 32 } }, /* @__PURE__ */ React.createElement("h2", { className: "sectl" }, "Avis sur ", /* @__PURE__ */ React.createElement("span", null, "l'annonceur"))), /* @__PURE__ */ React.createElement(
-    ReviewsBlock,
-    {
-      targetId: l.agency_id || l.owner_id,
-      targetType: l.agency_id ? "agency" : "agent",
-      user,
-      showToast
-    }
-  )), /* @__PURE__ */ React.createElement(WaFloat, { listing: l, ownerProfile }));
+  return(
+    <>
+      {showChat&&<ChatModal user={user} listing={l} ownerProfile={ownerProfile} onClose={()=>setShowChat(false)}/>}
+      {showSim&&<Simulator listing={l} onClose={()=>setShowSim(false)}/>}
+      {showVisit&&<VisitRequestModal listing={l} user={user} onClose={()=>setShowVisit(false)} showToast={showToast}/>}
+      {showReport&&<ReportModal listing={l} user={user} onClose={()=>setShowReport(false)} showToast={showToast}/>}
+      {showMortgage&&<MortgageModal price={l.price} onClose={()=>setShowMortgage(false)}/>}
+      <button className="bkb" onClick={onBack}>← Retour</button>
+      <div className="detl">
+        <div>
+          <ImageGallery listing={l}/>
+          <div className="dtags">
+            <span className="bdg" style={{...tx,padding:"5px 12px",borderRadius:7,fontSize:12}}>{TXL[l.transaction_type]}</span>
+            <span className="tag" style={{background:"#f3f4f6",color:"#374151"}}>{PICO[l.property_type]} {l.property_type}</span>
+            {l.is_verified&&<span className="tag" style={{background:"#dcfce7",color:"#166534"}}>✅ Vérifié</span>}
+            {l.is_physically_verified&&<PhysicalBadge/>}
+            {l.is_premium&&<span className="tag" style={{background:"var(--al)",color:"#92400e"}}>⭐ Premium</span>}
+          </div>
+          {l.video_url&&(
+            <div style={{marginBottom:12,borderRadius:"var(--r)",overflow:"hidden",border:"1px solid var(--br)"}}>
+              <div style={{background:"#000",borderRadius:"var(--r)",padding:"8px 12px 6px",display:"flex",alignItems:"center",gap:6,marginBottom:0}}>
+                <span style={{color:"#ef4444",fontSize:12}}>▶</span>
+                <span style={{color:"#fff",fontSize:11,fontWeight:700}}>Vidéo de présentation</span>
+              </div>
+              <video controls style={{width:"100%",display:"block",maxHeight:320,background:"#000"}} src={l.video_url} poster={l.cover_image}>Votre navigateur ne supporte pas la vidéo.</video>
+            </div>
+          )}
+          {l.tour_360_url&&(
+            <div style={{marginBottom:12,border:"1px solid #c4b5fd",borderRadius:"var(--r)",overflow:"hidden"}}>
+              <div style={{background:"linear-gradient(135deg,#7c3aed,#6d28d9)",padding:"8px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <div style={{display:"flex",alignItems:"center",gap:7}}>
+                  <span style={{fontSize:16}}>🌐</span>
+                  <span style={{color:"#fff",fontWeight:700,fontSize:12}}>Visite virtuelle 360°</span>
+                </div>
+                <a href={l.tour_360_url} target="_blank" rel="noopener noreferrer" style={{color:"#e9d5ff",fontSize:10,fontWeight:700}}>Ouvrir en plein écran ↗</a>
+              </div>
+              <iframe src={l.tour_360_url} style={{width:"100%",height:280,border:"none",display:"block"}} title="Visite 360°" allow="fullscreen"/>
+            </div>
+          )}
+          <h1 className="dtit">{l.title}</h1>
+          <div style={{color:"var(--mu)",fontSize:12,marginBottom:14,display:"flex",alignItems:"center",gap:4}}>📍 {[l.quartier,l.commune,l.city,l.region].filter(Boolean).join(", ")}</div>
+          <div className="sgrid">
+            {l.surface&&<div className="spec"><div className="spico">📐</div><div className="spv">{l.surface}</div><div className="spl">m²</div></div>}
+            {l.rooms&&<div className="spec"><div className="spico">🏠</div><div className="spv">{l.rooms}</div><div className="spl">Pièces</div></div>}
+            {l.bedrooms&&<div className="spec"><div className="spico">🛏</div><div className="spv">{l.bedrooms}</div><div className="spl">Chambres</div></div>}
+            {l.bathrooms&&<div className="spec"><div className="spico">🚿</div><div className="spv">{l.bathrooms}</div><div className="spl">Sdb</div></div>}
+          </div>
+          {Object.keys(feats).filter(k=>feats[k]).length>0&&<div style={{marginBottom:20}}><div style={{fontFamily:"var(--fd)",fontWeight:700,fontSize:14,marginBottom:8}}>Équipements</div><div className="frow">{Object.keys(feats).filter(k=>feats[k]).map(k=><div className="ftag" key={k}>{FL[k]||k}</div>)}</div></div>}
+          <PriceSparkline listingId={l.id} currentPrice={l.price}/>
+          {(l.transaction_type==="location"||l.transaction_type==="location_saisonniere")&&<AvailabilityCalendar listingId={l.id} isOwner={!!(user&&user.id===l.owner_id)} showToast={showToast}/>}
+          {l.description&&<div style={{marginBottom:20}}><div style={{fontFamily:"var(--fd)",fontWeight:700,fontSize:14,marginBottom:8}}>Description</div><p style={{fontSize:13,lineHeight:1.75,color:"#374151"}}>{l.description}</p></div>}
+          {doc&&<div style={{marginBottom:20}}><div style={{fontFamily:"var(--fd)",fontWeight:700,fontSize:14,marginBottom:8}}>Document de propriété</div><span style={{background:doc.b,color:doc.c,padding:"5px 12px",borderRadius:6,fontSize:11,display:"inline-flex",alignItems:"center",gap:5,fontWeight:700}}>📄 {doc.l}</span></div>}
+          {agency&&<div style={{background:"#fff",border:"1px solid var(--br)",borderRadius:"var(--r)",padding:15,marginBottom:20,cursor:"pointer",transition:".18s",boxShadow:"var(--sh)"}} onClick={()=>onShowAgency(agency.id)}><div style={{display:"flex",alignItems:"center",gap:12}}>
+            <div style={{width:44,height:44,borderRadius:9,background:"var(--g)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"var(--fd)",fontWeight:800,fontSize:17,flexShrink:0}}>{agency.name?.[0]||"A"}</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700,fontSize:13,display:"flex",alignItems:"center",gap:6}}>{agency.name}{agency.is_verified&&<span style={{background:"#dcfce7",color:"#16a34a",fontSize:9,fontWeight:700,padding:"1px 6px",borderRadius:4}}>✅</span>}</div>
+              <div style={{fontSize:11,color:"var(--mu)"}}>Voir toutes les annonces de l'agence →</div>
+            </div>
+          </div></div>}
+        </div>
+        <div>
+          <div className="ccrd">
+            <div className="cchd">
+              <div className="ccpri">{fmt(l.price)}</div>
+              <div className="ccsub">{l.transaction_type==="location"?"par mois":"Prix de vente"}{l.is_negotiable&&" · Négociable"}</div>
+              <CurrencyWidget amountXOF={l.price}/>
+            </div>
+            <div className="ccbd">
+              {l.surface>0&&<div style={{background:"var(--bg)",borderRadius:8,padding:"8px 12px",marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{fontSize:11,color:"var(--mu)",fontWeight:600}}>Prix au m²</span>
+                <span style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:13,color:"var(--g)"}}>{Math.round(l.price/l.surface).toLocaleString("fr")} FCFA</span>
+              </div>}
+              {mktStats&&<div style={{background:"#eff6ff",border:"1px solid #bfdbfe",borderRadius:8,padding:"8px 12px",marginBottom:8}}>
+                <div style={{fontSize:10,fontWeight:800,color:"#1e3a5f",marginBottom:4}}>📊 Marché {l.quartier}</div>
+                <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--tx)"}}>
+                  <span>Médiane : <strong>{(mktStats.median_price||0).toLocaleString("fr")} F</strong></span>
+                  <span>{mktStats.listing_count} annonces</span>
+                </div>
+                {mktStats.avg_price_per_m2&&<div style={{fontSize:10,color:"var(--mu)",marginTop:2}}>Moy. {mktStats.avg_price_per_m2.toLocaleString("fr")} F/m² dans ce quartier</div>}
+              </div>}
+              <Trust score={l.trust_score||0} lg listing={l}/>
+              {l.is_physically_verified&&<PhysicalBadge lg/>}
+              {l.is_investment_deal&&<InvestBadge yield_pct={l.expected_yield} lg/>}
+              <button className="btn btg">📞 Appeler l'annonceur</button>
+              <WaBtnPro listing={l} ownerProfile={ownerProfile} showToast={showToast}/>
+              <button className="btn bto" onClick={handleContact}>✉️ Envoyer un message</button>
+              <button className="btn" style={{background:"linear-gradient(135deg,#0ea5e9,#0284c7)",color:"#fff",fontWeight:700,fontSize:13}} onClick={()=>setShowVisit(true)}>📡 Visite à distance</button>
+              {l.transaction_type!=="location"&&<button className="btn bty" onClick={()=>setShowSim(true)}>📊 Simuler la rentabilité</button>}
+              {l.transaction_type!=="location"&&<button className="btn" style={{background:"linear-gradient(135deg,#0a5c36,#16a34a)",color:"#fff",fontWeight:700,fontSize:13}} onClick={()=>setShowMortgage(true)}>🏦 Calculer mon crédit</button>}
+              <ShareBtn listing={l} showToast={showToast}/>
+              <button className="btn" style={{background:"var(--bg)",color:"var(--tx)",border:"1.5px solid var(--br)",fontWeight:600,fontSize:12}} onClick={()=>onFav(l.id,!favIds.includes(l.id))}>
+                {favIds.includes(l.id)?"❤️ Retirer des favoris":"🤍 Ajouter aux favoris"}
+              </button>
+              <div style={{fontSize:10,color:"var(--mu)",textAlign:"center"}}>👁 {l.views_count} vues · 📩 {l.contacts_count} contacts</div>
+              <button onClick={()=>setShowReport(true)} style={{background:"none",border:"none",fontSize:10,color:"#ef4444",cursor:"pointer",width:"100%",textAlign:"center",marginTop:4,padding:"4px 0"}}>🚩 Signaler cette annonce</button>
+            </div>
+          </div>
+          {l.latitude&&<div style={{background:"#fff",border:"1px solid var(--br)",borderRadius:"var(--r)",padding:13,marginTop:11}}>
+            <div style={{fontFamily:"var(--fd)",fontWeight:700,fontSize:12,marginBottom:7}}>📍 Localisation</div>
+            <div style={{background:"var(--bg)",borderRadius:8,height:120,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"var(--mu)",fontSize:11,gap:2}}>
+              <span style={{fontSize:20}}>🗺️</span><span style={{fontWeight:700}}>{l.quartier}, {l.city}</span><span style={{fontSize:9}}>{l.latitude.toFixed(4)}, {l.longitude.toFixed(4)}</span>
+            </div>
+          </div>}
+        </div>
+      </div>
+      {similar.length>0&&(
+        <div className="similar">
+          <div className="sech" style={{marginBottom:18}}><h2 className="sectl">Annonces <span>similaires</span></h2></div>
+          <div className="grid">{similar.map(s=><Card key={s.id} l={s} onClick={()=>onOpenListing(s)} favIds={favIds} onFav={onFav}/>)}</div>
+        </div>
+      )}
+      {(l.agency_id||l.owner_id)&&(
+        <div style={{padding:"0 0 40px"}}>
+          <div className="sech" style={{marginBottom:18,paddingTop:32}}><h2 className="sectl">Avis sur <span>l'annonceur</span></h2></div>
+          <ReviewsBlock
+            targetId={l.agency_id||l.owner_id}
+            targetType={l.agency_id?"agency":"agent"}
+            user={user}
+            showToast={showToast}
+          />
+        </div>
+      )}
+      <WaFloat listing={l} ownerProfile={ownerProfile}/>
+    </>
+  );
 }
-const PRICE_STEPS = [0, 5e6, 1e7, 2e7, 3e7, 5e7, 75e6, 1e8, 15e7, 2e8, 3e8, 5e8, 1e9];
-const fmtStep = (v) => v >= 1e9 ? "1 Md+" : v >= 1e6 ? (v / 1e6).toFixed(0) + "M" : v >= 1e3 ? (v / 1e3).toFixed(0) + "K" : "0";
-function AdvFilters({ filters, onChange, onReset }) {
-  const [open, setOpen] = useState(false);
-  const activeCount = [filters.priceMin, filters.priceMax, filters.surfMin, filters.surfMax, filters.bedrooms, filters.docType, filters.region, filters.investOnly, filters.verifiedOnly].filter(Boolean).length;
-  return /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: `fbt ${activeCount > 0 ? "on" : ""}`, onClick: () => setOpen((o) => !o), style: { display: "flex", alignItems: "center", gap: 6 } }, "\u{1F39A}\uFE0F Filtres avanc\xE9s ", activeCount > 0 && /* @__PURE__ */ React.createElement("span", { style: { background: "var(--g)", color: "#fff", borderRadius: 50, fontSize: 9, fontWeight: 700, padding: "1px 6px", minWidth: 16, textAlign: "center" } }, activeCount)), open && /* @__PURE__ */ React.createElement("div", { className: "advfil", style: { marginTop: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11, color: "var(--mu)", textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 8 } }, "\u{1F4B0} Budget"), /* @__PURE__ */ React.createElement("div", { className: "advfilg", style: { gridTemplateColumns: "1fr 1fr" } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Prix minimum"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.priceMin || "", onChange: (e) => onChange("priceMin", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Pas de minimum"), PRICE_STEPS.filter((v) => v > 0).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, fmtStep(v), " FCFA")))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Prix maximum"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.priceMax || "", onChange: (e) => onChange("priceMax", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Pas de maximum"), PRICE_STEPS.filter((v) => v > 0).map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, fmtStep(v), " FCFA")))))), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11, color: "var(--mu)", textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 8 } }, "\u{1F4D0} Surface"), /* @__PURE__ */ React.createElement("div", { className: "advfilg", style: { gridTemplateColumns: "1fr 1fr" } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Surface min (m\xB2)"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.surfMin || "", onChange: (e) => onChange("surfMin", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toute surface"), [20, 30, 50, 70, 100, 150, 200, 300, 500].map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v, " m\xB2")))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Surface max (m\xB2)"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.surfMax || "", onChange: (e) => onChange("surfMax", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Pas de max"), [50, 100, 150, 200, 300, 500, 1e3].map((v) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, v, " m\xB2")))))), /* @__PURE__ */ React.createElement("div", { className: "advfilg" }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Chambres min"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.bedrooms || "", onChange: (e) => onChange("bedrooms", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tout"), [1, 2, 3, 4, 5].map((n) => /* @__PURE__ */ React.createElement("option", { key: n, value: n }, n, "+ chambre", n > 1 ? "s" : "")))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Document foncier"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.docType || "", onChange: (e) => onChange("docType", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Tout"), Object.entries(DOC).map(([v, { l }]) => /* @__PURE__ */ React.createElement("option", { key: v, value: v }, l)))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "R\xE9gion"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: filters.region || "", onChange: (e) => onChange("region", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Toutes r\xE9gions"), REGIONS.map((r) => /* @__PURE__ */ React.createElement("option", { key: r, value: r }, r))))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 } }, [["investOnly", "\u{1F4B0} Bon investissement"], ["verifiedOnly", "\u{1F3C5} V\xE9rifi\xE9s terrain"], ["premiumOnly", "\u2B50 Premium uniquement"], ["videoOnly", "\u25B6 Avec vid\xE9o"], ["tour360Only", "\u{1F310} Visite 360\xB0"]].map(([k, l]) => /* @__PURE__ */ React.createElement("label", { key: k, style: { display: "flex", alignItems: "center", gap: 5, cursor: "pointer", fontSize: 11, fontWeight: 600, color: filters[k] ? "var(--g)" : "var(--tx)" } }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: !!filters[k], onChange: (e) => onChange(k, e.target.checked || ""), style: { accentColor: "var(--g)" } }), l))), /* @__PURE__ */ React.createElement("button", { className: "fbt", onClick: onReset, style: { marginTop: 10, color: "#ef4444" } }, "\u{1F5D1} R\xE9initialiser tous les filtres")));
+
+// ══════════════════════════════════════════════════════════
+// ADVANCED FILTER PANEL
+// ══════════════════════════════════════════════════════════
+const PRICE_STEPS=[0,5e6,10e6,20e6,30e6,50e6,75e6,100e6,150e6,200e6,300e6,500e6,1e9];
+const fmtStep=v=>v>=1e9?"1 Md+":v>=1e6?(v/1e6).toFixed(0)+"M":v>=1e3?(v/1e3).toFixed(0)+"K":"0";
+
+function AdvFilters({filters,onChange,onReset}){
+  const [open,setOpen]=useState(false);
+  const activeCount=[filters.priceMin,filters.priceMax,filters.surfMin,filters.surfMax,filters.bedrooms,filters.docType,filters.region,filters.investOnly,filters.verifiedOnly].filter(Boolean).length;
+  return(
+    <div style={{marginBottom:14}}>
+      <button className={`fbt ${activeCount>0?"on":""}`} onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:6}}>
+        🎚️ Filtres avancés {activeCount>0&&<span style={{background:"var(--g)",color:"#fff",borderRadius:50,fontSize:9,fontWeight:700,padding:"1px 6px",minWidth:16,textAlign:"center"}}>{activeCount}</span>}
+      </button>
+      {open&&(
+        <div className="advfil" style={{marginTop:8}}>
+          {/* Prix */}
+          <div style={{marginBottom:12}}>
+            <div style={{fontWeight:700,fontSize:11,color:"var(--mu)",textTransform:"uppercase",letterSpacing:".5px",marginBottom:8}}>💰 Budget</div>
+            <div className="advfilg" style={{gridTemplateColumns:"1fr 1fr"}}>
+              <div className="fg">
+                <label className="fl">Prix minimum</label>
+                <select className="fi" value={filters.priceMin||""} onChange={e=>onChange("priceMin",e.target.value)}>
+                  <option value="">Pas de minimum</option>
+                  {PRICE_STEPS.filter(v=>v>0).map(v=><option key={v} value={v}>{fmtStep(v)} FCFA</option>)}
+                </select>
+              </div>
+              <div className="fg">
+                <label className="fl">Prix maximum</label>
+                <select className="fi" value={filters.priceMax||""} onChange={e=>onChange("priceMax",e.target.value)}>
+                  <option value="">Pas de maximum</option>
+                  {PRICE_STEPS.filter(v=>v>0).map(v=><option key={v} value={v}>{fmtStep(v)} FCFA</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+          {/* Surface */}
+          <div style={{marginBottom:12}}>
+            <div style={{fontWeight:700,fontSize:11,color:"var(--mu)",textTransform:"uppercase",letterSpacing:".5px",marginBottom:8}}>📐 Surface</div>
+            <div className="advfilg" style={{gridTemplateColumns:"1fr 1fr"}}>
+              <div className="fg">
+                <label className="fl">Surface min (m²)</label>
+                <select className="fi" value={filters.surfMin||""} onChange={e=>onChange("surfMin",e.target.value)}>
+                  <option value="">Toute surface</option>
+                  {[20,30,50,70,100,150,200,300,500].map(v=><option key={v} value={v}>{v} m²</option>)}
+                </select>
+              </div>
+              <div className="fg">
+                <label className="fl">Surface max (m²)</label>
+                <select className="fi" value={filters.surfMax||""} onChange={e=>onChange("surfMax",e.target.value)}>
+                  <option value="">Pas de max</option>
+                  {[50,100,150,200,300,500,1000].map(v=><option key={v} value={v}>{v} m²</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+          {/* Autres */}
+          <div className="advfilg">
+            <div className="fg">
+              <label className="fl">Chambres min</label>
+              <select className="fi" value={filters.bedrooms||""} onChange={e=>onChange("bedrooms",e.target.value)}>
+                <option value="">Tout</option>
+                {[1,2,3,4,5].map(n=><option key={n} value={n}>{n}+ chambre{n>1?"s":""}</option>)}
+              </select>
+            </div>
+            <div className="fg">
+              <label className="fl">Document foncier</label>
+              <select className="fi" value={filters.docType||""} onChange={e=>onChange("docType",e.target.value)}>
+                <option value="">Tout</option>
+                {Object.entries(DOC).map(([v,{l}])=><option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
+            <div className="fg">
+              <label className="fl">Région</label>
+              <select className="fi" value={filters.region||""} onChange={e=>onChange("region",e.target.value)}>
+                <option value="">Toutes régions</option>
+                {REGIONS.map(r=><option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+          </div>
+          {/* Checkboxes spéciales */}
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:8}}>
+            {[["investOnly","💰 Bon investissement"],["verifiedOnly","🏅 Vérifiés terrain"],["premiumOnly","⭐ Premium uniquement"],["videoOnly","▶ Avec vidéo"],["tour360Only","🌐 Visite 360°"]].map(([k,l])=>(
+              <label key={k} style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer",fontSize:11,fontWeight:600,color:filters[k]?"var(--g)":"var(--tx)"}}>
+                <input type="checkbox" checked={!!filters[k]} onChange={e=>onChange(k,e.target.checked||"")} style={{accentColor:"var(--g)"}}/>{l}
+              </label>
+            ))}
+          </div>
+          <button className="fbt" onClick={onReset} style={{marginTop:10,color:"#ef4444"}}>🗑 Réinitialiser tous les filtres</button>
+        </div>
+      )}
+    </div>
+  );
 }
-function ListingEditModal({ user, listing, onClose, onSaved }) {
-  const [form, setForm] = useState({ title: listing.title || "", description: listing.description || "", price: String(listing.price || ""), surface: String(listing.surface || ""), rooms: String(listing.rooms || ""), bedrooms: String(listing.bedrooms || ""), bathrooms: String(listing.bathrooms || ""), cover_image: listing.cover_image || "", quartier: listing.quartier || "", city: listing.city || "", is_negotiable: listing.is_negotiable || false, status: listing.status || "active" });
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-  const [saving, setSaving] = useState(false), [err, setErr] = useState("");
-  async function save() {
-    setSaving(true);
-    setErr("");
-    try {
-      const { error } = await sb.from("listings").update({
-        title: form.title,
-        description: form.description,
-        price: parseInt(String(form.price).replace(/\D/g, "")) || listing.price,
-        surface: parseFloat(form.surface) || null,
-        rooms: parseInt(form.rooms) || null,
-        bedrooms: parseInt(form.bedrooms) || null,
-        bathrooms: parseInt(form.bathrooms) || null,
-        cover_image: form.cover_image,
-        quartier: form.quartier,
-        city: form.city,
-        is_negotiable: form.is_negotiable,
-        status: form.status,
-        updated_at: (/* @__PURE__ */ new Date()).toISOString()
-      }).eq("id", listing.id);
-      if (error) {
-        setErr(error.message);
-        return;
-      }
-      onSaved({ ...listing, ...form, price: parseInt(String(form.price).replace(/\D/g, "")) || listing.price });
+
+// ══════════════════════════════════════════════════════════
+// LISTING EDIT MODAL
+// ══════════════════════════════════════════════════════════
+function ListingEditModal({user,listing,onClose,onSaved}){
+  const [form,setForm]=useState({title:listing.title||"",description:listing.description||"",price:String(listing.price||""),surface:String(listing.surface||""),rooms:String(listing.rooms||""),bedrooms:String(listing.bedrooms||""),bathrooms:String(listing.bathrooms||""),cover_image:listing.cover_image||"",quartier:listing.quartier||"",city:listing.city||"",is_negotiable:listing.is_negotiable||false,status:listing.status||"active"});
+  const set=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const [saving,setSaving]=useState(false),[err,setErr]=useState("");
+  async function save(){
+    setSaving(true);setErr("");
+    try{
+      const{error}=await sb.from("listings").update({
+        title:form.title,description:form.description,
+        price:parseInt(String(form.price).replace(/\D/g,""))||listing.price,
+        surface:parseFloat(form.surface)||null,rooms:parseInt(form.rooms)||null,
+        bedrooms:parseInt(form.bedrooms)||null,bathrooms:parseInt(form.bathrooms)||null,
+        cover_image:form.cover_image,quartier:form.quartier,city:form.city,
+        is_negotiable:form.is_negotiable,status:form.status,updated_at:new Date().toISOString()
+      }).eq("id",listing.id);
+      if(error){setErr(error.message);return;}
+      onSaved({...listing,...form,price:parseInt(String(form.price).replace(/\D/g,""))||listing.price});
       onClose();
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setSaving(false);
-    }
+    }catch(e){setErr(e.message);}finally{setSaving(false);}
   }
-  return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal", style: { maxWidth: 500 } }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtit" }, "\u270F\uFE0F Modifier l'annonce"), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, err && /* @__PURE__ */ React.createElement("div", { className: "al ale" }, "\u274C ", err), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Titre"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: form.title, onChange: (e) => set("title", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Description"), /* @__PURE__ */ React.createElement("textarea", { className: "fi", rows: 3, value: form.description, onChange: (e) => set("description", e.target.value), style: { resize: "vertical" } })), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Prix (FCFA)"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: form.price, onChange: (e) => set("price", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Surface (m\xB2)"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: form.surface, onChange: (e) => set("surface", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Pi\xE8ces"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: form.rooms, onChange: (e) => set("rooms", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Chambres"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: form.bedrooms, onChange: (e) => set("bedrooms", e.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "URL photo"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: form.cover_image, onChange: (e) => set("cover_image", e.target.value) })), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Quartier"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: form.quartier, onChange: (e) => set("quartier", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Ville"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: form.city, onChange: (e) => set("city", e.target.value) }))), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Statut"), /* @__PURE__ */ React.createElement("select", { className: "fi", value: form.status, onChange: (e) => set("status", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "active" }, "\u2705 Actif"), /* @__PURE__ */ React.createElement("option", { value: "pending" }, "\u23F3 En attente"), /* @__PURE__ */ React.createElement("option", { value: "archived" }, "\u{1F4E6} Archiv\xE9"), /* @__PURE__ */ React.createElement("option", { value: "sold" }, "\u{1F91D} Vendu"), /* @__PURE__ */ React.createElement("option", { value: "rented" }, "\u{1F511} Lou\xE9"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 13 } }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", id: "en", checked: form.is_negotiable, onChange: (e) => set("is_negotiable", e.target.checked), style: { width: 14, height: 14, cursor: "pointer" } }), /* @__PURE__ */ React.createElement("label", { htmlFor: "en", style: { fontSize: 13, cursor: "pointer" } }, "Prix n\xE9gociable")), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", onClick: save, disabled: saving }, saving ? "Enregistrement..." : "\u{1F4BE} Sauvegarder"))));
+  return(
+    <div className="ov" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:500}}>
+        <div className="mhd"><div className="mtit">✏️ Modifier l'annonce</div><button className="mcls" onClick={onClose}>✕</button></div>
+        <div className="mbd">
+          {err&&<div className="al ale">❌ {err}</div>}
+          <div className="fg"><label className="fl">Titre</label><input className="fi" value={form.title} onChange={e=>set("title",e.target.value)}/></div>
+          <div className="fg"><label className="fl">Description</label><textarea className="fi" rows={3} value={form.description} onChange={e=>set("description",e.target.value)} style={{resize:"vertical"}}/></div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+            <div className="fg"><label className="fl">Prix (FCFA)</label><input className="fi" value={form.price} onChange={e=>set("price",e.target.value)}/></div>
+            <div className="fg"><label className="fl">Surface (m²)</label><input className="fi" type="number" value={form.surface} onChange={e=>set("surface",e.target.value)}/></div>
+            <div className="fg"><label className="fl">Pièces</label><input className="fi" type="number" value={form.rooms} onChange={e=>set("rooms",e.target.value)}/></div>
+            <div className="fg"><label className="fl">Chambres</label><input className="fi" type="number" value={form.bedrooms} onChange={e=>set("bedrooms",e.target.value)}/></div>
+          </div>
+          <div className="fg"><label className="fl">URL photo</label><input className="fi" value={form.cover_image} onChange={e=>set("cover_image",e.target.value)}/></div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+            <div className="fg"><label className="fl">Quartier</label><input className="fi" value={form.quartier} onChange={e=>set("quartier",e.target.value)}/></div>
+            <div className="fg"><label className="fl">Ville</label><input className="fi" value={form.city} onChange={e=>set("city",e.target.value)}/></div>
+          </div>
+          <div className="fg"><label className="fl">Statut</label>
+            <select className="fi" value={form.status} onChange={e=>set("status",e.target.value)}>
+              <option value="active">✅ Actif</option>
+              <option value="pending">⏳ En attente</option>
+              <option value="archived">📦 Archivé</option>
+              <option value="sold">🤝 Vendu</option>
+              <option value="rented">🔑 Loué</option>
+            </select>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:13}}>
+            <input type="checkbox" id="en" checked={form.is_negotiable} onChange={e=>set("is_negotiable",e.target.checked)} style={{width:14,height:14,cursor:"pointer"}}/><label htmlFor="en" style={{fontSize:13,cursor:"pointer"}}>Prix négociable</label>
+          </div>
+          <button className="fbt2 fbg" onClick={save} disabled={saving}>{saving?"Enregistrement...":"💾 Sauvegarder"}</button>
+        </div>
+      </div>
+    </div>
+  );
 }
-function ParticulierDash({ user, profile, myList, convs, favIds, favListings, alerts, loading, onOpenListing, onShowAgency, showDT, setEditListing, setShowProfileEdit, toggleStatus, del, boost, toggleAlert, deleteAlert, setProfile, onFav }) {
-  const [tab, setTab] = useState("overview");
-  const totV = myList.reduce((s, l) => s + (l.views_count || 0), 0);
-  const totC = myList.reduce((s, l) => s + (l.contacts_count || 0), 0);
-  const act = myList.filter((l) => l.status === "active").length;
-  const unread = convs.filter((c) => c.last_message_at > new Date(Date.now() - 36e5).toISOString()).length;
-  const [recentlyViewedUser, setRecentlyViewedUser] = useState([]);
-  useEffect(() => {
-    if (user) sb.from("recently_viewed").select("*,listings(*)").eq("user_id", user.id).order("viewed_at", { ascending: false }).limit(6).then(({ data }) => {
-      if (data) setRecentlyViewedUser(data.filter((r) => r.listings).map((r) => r.listings));
-    });
-  }, []);
-  const navs = [
-    { k: "overview", i: "\u{1F4CA}", l: "Tableau de bord" },
-    { k: "listings", i: "\u{1F3E0}", l: `Mes annonces (${myList.length})` },
-    { k: "messages", i: "\u{1F4AC}", l: `Messages${unread > 0 ? " \u25CF" : ""}` },
-    { k: "favorites", i: "\u2764\uFE0F", l: `Favoris (${favIds.length})` },
-    { k: "alerts", i: "\u{1F514}", l: `Alertes (${alerts.filter((a) => a.is_active).length})` },
-    { k: "profile", i: "\u{1F464}", l: "Mon profil" }
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════
+
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD PARTICULIER (default)
+// ══════════════════════════════════════════════════════════
+function ParticulierDash({user,profile,myList,convs,favIds,favListings,alerts,loading,onOpenListing,onShowAgency,showDT,setEditListing,setShowProfileEdit,toggleStatus,del,boost,toggleAlert,deleteAlert,setProfile,onFav}){
+  const [tab,setTab]=useState("overview");
+  const totV=myList.reduce((s,l)=>s+(l.views_count||0),0);
+  const totC=myList.reduce((s,l)=>s+(l.contacts_count||0),0);
+  const act=myList.filter(l=>l.status==="active").length;
+  const unread=convs.filter(c=>c.last_message_at>new Date(Date.now()-3600000).toISOString()).length;
+  const [recentlyViewedUser,setRecentlyViewedUser]=useState([]);
+  useEffect(()=>{
+    if(user)sb.from("recently_viewed").select("*,listings(*)").eq("user_id",user.id).order("viewed_at",{ascending:false}).limit(6).then(({data})=>{if(data)setRecentlyViewedUser(data.filter(r=>r.listings).map(r=>r.listings));});
+  },[]);
+  const navs=[
+    {k:"overview",i:"📊",l:"Tableau de bord"},
+    {k:"listings",i:"🏠",l:`Mes annonces (${myList.length})`},
+    {k:"messages",i:"💬",l:`Messages${unread>0?" ●":""}`},
+    {k:"favorites",i:"❤️",l:`Favoris (${favIds.length})`},
+    {k:"alerts",i:"🔔",l:`Alertes (${alerts.filter(a=>a.is_active).length})`},
+    {k:"profile",i:"👤",l:"Mon profil"},
   ];
-  return /* @__PURE__ */ React.createElement(DashLayout, { navs, tab, setTab, profile, user }, loading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, tab === "overview" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F4CA} Tableau de bord"), /* @__PURE__ */ React.createElement("div", { className: "kpig" }, [["\u{1F3E0}", myList.length, "Total annonces"], ["\u2705", act, "Actives"], ["\u{1F441}", totV.toLocaleString("fr"), "Vues"], ["\u{1F4E9}", totC, "Contacts"], ["\u2764\uFE0F", favIds.length, "Favoris"], ["\u{1F514}", alerts.filter((a) => a.is_active).length, "Alertes actives"]].map(([ico, val, lbl]) => /* @__PURE__ */ React.createElement("div", { className: "kpi", key: lbl }, /* @__PURE__ */ React.createElement("div", { className: "kpiic" }, ico), /* @__PURE__ */ React.createElement("div", { className: "kpiv" }, val), /* @__PURE__ */ React.createElement("div", { className: "kpil" }, lbl)))), myList.length > 0 && /* @__PURE__ */ React.createElement(PerformanceChart, { myList }), /* @__PURE__ */ React.createElement(RecentListingsTable, { myList, onOpenListing, onViewAll: () => setTab("listings") })), tab === "listings" && /* @__PURE__ */ React.createElement(MyListingsTab, { myList, onOpenListing, setEditListing, toggleStatus, del, boost }), tab === "messages" && /* @__PURE__ */ React.createElement(MessagesTab, { convs, onOpenListing }), tab === "favorites" && /* @__PURE__ */ React.createElement(FavoritesTab, { favListings, favIds, onFav, onOpenListing }), tab === "alerts" && /* @__PURE__ */ React.createElement(AlertsTab, { alerts, toggleAlert, deleteAlert }), tab === "profile" && /* @__PURE__ */ React.createElement(ProfileTab, { user, profile, setShowProfileEdit, showDT })));
+  return(
+    <DashLayout navs={navs} tab={tab} setTab={setTab} profile={profile} user={user}>
+      {loading?<div className="ldr"><div className="spin"/></div>:(
+        <>
+          {tab==="overview"&&(
+            <>
+              <div className="dtit2">📊 Tableau de bord</div>
+              <div className="kpig">
+                {[["🏠",myList.length,"Total annonces"],["✅",act,"Actives"],["👁",totV.toLocaleString("fr"),"Vues"],["📩",totC,"Contacts"],["❤️",favIds.length,"Favoris"],["🔔",alerts.filter(a=>a.is_active).length,"Alertes actives"]].map(([ico,val,lbl])=>(
+                  <div className="kpi" key={lbl}><div className="kpiic">{ico}</div><div className="kpiv">{val}</div><div className="kpil">{lbl}</div></div>
+                ))}
+              </div>
+              {myList.length>0&&<PerformanceChart myList={myList}/>}
+              <RecentListingsTable myList={myList} onOpenListing={onOpenListing} onViewAll={()=>setTab("listings")}/>
+            </>
+          )}
+          {tab==="listings"&&<MyListingsTab myList={myList} onOpenListing={onOpenListing} setEditListing={setEditListing} toggleStatus={toggleStatus} del={del} boost={boost}/>}
+          {tab==="messages"&&<MessagesTab convs={convs} onOpenListing={onOpenListing}/>}
+          {tab==="favorites"&&<FavoritesTab favListings={favListings} favIds={favIds} onFav={onFav} onOpenListing={onOpenListing}/>}
+          {tab==="alerts"&&<AlertsTab alerts={alerts} toggleAlert={toggleAlert} deleteAlert={deleteAlert}/>}
+          {tab==="profile"&&<ProfileTab user={user} profile={profile} setShowProfileEdit={setShowProfileEdit} showDT={showDT}/>}
+        </>
+      )}
+    </DashLayout>
+  );
 }
-function AgentDash({ user, profile, myList, convs, loading, onOpenListing, showDT, setEditListing, setShowProfileEdit, toggleStatus, del, boost, setProfile }) {
-  const [tab, setTab] = useState("overview");
-  const [agencyInfo, setAgencyInfo] = useState(null);
-  const [agencyListings, setAgencyListings] = useState([]);
-  const [showEditProfile, setShowEditProfile] = useState(false);
-  const [agBio, setAgBio] = useState(profile.bio || "");
-  const [agExp, setAgExp] = useState(profile.experience_years || 0);
-  const [agSpec, setAgSpec] = useState((profile.specialties || []).join(", "));
-  const [savingProfile, setSavingProfile] = useState(false);
-  useEffect(() => {
-    if (profile.agency_id) {
-      sb.from("agencies").select("*").eq("id", profile.agency_id).single().then(({ data }) => setAgencyInfo(data));
-      sb.from("listings").select("*").eq("agency_id", profile.agency_id).order("created_at", { ascending: false }).limit(20).then(({ data }) => setAgencyListings(data || []));
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD AGENT
+// ══════════════════════════════════════════════════════════
+function AgentDash({user,profile,myList,convs,loading,onOpenListing,showDT,setEditListing,setShowProfileEdit,toggleStatus,del,boost,setProfile}){
+  const [tab,setTab]=useState("overview");
+  const [agencyInfo,setAgencyInfo]=useState(null);
+  const [agencyListings,setAgencyListings]=useState([]);
+  const [showEditProfile,setShowEditProfile]=useState(false);
+  const [agBio,setAgBio]=useState(profile.bio||"");
+  const [agExp,setAgExp]=useState(profile.experience_years||0);
+  const [agSpec,setAgSpec]=useState((profile.specialties||[]).join(", "));
+  const [savingProfile,setSavingProfile]=useState(false);
+
+  useEffect(()=>{
+    if(profile.agency_id){
+      sb.from("agencies").select("*").eq("id",profile.agency_id).single().then(({data})=>setAgencyInfo(data));
+      sb.from("listings").select("*").eq("agency_id",profile.agency_id).order("created_at",{ascending:false}).limit(20).then(({data})=>setAgencyListings(data||[]));
     }
-  }, [profile.agency_id]);
-  const totV = myList.reduce((s, l) => s + (l.views_count || 0), 0);
-  const totC = myList.reduce((s, l) => s + (l.contacts_count || 0), 0);
-  const act = myList.filter((l) => l.status === "active").length;
-  const unread = convs.filter((c) => c.last_message_at > new Date(Date.now() - 36e5).toISOString()).length;
-  async function saveAgentProfile() {
+  },[profile.agency_id]);
+
+  const totV=myList.reduce((s,l)=>s+(l.views_count||0),0);
+  const totC=myList.reduce((s,l)=>s+(l.contacts_count||0),0);
+  const act=myList.filter(l=>l.status==="active").length;
+  const unread=convs.filter(c=>c.last_message_at>new Date(Date.now()-3600000).toISOString()).length;
+
+  async function saveAgentProfile(){
     setSavingProfile(true);
-    try {
-      const specs = agSpec.split(",").map((s) => s.trim()).filter(Boolean);
-      await sb.from("profiles").update({ bio: agBio, experience_years: parseInt(agExp) || 0, specialties: specs }).eq("id", user.id);
-      setProfile((p) => ({ ...p, bio: agBio, experience_years: parseInt(agExp) || 0, specialties: specs }));
-      showDT("\u2705 Profil agent mis \xE0 jour !");
+    try{
+      const specs=agSpec.split(",").map(s=>s.trim()).filter(Boolean);
+      await sb.from("profiles").update({bio:agBio,experience_years:parseInt(agExp)||0,specialties:specs}).eq("id",user.id);
+      setProfile(p=>({...p,bio:agBio,experience_years:parseInt(agExp)||0,specialties:specs}));
+      showDT("✅ Profil agent mis à jour !");
       setShowEditProfile(false);
-    } catch (e) {
-      showDT("Erreur: " + e.message, "err");
-    } finally {
-      setSavingProfile(false);
-    }
+    }catch(e){showDT("Erreur: "+e.message,"err");}finally{setSavingProfile(false);}
   }
-  const navs = [
-    { k: "overview", i: "\u{1F4CA}", l: "Vue d'ensemble" },
-    { k: "listings", i: "\u{1F3E0}", l: `Mes annonces (${myList.length})` },
-    { k: "leads", i: "\u{1F4E9}", l: `Leads (${convs.length})${unread > 0 ? " \u25CF" : ""}` },
-    { k: "agency", i: "\u{1F3E2}", l: "Mon agence" },
-    { k: "profile", i: "\u{1F464}", l: "Mon profil" }
+
+  const navs=[
+    {k:"overview",i:"📊",l:"Vue d'ensemble"},
+    {k:"listings",i:"🏠",l:`Mes annonces (${myList.length})`},
+    {k:"leads",i:"📩",l:`Leads (${convs.length})${unread>0?" ●":""}`},
+    {k:"agency",i:"🏢",l:"Mon agence"},
+    {k:"profile",i:"👤",l:"Mon profil"},
   ];
-  return /* @__PURE__ */ React.createElement(DashLayout, { navs, tab, setTab, profile, user, roleLabel: "\u{1F3E1} Agent immobilier" }, loading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : /* @__PURE__ */ React.createElement(React.Fragment, null, tab === "overview" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F4CA} Performance Agent"), /* @__PURE__ */ React.createElement("div", { className: "kpig" }, [["\u{1F3E0}", myList.length, "Mes annonces"], ["\u2705", act, "Actives"], ["\u{1F441}", totV.toLocaleString("fr"), "Vues totales"], ["\u{1F4E9}", totC, "Contacts re\xE7us"], ["\u{1F4AC}", convs.length, "Conversations"], ["\u{1F4C5}", profile.experience_years || 0, "Ans d'exp."]].map(([ico, val, lbl]) => /* @__PURE__ */ React.createElement("div", { className: "kpi", key: lbl }, /* @__PURE__ */ React.createElement("div", { className: "kpiic" }, ico), /* @__PURE__ */ React.createElement("div", { className: "kpiv" }, val), /* @__PURE__ */ React.createElement("div", { className: "kpil" }, lbl)))), agencyInfo && /* @__PURE__ */ React.createElement("div", { className: "dash-card", style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 13, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { width: 48, height: 48, borderRadius: 10, background: "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 20 } }, (agencyInfo.name || "A")[0]), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 14 } }, agencyInfo.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, agencyInfo.city, " \xB7 Plan ", agencyInfo.subscription_plan), agencyInfo.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9e")))), myList.length > 0 && /* @__PURE__ */ React.createElement(PerformanceChart, { myList }), /* @__PURE__ */ React.createElement(RecentListingsTable, { myList, onOpenListing, onViewAll: () => setTab("listings") })), tab === "listings" && /* @__PURE__ */ React.createElement(MyListingsTab, { myList, onOpenListing, setEditListing, toggleStatus, del, boost }), tab === "leads" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F4E9} Leads & Contacts (", convs.length, ")"), convs.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36, marginBottom: 8 } }, "\u{1F4E9}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700 } }, "Aucun lead pour l'instant"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", marginTop: 3 } }, "Les prospects qui contactent vos annonces appara\xEEtront ici.")) : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, convs.map((c, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "dash-card", style: { display: "flex", gap: 12, alignItems: "center", cursor: "pointer" }, onClick: () => c.listing_id && onOpenListing({ id: c.listing_id, ...c.listings }) }, /* @__PURE__ */ React.createElement("div", { style: { width: 44, height: 36, borderRadius: 7, overflow: "hidden", flexShrink: 0, background: "var(--bg)" } }, c.listings && c.listings.cover_image && /* @__PURE__ */ React.createElement("img", { src: c.listings.cover_image, alt: "", style: { width: "100%", height: "100%", objectFit: "cover" }, onError: (e) => e.target.style.display = "none" })), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 12 } }, c.listings && c.listings.property_type && PICO[c.listings.property_type] || "\u{1F3E0}", " ", c.listings && c.listings.title || "Annonce"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, "Dernier message \xB7 ", ago(c.last_message_at))), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: "var(--g)", fontWeight: 700 } }, "\u2192"))))), tab === "agency" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F3E2} Mon agence"), !profile.agency_id ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36, marginBottom: 8 } }, "\u{1F3E2}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700 } }, "Pas encore rattach\xE9 \xE0 une agence"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", marginTop: 3 } }, "Demandez \xE0 l'administrateur de votre agence de vous ajouter.")) : agencyInfo ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dash-card", style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 13, alignItems: "center", marginBottom: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 56, height: 56, borderRadius: 12, background: "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 24 } }, (agencyInfo.name || "A")[0]), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 6 } }, agencyInfo.name, agencyInfo.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9e")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, agencyInfo.city), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", marginTop: 2 } }, "Plan : ", /* @__PURE__ */ React.createElement("strong", null, agencyInfo.subscription_plan)))), [["\u{1F4E7}", agencyInfo.email || "\u2014"], ["\u{1F4F1}", agencyInfo.phone || "\u2014"], ["\u{1F4AC}", agencyInfo.whatsapp || "\u2014"], ["\u{1F4CD}", agencyInfo.address || "\u2014"]].map(([ico, val]) => /* @__PURE__ */ React.createElement("div", { key: ico, style: { display: "flex", gap: 8, padding: "7px 0", borderBottom: "1px solid var(--br)", fontSize: 12 } }, /* @__PURE__ */ React.createElement("span", null, ico), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--mu)" } }, val))), agencyInfo.description && /* @__PURE__ */ React.createElement("p", { style: { fontSize: 12, color: "var(--mu)", marginTop: 10, lineHeight: 1.5 } }, agencyInfo.description)), /* @__PURE__ */ React.createElement("div", { className: "dtit2", style: { marginTop: 14 } }, "\u{1F3E0} Annonces de l'agence (", agencyListings.length, ")"), agencyListings.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1px solid var(--br)", borderRadius: "var(--r)", overflow: "auto", boxShadow: "var(--sh)" } }, /* @__PURE__ */ React.createElement("table", { className: "dtbl", style: { minWidth: 480 } }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Bien"), /* @__PURE__ */ React.createElement("th", null, "Prix"), /* @__PURE__ */ React.createElement("th", null, "Statut"), /* @__PURE__ */ React.createElement("th", null, "Vues"))), /* @__PURE__ */ React.createElement("tbody", null, agencyListings.slice(0, 10).map((l) => /* @__PURE__ */ React.createElement("tr", { key: l.id, style: { cursor: "pointer" }, onClick: () => onOpenListing(l) }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 11 } }, PICO[l.property_type], " ", (l.title || "").slice(0, 24)), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--mu)" } }, "\u{1F4CD} ", l.quartier)), /* @__PURE__ */ React.createElement("td", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 11, color: "var(--g)" } }, fmt(l.price)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sdot" }, /* @__PURE__ */ React.createElement("span", { className: `dot ${l.status === "active" ? "dg" : l.status === "archived" ? "dr" : "dy"}` }), l.status)), /* @__PURE__ */ React.createElement("td", { style: { fontSize: 11, color: "var(--mu)" } }, "\u{1F441} ", l.views_count || 0))))))) : /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" }))), tab === "profile" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F464} Mon profil agent"), /* @__PURE__ */ React.createElement("div", { className: "dash-card", style: { maxWidth: 520 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 13, alignItems: "center", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "dav", style: { width: 56, height: 56, fontSize: 20, margin: 0 } }, (profile.full_name || user.email || "?").split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, profile.full_name || "\u2014"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, user.email), /* @__PURE__ */ React.createElement("span", { className: "drole" }, "\u{1F3E1} Agent immobilier"))), !showEditProfile ? /* @__PURE__ */ React.createElement(React.Fragment, null, [["\u{1F4E7} Email", user.email], ["\u{1F4F1} T\xE9l\xE9phone", profile.phone || "Non renseign\xE9"], ["\u{1F4AC} WhatsApp", profile.whatsapp || "Non renseign\xE9"], ["\u{1F4DD} Bio", profile.bio || "Non renseign\xE9"], ["\u{1F3AF} Sp\xE9cialit\xE9s", (profile.specialties || []).join(", ") || "Non renseign\xE9"], ["\u{1F4C5} Exp\xE9rience", (profile.experience_years || 0) + " ans"]].map(([k, v]) => /* @__PURE__ */ React.createElement("div", { key: k, style: { display: "flex", justifyContent: "space-between", padding: "9px 0", borderBottom: "1px solid var(--br)", fontSize: 12, gap: 10, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--mu)", fontWeight: 600, flexShrink: 0 } }, k), /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 700, textAlign: "right" } }, v))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginTop: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 1 }, onClick: () => {
-    setAgBio(profile.bio || "");
-    setAgExp(profile.experience_years || 0);
-    setAgSpec((profile.specialties || []).join(", "));
-    setShowEditProfile(true);
-  } }, "\u270F\uFE0F Modifier"), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbo", style: { flex: 1 }, onClick: () => setShowProfileEdit(true) }, "\u{1F464} Profil g\xE9n\xE9ral"))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Bio professionnelle"), /* @__PURE__ */ React.createElement("textarea", { className: "fi", rows: 3, value: agBio, onChange: (e) => setAgBio(e.target.value), placeholder: "D\xE9crivez votre expertise..." })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Ann\xE9es d'exp\xE9rience"), /* @__PURE__ */ React.createElement("input", { className: "fi", type: "number", value: agExp, onChange: (e) => setAgExp(e.target.value), min: 0, max: 50 })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Sp\xE9cialit\xE9s (s\xE9par\xE9es par virgules)"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: agSpec, onChange: (e) => setAgSpec(e.target.value), placeholder: "Vente, Location, Terrains..." })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginTop: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 1 }, onClick: saveAgentProfile, disabled: savingProfile }, savingProfile ? "Enregistrement..." : "\u{1F4BE} Sauvegarder"), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbo", style: { flex: 1 }, onClick: () => setShowEditProfile(false) }, "Annuler")))))));
+
+  return(
+    <DashLayout navs={navs} tab={tab} setTab={setTab} profile={profile} user={user} roleLabel="🏡 Agent immobilier">
+      {loading?<div className="ldr"><div className="spin"/></div>:(
+        <>
+          {tab==="overview"&&(
+            <>
+              <div className="dtit2">📊 Performance Agent</div>
+              <div className="kpig">
+                {[["🏠",myList.length,"Mes annonces"],["✅",act,"Actives"],["👁",totV.toLocaleString("fr"),"Vues totales"],["📩",totC,"Contacts reçus"],["💬",convs.length,"Conversations"],["📅",profile.experience_years||0,"Ans d'exp."]].map(([ico,val,lbl])=>(
+                  <div className="kpi" key={lbl}><div className="kpiic">{ico}</div><div className="kpiv">{val}</div><div className="kpil">{lbl}</div></div>
+                ))}
+              </div>
+              {agencyInfo&&(
+                <div className="dash-card" style={{marginBottom:16}}>
+                  <div style={{display:"flex",gap:13,alignItems:"center"}}>
+                    <div style={{width:48,height:48,borderRadius:10,background:"var(--g)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:20}}>{(agencyInfo.name||"A")[0]}</div>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:14}}>{agencyInfo.name}</div>
+                      <div style={{fontSize:11,color:"var(--mu)"}}>{agencyInfo.city} · Plan {agencyInfo.subscription_plan}</div>
+                      {agencyInfo.is_verified&&<span style={{background:"#dcfce7",color:"#16a34a",fontSize:9,fontWeight:700,padding:"2px 6px",borderRadius:4}}>✅ Vérifiée</span>}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {myList.length>0&&<PerformanceChart myList={myList}/>}
+              <RecentListingsTable myList={myList} onOpenListing={onOpenListing} onViewAll={()=>setTab("listings")}/>
+            </>
+          )}
+          {tab==="listings"&&<MyListingsTab myList={myList} onOpenListing={onOpenListing} setEditListing={setEditListing} toggleStatus={toggleStatus} del={del} boost={boost}/>}
+          {tab==="leads"&&(
+            <>
+              <div className="dtit2">📩 Leads & Contacts ({convs.length})</div>
+              {convs.length===0?(
+                <div className="empty-state">
+                  <div style={{fontSize:36,marginBottom:8}}>📩</div>
+                  <div style={{fontWeight:700}}>Aucun lead pour l'instant</div>
+                  <div style={{fontSize:11,color:"var(--mu)",marginTop:3}}>Les prospects qui contactent vos annonces apparaîtront ici.</div>
+                </div>
+              ):(
+                <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                  {convs.map((c,i)=>(
+                    <div key={i} className="dash-card" style={{display:"flex",gap:12,alignItems:"center",cursor:"pointer"}} onClick={()=>c.listing_id&&onOpenListing({id:c.listing_id,...c.listings})}>
+                      <div style={{width:44,height:36,borderRadius:7,overflow:"hidden",flexShrink:0,background:"var(--bg)"}}>
+                        {c.listings&&c.listings.cover_image&&<img src={c.listings.cover_image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>e.target.style.display="none"}/>}
+                      </div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:700,fontSize:12}}>{(c.listings&&c.listings.property_type&&PICO[c.listings.property_type])||"🏠"} {(c.listings&&c.listings.title)||"Annonce"}</div>
+                        <div style={{fontSize:10,color:"var(--mu)"}}>Dernier message · {ago(c.last_message_at)}</div>
+                      </div>
+                      <span style={{fontSize:11,color:"var(--g)",fontWeight:700}}>→</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+          {tab==="agency"&&(
+            <>
+              <div className="dtit2">🏢 Mon agence</div>
+              {!profile.agency_id?(
+                <div className="empty-state">
+                  <div style={{fontSize:36,marginBottom:8}}>🏢</div>
+                  <div style={{fontWeight:700}}>Pas encore rattaché à une agence</div>
+                  <div style={{fontSize:11,color:"var(--mu)",marginTop:3}}>Demandez à l'administrateur de votre agence de vous ajouter.</div>
+                </div>
+              ):agencyInfo?(
+                <>
+                  <div className="dash-card" style={{marginBottom:16}}>
+                    <div style={{display:"flex",gap:13,alignItems:"center",marginBottom:14}}>
+                      <div style={{width:56,height:56,borderRadius:12,background:"var(--g)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:24}}>{(agencyInfo.name||"A")[0]}</div>
+                      <div>
+                        <div style={{fontWeight:700,fontSize:16,display:"flex",alignItems:"center",gap:6}}>{agencyInfo.name}{agencyInfo.is_verified&&<span style={{background:"#dcfce7",color:"#16a34a",fontSize:9,fontWeight:700,padding:"2px 6px",borderRadius:4}}>✅ Vérifiée</span>}</div>
+                        <div style={{fontSize:11,color:"var(--mu)"}}>{agencyInfo.city}</div>
+                        <div style={{fontSize:10,color:"var(--mu)",marginTop:2}}>Plan : <strong>{agencyInfo.subscription_plan}</strong></div>
+                      </div>
+                    </div>
+                    {[["📧",agencyInfo.email||"—"],["📱",agencyInfo.phone||"—"],["💬",agencyInfo.whatsapp||"—"],["📍",agencyInfo.address||"—"]].map(([ico,val])=>(
+                      <div key={ico} style={{display:"flex",gap:8,padding:"7px 0",borderBottom:"1px solid var(--br)",fontSize:12}}><span>{ico}</span><span style={{color:"var(--mu)"}}>{val}</span></div>
+                    ))}
+                    {agencyInfo.description&&<p style={{fontSize:12,color:"var(--mu)",marginTop:10,lineHeight:1.5}}>{agencyInfo.description}</p>}
+                  </div>
+                  <div className="dtit2" style={{marginTop:14}}>🏠 Annonces de l'agence ({agencyListings.length})</div>
+                  {agencyListings.length>0&&(
+                    <div style={{background:"#fff",border:"1px solid var(--br)",borderRadius:"var(--r)",overflow:"auto",boxShadow:"var(--sh)"}}>
+                      <table className="dtbl" style={{minWidth:480}}>
+                        <thead><tr><th>Bien</th><th>Prix</th><th>Statut</th><th>Vues</th></tr></thead>
+                        <tbody>
+                          {agencyListings.slice(0,10).map(l=>(
+                            <tr key={l.id} style={{cursor:"pointer"}} onClick={()=>onOpenListing(l)}>
+                              <td><div style={{fontWeight:600,fontSize:11}}>{PICO[l.property_type]} {(l.title||"").slice(0,24)}</div><div style={{fontSize:9,color:"var(--mu)"}}>📍 {l.quartier}</div></td>
+                              <td style={{fontFamily:"var(--fd)",fontWeight:700,fontSize:11,color:"var(--g)"}}>{fmt(l.price)}</td>
+                              <td><span className="sdot"><span className={`dot ${l.status==="active"?"dg":l.status==="archived"?"dr":"dy"}`}/>{l.status}</span></td>
+                              <td style={{fontSize:11,color:"var(--mu)"}}>👁 {l.views_count||0}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </>
+              ):<div className="ldr"><div className="spin"/></div>}
+            </>
+          )}
+          {tab==="profile"&&(
+            <>
+              <div className="dtit2">👤 Mon profil agent</div>
+              <div className="dash-card" style={{maxWidth:520}}>
+                <div style={{display:"flex",gap:13,alignItems:"center",marginBottom:16}}>
+                  <div className="dav" style={{width:56,height:56,fontSize:20,margin:0}}>{(profile.full_name||user.email||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2)}</div>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:15}}>{profile.full_name||"—"}</div>
+                    <div style={{fontSize:11,color:"var(--mu)"}}>{user.email}</div>
+                    <span className="drole">🏡 Agent immobilier</span>
+                  </div>
+                </div>
+                {!showEditProfile?(
+                  <>
+                    {[["📧 Email",user.email],["📱 Téléphone",profile.phone||"Non renseigné"],["💬 WhatsApp",profile.whatsapp||"Non renseigné"],["📝 Bio",profile.bio||"Non renseigné"],["🎯 Spécialités",(profile.specialties||[]).join(", ")||"Non renseigné"],["📅 Expérience",(profile.experience_years||0)+" ans"]].map(([k,v])=>(
+                      <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"9px 0",borderBottom:"1px solid var(--br)",fontSize:12,gap:10,flexWrap:"wrap"}}><span style={{color:"var(--mu)",fontWeight:600,flexShrink:0}}>{k}</span><span style={{fontWeight:700,textAlign:"right"}}>{v}</span></div>
+                    ))}
+                    <div style={{display:"flex",gap:8,marginTop:14}}>
+                      <button className="fbt2 fbg" style={{flex:1}} onClick={()=>{setAgBio(profile.bio||"");setAgExp(profile.experience_years||0);setAgSpec((profile.specialties||[]).join(", "));setShowEditProfile(true);}}>✏️ Modifier</button>
+                      <button className="fbt2 fbo" style={{flex:1}} onClick={()=>setShowProfileEdit(true)}>👤 Profil général</button>
+                    </div>
+                  </>
+                ):(
+                  <>
+                    <div className="fg"><label className="fl">Bio professionnelle</label><textarea className="fi" rows={3} value={agBio} onChange={e=>setAgBio(e.target.value)} placeholder="Décrivez votre expertise..."/></div>
+                    <div className="fg"><label className="fl">Années d'expérience</label><input className="fi" type="number" value={agExp} onChange={e=>setAgExp(e.target.value)} min={0} max={50}/></div>
+                    <div className="fg"><label className="fl">Spécialités (séparées par virgules)</label><input className="fi" value={agSpec} onChange={e=>setAgSpec(e.target.value)} placeholder="Vente, Location, Terrains..."/></div>
+                    <div style={{display:"flex",gap:8,marginTop:10}}>
+                      <button className="fbt2 fbg" style={{flex:1}} onClick={saveAgentProfile} disabled={savingProfile}>{savingProfile?"Enregistrement...":"💾 Sauvegarder"}</button>
+                      <button className="fbt2 fbo" style={{flex:1}} onClick={()=>setShowEditProfile(false)}>Annuler</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </DashLayout>
+  );
 }
-const CRM_COLS = [
-  { k: "title", lb: "Titre *", req: true, ex: "Villa 4 pi\xE8ces Almadies" },
-  { k: "transaction_type", lb: "Type transaction *", req: true, ex: "vente / location" },
-  { k: "property_type", lb: "Type de bien *", req: true, ex: "appartement / maison / villa / terrain / bureau / commerce" },
-  { k: "price", lb: "Prix FCFA *", req: true, ex: "45000000" },
-  { k: "city", lb: "Ville *", req: true, ex: "Dakar" },
-  { k: "quartier", lb: "Quartier", req: false, ex: "Almadies" },
-  { k: "surface", lb: "Surface m\xB2", req: false, ex: "120" },
-  { k: "rooms", lb: "Pi\xE8ces", req: false, ex: "4" },
-  { k: "bedrooms", lb: "Chambres", req: false, ex: "3" },
-  { k: "bathrooms", lb: "Salles de bain", req: false, ex: "2" },
-  { k: "description", lb: "Description", req: false, ex: "Belle villa avec piscine..." },
-  { k: "cover_image", lb: "URL Photo principale", req: false, ex: "https://..." },
-  { k: "address", lb: "Adresse", req: false, ex: "Rue 10, Villa 3" },
-  { k: "document_type", lb: "Document (titre_foncier...)", req: false, ex: "titre_foncier / bail / permis_occuper" },
-  { k: "is_negotiable", lb: "N\xE9gociable (1/0)", req: false, ex: "1" },
-  { k: "expected_yield", lb: "Rendement % (invest.)", req: false, ex: "7.5" }
+
+// ══════════════════════════════════════════════════════════
+// CRM IMPORT — Import CSV de 100 annonces en 1 clic
+// ══════════════════════════════════════════════════════════
+const CRM_COLS=[
+  {k:"title",          lb:"Titre *",                   req:true,  ex:"Villa 4 pièces Almadies"},
+  {k:"transaction_type",lb:"Type transaction *",        req:true,  ex:"vente / location"},
+  {k:"property_type",  lb:"Type de bien *",             req:true,  ex:"appartement / maison / villa / terrain / bureau / commerce"},
+  {k:"price",          lb:"Prix FCFA *",                req:true,  ex:"45000000"},
+  {k:"city",           lb:"Ville *",                    req:true,  ex:"Dakar"},
+  {k:"quartier",       lb:"Quartier",                   req:false, ex:"Almadies"},
+  {k:"surface",        lb:"Surface m²",                 req:false, ex:"120"},
+  {k:"rooms",          lb:"Pièces",                     req:false, ex:"4"},
+  {k:"bedrooms",       lb:"Chambres",                   req:false, ex:"3"},
+  {k:"bathrooms",      lb:"Salles de bain",             req:false, ex:"2"},
+  {k:"description",    lb:"Description",                req:false, ex:"Belle villa avec piscine..."},
+  {k:"cover_image",    lb:"URL Photo principale",       req:false, ex:"https://..."},
+  {k:"address",        lb:"Adresse",                    req:false, ex:"Rue 10, Villa 3"},
+  {k:"document_type",  lb:"Document (titre_foncier...)",req:false, ex:"titre_foncier / bail / permis_occuper"},
+  {k:"is_negotiable",  lb:"Négociable (1/0)",           req:false, ex:"1"},
+  {k:"expected_yield", lb:"Rendement % (invest.)",      req:false, ex:"7.5"},
 ];
-const CRM_VALID = {
-  transaction_type: ["vente", "location", "location_saisonniere"],
-  property_type: ["appartement", "maison", "villa", "terrain", "bureau", "commerce"]
+const CRM_VALID={
+  transaction_type:["vente","location","location_saisonniere"],
+  property_type:["appartement","maison","villa","terrain","bureau","commerce"],
 };
-function parseCsvLine(line) {
-  const r = [];
-  let cur = "", inQ = false;
-  for (const c of line) {
-    if (c === '"') {
-      inQ = !inQ;
-    } else if (c === "," && !inQ) {
-      r.push(cur.trim());
-      cur = "";
-    } else {
-      cur += c;
-    }
+
+function parseCsvLine(line){
+  const r=[]; let cur="",inQ=false;
+  for(const c of line){
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){r.push(cur.trim());cur="";}
+    else{cur+=c;}
   }
   r.push(cur.trim());
   return r;
 }
-function validateCrmRow(row) {
-  const e = [];
-  if (!row.title || row.title.length < 3) e.push("Titre trop court");
-  if (!CRM_VALID.transaction_type.includes((row.transaction_type || "").toLowerCase())) e.push(`transaction_type invalide: "${row.transaction_type || ""}"`);
-  if (!CRM_VALID.property_type.includes((row.property_type || "").toLowerCase())) e.push(`property_type invalide: "${row.property_type || ""}"`);
-  if (!row.price || isNaN(parseInt((row.price || "").replace(/\s/g, "")))) e.push("Prix invalide");
-  if (!row.city || row.city.length < 2) e.push("Ville manquante");
+function validateCrmRow(row){
+  const e=[];
+  if(!row.title||row.title.length<3) e.push("Titre trop court");
+  if(!CRM_VALID.transaction_type.includes((row.transaction_type||"").toLowerCase())) e.push(`transaction_type invalide: "${row.transaction_type||""}"`);
+  if(!CRM_VALID.property_type.includes((row.property_type||"").toLowerCase())) e.push(`property_type invalide: "${row.property_type||""}"`);
+  if(!row.price||isNaN(parseInt((row.price||"").replace(/\s/g,"")))) e.push("Prix invalide");
+  if(!row.city||row.city.length<2) e.push("Ville manquante");
   return e;
 }
-function normalizeCrmRow(raw, agencyId, userId) {
-  return {
-    agency_id: agencyId,
-    owner_id: userId,
-    title: (raw.title || "").slice(0, 200),
-    transaction_type: (raw.transaction_type || "vente").toLowerCase(),
-    property_type: (raw.property_type || "appartement").toLowerCase(),
-    price: parseInt((raw.price || "0").replace(/[\s\u00a0]/g, "")) || 0,
-    city: (raw.city || "Dakar").slice(0, 100),
-    region: { "Dakar": "Dakar", "Thi\xE8s": "Thi\xE8s", "Mbour": "Thi\xE8s", "Saint-Louis": "Saint-Louis", "Ziguinchor": "Ziguinchor", "Kaolack": "Kaolack", "Touba": "Diourbel", "Tambacounda": "Tambacounda", "Kolda": "Kolda" }[raw.city] || "Dakar",
-    quartier: raw.quartier || null,
-    address: raw.address || null,
-    surface: raw.surface ? parseFloat(raw.surface) : null,
-    rooms: raw.rooms ? parseInt(raw.rooms) : null,
-    bedrooms: raw.bedrooms ? parseInt(raw.bedrooms) : null,
-    bathrooms: raw.bathrooms ? parseInt(raw.bathrooms) : null,
-    description: raw.description || null,
-    cover_image: raw.cover_image || null,
-    document_type: raw.document_type || null,
-    is_negotiable: ["1", "oui", "true", "yes"].includes((raw.is_negotiable || "").toLowerCase()),
-    expected_yield: raw.expected_yield ? parseFloat(raw.expected_yield) : null,
-    is_investment_deal: !!raw.expected_yield,
-    status: "active"
+function normalizeCrmRow(raw,agencyId,userId){
+  return{
+    agency_id:agencyId, owner_id:userId,
+    title:(raw.title||"").slice(0,200),
+    transaction_type:(raw.transaction_type||"vente").toLowerCase(),
+    property_type:(raw.property_type||"appartement").toLowerCase(),
+    price:parseInt((raw.price||"0").replace(/[\s\u00a0]/g,""))||0,
+    city:(raw.city||"Dakar").slice(0,100),
+    region:({"Dakar":"Dakar","Thiès":"Thiès","Mbour":"Thiès","Saint-Louis":"Saint-Louis","Ziguinchor":"Ziguinchor","Kaolack":"Kaolack","Touba":"Diourbel","Tambacounda":"Tambacounda","Kolda":"Kolda"})[raw.city]||"Dakar",
+    quartier:raw.quartier||null, address:raw.address||null,
+    surface:raw.surface?parseFloat(raw.surface):null,
+    rooms:raw.rooms?parseInt(raw.rooms):null,
+    bedrooms:raw.bedrooms?parseInt(raw.bedrooms):null,
+    bathrooms:raw.bathrooms?parseInt(raw.bathrooms):null,
+    description:raw.description||null,
+    cover_image:raw.cover_image||null,
+    document_type:raw.document_type||null,
+    is_negotiable:["1","oui","true","yes"].includes((raw.is_negotiable||"").toLowerCase()),
+    expected_yield:raw.expected_yield?parseFloat(raw.expected_yield):null,
+    is_investment_deal:!!raw.expected_yield,
+    status:"active",
   };
 }
-function CrmImportPanel({ user, profile, agencyId, showDT, onImported }) {
-  const [step, setStep] = useState("upload");
-  const [rawRows, setRawRows] = useState([]);
-  const [headers, setHeaders] = useState([]);
-  const [colMap, setColMap] = useState({});
-  const [preview, setPreview] = useState([]);
-  const [progress, setProgress] = useState({ done: 0, total: 0, errs: [] });
-  const [logs, setLogs] = useState([]);
-  const [loadingLogs, setLoadingLogs] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-  const fileRef = useRef(null);
-  useEffect(() => {
-    loadLogs();
-  }, []);
-  async function loadLogs() {
+
+function CrmImportPanel({user,profile,agencyId,showDT,onImported}){
+  const [step,setStep]=useState("upload");
+  const [rawRows,setRawRows]=useState([]);
+  const [headers,setHeaders]=useState([]);
+  const [colMap,setColMap]=useState({});
+  const [preview,setPreview]=useState([]);
+  const [progress,setProgress]=useState({done:0,total:0,errs:[]});
+  const [logs,setLogs]=useState([]);
+  const [loadingLogs,setLoadingLogs]=useState(false);
+  const [dragOver,setDragOver]=useState(false);
+  const fileRef=useRef(null);
+
+  useEffect(()=>{loadLogs();},[]);
+
+  async function loadLogs(){
     setLoadingLogs(true);
-    try {
-      const { data } = await sb.from("crm_imports").select("*").eq("imported_by", user.id).order("created_at", { ascending: false }).limit(10);
-      if (data) setLogs(data);
-    } catch (_) {
-    }
+    try{const{data}=await sb.from("crm_imports").select("*").eq("imported_by",user.id).order("created_at",{ascending:false}).limit(10);if(data)setLogs(data);}catch(_){}
     setLoadingLogs(false);
   }
-  function handleFile(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const ext = file.name.split(".").pop().toLowerCase();
-    if (!["csv", "txt"].includes(ext)) {
-      showDT("\u26A0\uFE0F Format CSV requis. Exportez votre fichier Excel en CSV depuis Fichier \u2192 Enregistrer sous.", "err");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const text = ev.target.result;
-      const firstLine = text.split(/\r?\n/)[0] || "";
-      const sep = firstLine.includes(";") ? ";" : firstLine.includes("	") ? "	" : ",";
-      const parseLine = (l) => {
-        const vals = [];
-        let cur = "", inQ = false;
-        for (const c of l) {
-          if (c === '"') {
-            inQ = !inQ;
-          } else if (c === sep && !inQ) {
-            vals.push(cur.trim());
-            cur = "";
-          } else {
-            cur += c;
-          }
-        }
-        vals.push(cur.trim());
-        return vals;
+
+  function handleFile(e){
+    const file=e.target.files?.[0]; if(!file)return;
+    const ext=file.name.split(".").pop().toLowerCase();
+    if(!["csv","txt"].includes(ext)){showDT("⚠️ Format CSV requis. Exportez votre fichier Excel en CSV depuis Fichier → Enregistrer sous.","err");return;}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const text=ev.target.result;
+      // Détecter séparateur (virgule, point-virgule, tab)
+      const firstLine=text.split(/\r?\n/)[0]||"";
+      const sep=firstLine.includes(";")?";":(firstLine.includes("\t")?"\t":",");
+      const parseLine=l=>{
+        const vals=[]; let cur="",inQ=false;
+        for(const c of l){if(c==='"'){inQ=!inQ;}else if(c===sep&&!inQ){vals.push(cur.trim());cur="";}else{cur+=c;}}
+        vals.push(cur.trim()); return vals;
       };
-      const lines = text.split(/\r?\n/).filter((l) => l.trim());
-      if (lines.length < 2) {
-        showDT("Fichier vide ou invalide", "err");
-        return;
-      }
-      const hdrs = parseLine(lines[0]).map((h) => h.replace(/^"|"$/g, "").trim());
-      const rows = lines.slice(1, 101).filter((l) => l.trim()).map((l) => {
-        const cols = parseLine(l);
-        const obj = {};
-        hdrs.forEach((h, i) => {
-          obj[h] = (cols[i] || "").replace(/^"|"$/g, "").trim();
-        });
+      const lines=text.split(/\r?\n/).filter(l=>l.trim());
+      if(lines.length<2){showDT("Fichier vide ou invalide","err");return;}
+      const hdrs=parseLine(lines[0]).map(h=>h.replace(/^"|"$/g,"").trim());
+      const rows=lines.slice(1,101).filter(l=>l.trim()).map(l=>{
+        const cols=parseLine(l);
+        const obj={};
+        hdrs.forEach((h,i)=>{obj[h]=(cols[i]||"").replace(/^"|"$/g,"").trim();});
         return obj;
       });
-      setHeaders(hdrs);
-      setRawRows(rows);
-      const auto = {};
-      CRM_COLS.forEach((col) => {
-        const aliases = [col.k, ...col.aliases || []];
-        const m = hdrs.find((h) => aliases.some((a) => h.toLowerCase() === a || h.toLowerCase().replace(/[\s_-]/g, "") === a.replace(/_/g, "")));
-        if (m) auto[col.k] = m;
+      setHeaders(hdrs); setRawRows(rows);
+      const auto={};
+      CRM_COLS.forEach(col=>{
+        const aliases=[col.k,...(col.aliases||[])];
+        const m=hdrs.find(h=>aliases.some(a=>h.toLowerCase()===a||h.toLowerCase().replace(/[\s_-]/g,"")===a.replace(/_/g,"")));
+        if(m)auto[col.k]=m;
       });
-      setColMap(auto);
-      setStep("mapping");
-      showDT(`\u{1F4CB} ${rows.length} ligne${rows.length > 1 ? "s" : ""} d\xE9tect\xE9e${rows.length > 1 ? "s" : ""}. V\xE9rifiez le mapping.`);
+      setColMap(auto); setStep("mapping");
+      showDT(`📋 ${rows.length} ligne${rows.length>1?"s":""} détectée${rows.length>1?"s":""}. Vérifiez le mapping.`);
     };
-    reader.readAsText(file, "UTF-8");
+    reader.readAsText(file,"UTF-8");
   }
-  function buildPreview() {
-    const mapped = rawRows.map((raw, i) => {
-      const norm = {};
-      CRM_COLS.forEach((col) => {
-        if (colMap[col.k]) norm[col.k] = raw[colMap[col.k]] || "";
-      });
-      return { ...norm, _idx: i + 1, _errs: validateCrmRow(norm) };
+
+  function buildPreview(){
+    const mapped=rawRows.map((raw,i)=>{
+      const norm={};
+      CRM_COLS.forEach(col=>{if(colMap[col.k])norm[col.k]=raw[colMap[col.k]]||"";});
+      return{...norm,_idx:i+1,_errs:validateCrmRow(norm)};
     });
-    setPreview(mapped);
-    setStep("preview");
+    setPreview(mapped); setStep("preview");
   }
-  async function startImport() {
-    const valid = preview.filter((r) => r._errs.length === 0);
-    if (!valid.length) {
-      showDT("Aucune ligne valide \xE0 importer", "err");
-      return;
+
+  async function startImport(){
+    const valid=preview.filter(r=>r._errs.length===0);
+    if(!valid.length){showDT("Aucune ligne valide à importer","err");return;}
+    setStep("importing"); setProgress({done:0,total:valid.length,errs:[]});
+    let ok=0; const importErrs=[];
+    const CHUNK=10;
+    for(let i=0;i<valid.length;i+=CHUNK){
+      const chunk=valid.slice(i,i+CHUNK).map(r=>normalizeCrmRow(r,agencyId,user.id));
+      try{
+        const{error}=await sb.from("listings").insert(chunk);
+        if(error){importErrs.push(`Lignes ${i+1}–${Math.min(i+CHUNK,valid.length)}: ${error.message}`);}
+        else{ok+=chunk.length;}
+      }catch(e){importErrs.push(`Lignes ${i+1}–${Math.min(i+CHUNK,valid.length)}: ${e.message}`);}
+      setProgress(p=>({...p,done:Math.min(i+CHUNK,valid.length),errs:importErrs}));
+      await new Promise(r=>setTimeout(r,150));
     }
-    setStep("importing");
-    setProgress({ done: 0, total: valid.length, errs: [] });
-    let ok = 0;
-    const importErrs = [];
-    const CHUNK = 10;
-    for (let i = 0; i < valid.length; i += CHUNK) {
-      const chunk = valid.slice(i, i + CHUNK).map((r) => normalizeCrmRow(r, agencyId, user.id));
-      try {
-        const { error } = await sb.from("listings").insert(chunk);
-        if (error) {
-          importErrs.push(`Lignes ${i + 1}\u2013${Math.min(i + CHUNK, valid.length)}: ${error.message}`);
-        } else {
-          ok += chunk.length;
-        }
-      } catch (e) {
-        importErrs.push(`Lignes ${i + 1}\u2013${Math.min(i + CHUNK, valid.length)}: ${e.message}`);
-      }
-      setProgress((p) => ({ ...p, done: Math.min(i + CHUNK, valid.length), errs: importErrs }));
-      await new Promise((r) => setTimeout(r, 150));
-    }
-    try {
+    try{
       await sb.from("crm_imports").insert({
-        agency_id: agencyId,
-        imported_by: user.id,
-        filename: fileRef.current?.files?.[0]?.name || "import.csv",
-        total_rows: valid.length,
-        success_rows: ok,
-        error_rows: importErrs.length,
-        errors: importErrs,
-        status: "done",
-        completed_at: (/* @__PURE__ */ new Date()).toISOString()
+        agency_id:agencyId, imported_by:user.id,
+        filename:fileRef.current?.files?.[0]?.name||"import.csv",
+        total_rows:valid.length, success_rows:ok, error_rows:importErrs.length,
+        errors:importErrs, status:"done", completed_at:new Date().toISOString(),
       });
-    } catch (_) {
-    }
-    setProgress((p) => ({ ...p, done: valid.length }));
-    setStep("done");
-    loadLogs();
-    if (ok > 0) onImported(ok);
+    }catch(_){}
+    setProgress(p=>({...p,done:valid.length}));
+    setStep("done"); loadLogs();
+    if(ok>0)onImported(ok);
   }
-  function downloadTemplate() {
-    const hdr = CRM_COLS.map((c) => c.k).join(",");
-    const ex1 = [
-      "Villa Almadies",
-      "villa",
-      "vente",
-      "Dakar",
-      "Almadies",
-      "350000000",
-      "320",
-      "5",
-      "3",
-      "3",
-      "Magnifique villa avec piscine",
-      "https://example.com/photo.jpg",
-      "titre_foncier",
-      "oui",
-      "non",
-      "14.7281",
-      "-17.5038",
-      "0"
+
+  function downloadTemplate(){
+    const hdr=CRM_COLS.map(c=>c.k).join(",");
+    const ex1=[
+      "Villa Almadies","villa","vente","Dakar","Almadies","350000000","320",
+      "5","3","3","Magnifique villa avec piscine","https://example.com/photo.jpg",
+      "titre_foncier","oui","non","14.7281","-17.5038","0"
     ].join(",");
-    const ex2 = [
-      "Appartement Plateau",
-      "appartement",
-      "location",
-      "Dakar",
-      "Plateau",
-      "450000",
-      "85",
-      "3",
-      "2",
-      "1",
-      "Appartement meubl\xE9 vue mer",
-      "https://example.com/apt.jpg",
-      "bail",
-      "non",
-      "non",
-      "14.6928",
-      "-17.4467",
-      "8.5"
+    const ex2=[
+      "Appartement Plateau","appartement","location","Dakar","Plateau","450000","85",
+      "3","2","1","Appartement meublé vue mer","https://example.com/apt.jpg",
+      "bail","non","non","14.6928","-17.4467","8.5"
     ].join(",");
-    const blob = new Blob([hdr + "\n" + ex1 + "\n" + ex2], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "modele_import_senegalsen.csv";
-    a.click();
+    const blob=new Blob([hdr+"\n"+ex1+"\n"+ex2],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download="modele_import_senegalsen.csv"; a.click();
     URL.revokeObjectURL(url);
   }
-  function buildDemoRows() {
-    const TYPES = ["villa", "appartement", "maison", "terrain", "bureau", "commerce", "studio"];
-    const TX = ["vente", "vente", "vente", "location", "location", "location_saisonniere"];
-    const CITIES = ["Dakar", "Dakar", "Dakar", "Dakar", "Thi\xE8s", "Mbour", "Saint-Louis", "Ziguinchor", "Kaolack"];
-    const QUARTIERS2 = {
-      Dakar: ["Almadies", "Plateau", "Mermoz", "Sacr\xE9-C\u0153ur", "Point E", "Libert\xE9", "Ngor", "Ouakam", "Parcelles Assainies", "Grand Yoff", "HLM", "Fann", "Medina", "Yoff", "Pikine"],
-      "Thi\xE8s": ["Centre", "Thi\xE8s Nord", "Thi\xE8s Sud", "Randoul\xE8ne"],
-      "Mbour": ["Saly", "Mbour Centre", "Joal", "Nianing"],
-      "Saint-Louis": ["Centre", "Guet Ndar", "Sor", "Langue de Barbarie"],
-      "Ziguinchor": ["Centre", "Til\xE8ne", "Boucotte"],
-      "Kaolack": ["Centre", "M\xE9dina Baye", "Ndoffane"]
+
+  // ══ Génération de 100 annonces réalistes 1-clic ══════════════════
+  function buildDemoRows(){
+    const TYPES=["villa","appartement","maison","terrain","bureau","commerce","studio"];
+    const TX=["vente","vente","vente","location","location","location_saisonniere"];
+    const CITIES=["Dakar","Dakar","Dakar","Dakar","Thiès","Mbour","Saint-Louis","Ziguinchor","Kaolack"];
+    const QUARTIERS={
+      Dakar:["Almadies","Plateau","Mermoz","Sacré-Cœur","Point E","Liberté","Ngor","Ouakam","Parcelles Assainies","Grand Yoff","HLM","Fann","Medina","Yoff","Pikine"],
+      "Thiès":["Centre","Thiès Nord","Thiès Sud","Randoulène"],
+      "Mbour":["Saly","Mbour Centre","Joal","Nianing"],
+      "Saint-Louis":["Centre","Guet Ndar","Sor","Langue de Barbarie"],
+      "Ziguinchor":["Centre","Tilène","Boucotte"],
+      "Kaolack":["Centre","Médina Baye","Ndoffane"],
     };
-    const IMGS_APT = ["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600", "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600"];
-    const IMGS_VIL = ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600", "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600", "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600", "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600"];
-    const IMGS_TER = ["https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600", "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600"];
-    const IMGS_BUR = ["https://images.unsplash.com/photo-1497366216548-37526070297c?w=600", "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600"];
-    const DOCS = ["titre_foncier", "titre_foncier", "bail", "droit_superficie", "promesse_vente"];
-    const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const rows = [];
-    for (let i = 0; i < 100; i++) {
-      const type = pick(TYPES);
-      const tx = pick(TX);
-      const city = pick(CITIES);
-      const qs = QUARTIERS2[city] || QUARTIERS2["Dakar"];
-      const q = pick(qs);
-      let price, surf, rooms, beds, baths, img;
-      if (type === "terrain") {
-        price = rnd(15, 250) * 1e6;
-        surf = rnd(150, 2e3);
-        rooms = 0;
-        beds = 0;
-        baths = 0;
-        img = pick(IMGS_TER);
-      } else if (type === "villa") {
-        price = tx === "location" ? rnd(200, 900) * 1e4 : rnd(80, 600) * 1e6;
-        surf = rnd(180, 600);
-        rooms = rnd(5, 10);
-        beds = rnd(3, 7);
-        baths = rnd(2, 5);
-        img = pick(IMGS_VIL);
-      } else if (type === "appartement" || type === "studio") {
-        price = tx === "location" ? rnd(80, 600) * 1e3 : rnd(15, 120) * 1e6;
-        surf = rnd(25, 150);
-        rooms = rnd(1, 5);
-        beds = rnd(0, 4);
-        baths = rnd(1, 2);
-        img = pick(IMGS_APT);
-      } else if (type === "bureau" || type === "commerce") {
-        price = tx === "location" ? rnd(150, 1500) * 1e3 : rnd(20, 300) * 1e6;
-        surf = rnd(30, 500);
-        rooms = rnd(2, 8);
-        beds = 0;
-        baths = rnd(1, 2);
-        img = pick(IMGS_BUR);
-      } else {
-        price = tx === "location" ? rnd(100, 500) * 1e3 : rnd(30, 200) * 1e6;
-        surf = rnd(60, 400);
-        rooms = rnd(3, 8);
-        beds = rnd(2, 5);
-        baths = rnd(1, 3);
-        img = pick(IMGS_VIL);
+    const IMGS_APT=["https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600","https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600"];
+    const IMGS_VIL=["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600","https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600"];
+    const IMGS_TER=["https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600","https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600"];
+    const IMGS_BUR=["https://images.unsplash.com/photo-1497366216548-37526070297c?w=600","https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600"];
+    const DOCS=["titre_foncier","titre_foncier","bail","droit_superficie","promesse_vente"];
+    const rnd=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+    const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)];
+    const rows=[];
+    for(let i=0;i<100;i++){
+      const type=pick(TYPES);
+      const tx=pick(TX);
+      const city=pick(CITIES);
+      const qs=QUARTIERS[city]||QUARTIERS["Dakar"];
+      const q=pick(qs);
+      let price,surf,rooms,beds,baths,img;
+      if(type==="terrain"){
+        price=rnd(15,250)*1000000;surf=rnd(150,2000);rooms=0;beds=0;baths=0;img=pick(IMGS_TER);
+      }else if(type==="villa"){
+        price=tx==="location"?rnd(200,900)*10000:rnd(80,600)*1000000;surf=rnd(180,600);rooms=rnd(5,10);beds=rnd(3,7);baths=rnd(2,5);img=pick(IMGS_VIL);
+      }else if(type==="appartement"||type==="studio"){
+        price=tx==="location"?rnd(80,600)*1000:rnd(15,120)*1000000;surf=rnd(25,150);rooms=rnd(1,5);beds=rnd(0,4);baths=rnd(1,2);img=pick(IMGS_APT);
+      }else if(type==="bureau"||type==="commerce"){
+        price=tx==="location"?rnd(150,1500)*1000:rnd(20,300)*1000000;surf=rnd(30,500);rooms=rnd(2,8);beds=0;baths=rnd(1,2);img=pick(IMGS_BUR);
+      }else{
+        price=tx==="location"?rnd(100,500)*1000:rnd(30,200)*1000000;surf=rnd(60,400);rooms=rnd(3,8);beds=rnd(2,5);baths=rnd(1,3);img=pick(IMGS_VIL);
       }
-      const titles = { villa: "Villa", appartement: "Appartement", maison: "Maison", terrain: "Terrain", bureau: "Bureau", commerce: "Local commercial", studio: "Studio" };
-      const descs = [
-        `${titles[type]} ${tx === "location" ? "\xE0 louer" : "\xE0 vendre"} de ${surf}m\xB2 \xE0 ${q}, ${city}. Bien entretenu, id\xE9al pour ${type === "bureau" ? "professionnel" : "famille"}.`,
-        `Magnifique ${titles[type].toLowerCase()} en ${tx === "location" ? "location" : "vente"} dans le quartier ${q}. Surface de ${surf}m\xB2, ${rooms} pi\xE8ces.`,
-        `${titles[type]} exceptionnel \xE0 ${q} \u2014 ${surf}m\xB2, proche commodit\xE9s, documentation compl\xE8te.`
+      const titles={villa:"Villa",appartement:"Appartement",maison:"Maison",terrain:"Terrain",bureau:"Bureau",commerce:"Local commercial",studio:"Studio"};
+      const descs=[
+        `${titles[type]} ${tx==="location"?"à louer":"à vendre"} de ${surf}m² à ${q}, ${city}. Bien entretenu, idéal pour ${type==="bureau"?"professionnel":"famille"}.`,
+        `Magnifique ${titles[type].toLowerCase()} en ${tx==="location"?"location":"vente"} dans le quartier ${q}. Surface de ${surf}m², ${rooms} pièces.`,
+        `${titles[type]} exceptionnel à ${q} — ${surf}m², proche commodités, documentation complète.`,
       ];
       rows.push({
-        title: `${titles[type]} ${q} ${surf}m\xB2`,
-        property_type: type,
-        transaction_type: tx,
-        city,
-        quartier: q,
-        price: String(price),
-        surface: String(surf),
-        rooms: String(rooms),
-        bedrooms: String(beds),
-        bathrooms: String(baths),
-        description: pick(descs),
-        cover_image: img,
-        document_type: pick(DOCS),
-        is_negotiable: Math.random() > 0.4 ? "oui" : "non",
-        latitude: String((14.6928 + Math.random() * 0.5).toFixed(4)),
-        longitude: String((-17.4467 - Math.random() * 0.5).toFixed(4))
+        title:`${titles[type]} ${q} ${surf}m²`,
+        property_type:type,
+        transaction_type:tx,
+        city,quartier:q,
+        price:String(price),
+        surface:String(surf),
+        rooms:String(rooms),
+        bedrooms:String(beds),
+        bathrooms:String(baths),
+        description:pick(descs),
+        cover_image:img,
+        document_type:pick(DOCS),
+        is_negotiable:Math.random()>0.4?"oui":"non",
+        latitude:String((14.6928+Math.random()*0.5).toFixed(4)),
+        longitude:String((-17.4467-Math.random()*0.5).toFixed(4)),
       });
     }
     return rows;
   }
-  async function importDemo() {
-    const demoRows = buildDemoRows();
-    const valid = demoRows.map((r, i) => ({ ...r, _idx: i + 1, _errs: [] }));
-    setPreview(valid);
-    setStep("importing");
-    setProgress({ done: 0, total: valid.length, errs: [] });
-    let ok = 0;
-    const importErrs = [];
-    const CHUNK = 20;
-    for (let i = 0; i < valid.length; i += CHUNK) {
-      const chunk = valid.slice(i, i + CHUNK);
-      try {
-        const rows = chunk.map((r) => normalizeCrmRow(r, agencyId, user.id));
-        const { error } = await sb.from("listings").insert(rows);
-        if (error) {
-          importErrs.push(error.message);
-        } else {
-          ok += chunk.length;
-        }
-      } catch (e) {
-        importErrs.push(String(e.message || e));
-      }
-      setProgress({ done: Math.min(i + CHUNK, valid.length), total: valid.length, errs: importErrs });
-      await new Promise((r) => setTimeout(r, 180));
+
+  async function importDemo(){
+    const demoRows=buildDemoRows();
+    const valid=demoRows.map((r,i)=>({...r,_idx:i+1,_errs:[]}));
+    setPreview(valid); setStep("importing"); setProgress({done:0,total:valid.length,errs:[]});
+    let ok=0; const importErrs=[];
+    // Import par chunks de 20 avec barre de progression animée
+    const CHUNK=20;
+    for(let i=0;i<valid.length;i+=CHUNK){
+      const chunk=valid.slice(i,i+CHUNK);
+      try{
+        const rows=chunk.map(r=>normalizeCrmRow(r,agencyId,user.id));
+        const{error}=await sb.from("listings").insert(rows);
+        if(error){importErrs.push(error.message);}else{ok+=chunk.length;}
+      }catch(e){importErrs.push(String(e.message||e));}
+      setProgress({done:Math.min(i+CHUNK,valid.length),total:valid.length,errs:importErrs});
+      await new Promise(r=>setTimeout(r,180));
     }
-    try {
-      await sb.from("crm_imports").insert({ agency_id: agencyId, imported_by: user.id, filename: "demo_100_annonces.csv", total_rows: valid.length, success_rows: ok, error_rows: importErrs.length, errors: importErrs, status: "done", completed_at: (/* @__PURE__ */ new Date()).toISOString(), notes: "Import d\xE9mo 100 annonces" });
-    } catch (_) {
-    }
-    setStep("done");
-    loadLogs();
-    if (ok > 0) onImported(ok);
+    try{await sb.from("crm_imports").insert({agency_id:agencyId,imported_by:user.id,filename:"demo_100_annonces.csv",total_rows:valid.length,success_rows:ok,error_rows:importErrs.length,errors:importErrs,status:"done",completed_at:new Date().toISOString(),notes:"Import démo 100 annonces"});}catch(_){}
+    setStep("done"); loadLogs();
+    if(ok>0)onImported(ok);
   }
-  const validCount = preview.filter((r) => r._errs.length === 0).length;
-  const errCount = preview.filter((r) => r._errs.length > 0).length;
-  const STEPS_LBL = [["upload", "\u{1F4C1} Upload"], ["mapping", "\u{1F517} Mapping"], ["preview", "\u{1F441} Aper\xE7u"], ["importing", "\u2699\uFE0F Import"], ["done", "\u2705 Termin\xE9"]];
-  const stepIdx = STEPS_LBL.findIndex(([k]) => k === step);
-  const pct = progress.total > 0 ? Math.round(progress.done / progress.total * 100) : 0;
-  return /* @__PURE__ */ React.createElement("div", null, step === "upload" && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,#0a5c36 0%,#1a3a5c 100%)", borderRadius: 14, padding: "22px 20px", marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { color: "#fff", fontFamily: "var(--fd)", fontWeight: 800, fontSize: 18, marginBottom: 4 } }, "\u26A1 Import 100 annonces en 1 clic"), /* @__PURE__ */ React.createElement("div", { style: { color: "rgba(255,255,255,.65)", fontSize: 12, marginBottom: 12 } }, "Testez l'import massif avec ", /* @__PURE__ */ React.createElement("strong", { style: { color: "var(--au)" } }, "100 annonces g\xE9n\xE9r\xE9es automatiquement"), " \u2014 villas, appartements, terrains dans tout le S\xE9n\xE9gal"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      onClick: importDemo,
-      style: { background: "var(--au)", color: "#1a1a1a", border: "none", borderRadius: 9, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", gap: 7, boxShadow: "0 4px 18px rgba(234,179,8,.35)" }
-    },
-    "\u26A1 Importer 100 annonces d\xE9mo \u2192"
-  ), /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      onClick: downloadTemplate,
-      style: { background: "rgba(255,255,255,.12)", color: "#fff", border: "1.5px solid rgba(255,255,255,.3)", borderRadius: 9, padding: "10px 18px", fontSize: 12, fontWeight: 700, cursor: "pointer" }
-    },
-    "\u2B07\uFE0F T\xE9l\xE9charger le mod\xE8le CSV"
-  ))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7, minWidth: 160 } }, [["\u{1F3E0}", "7 types de biens"], ["\u{1F30D}", "9 villes couvertes"], ["\u{1F4C4}", "Donn\xE9es 100% r\xE9alistes"], ["\u2699\uFE0F", "Import par chunks"]].map(([ico, txt]) => /* @__PURE__ */ React.createElement("div", { key: txt, style: { display: "flex", alignItems: "center", gap: 8, color: "rgba(255,255,255,.8)", fontSize: 11 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 15 } }, ico), txt))))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dtit2", style: { marginBottom: 3 } }, "\u{1F4E5} Import CSV personnalis\xE9"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, "Importez vos propres annonces via fichier CSV ou Excel")), step !== "upload" && /* @__PURE__ */ React.createElement("button", { onClick: downloadTemplate, style: { background: "var(--bg)", border: "1.5px solid var(--br)", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" } }, "\u2B07\uFE0F Mod\xE8le CSV")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", borderRadius: 10, overflow: "hidden", border: "1px solid var(--br)", marginBottom: 18 } }, STEPS_LBL.map(([k, l], i) => /* @__PURE__ */ React.createElement("div", { key: k, style: {
-    flex: 1,
-    padding: "8px 2px",
-    textAlign: "center",
-    fontSize: 10,
-    fontWeight: 700,
-    background: step === k ? "var(--g)" : i < stepIdx ? "var(--gl)" : "var(--bg)",
-    color: step === k ? "#fff" : i < stepIdx ? "var(--g)" : "var(--mu)",
-    borderRight: i < STEPS_LBL.length - 1 ? "1px solid var(--br)" : "none",
-    transition: ".15s"
-  } }, l))), step === "upload" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      onClick: () => fileRef.current?.click(),
-      onDragOver: (e) => {
-        e.preventDefault();
-        setDragOver(true);
-      },
-      onDragLeave: () => setDragOver(false),
-      onDrop: (e) => {
-        e.preventDefault();
-        setDragOver(false);
-        const f = e.dataTransfer.files?.[0];
-        if (f) {
-          const dt = new DataTransfer();
-          dt.items.add(f);
-          fileRef.current.files = dt.files;
-          handleFile({ target: { files: dt.files } });
-        }
-      },
-      style: { border: `2.5px dashed ${dragOver ? "var(--g)" : "var(--br)"}`, borderRadius: "var(--r)", padding: "36px 20px", textAlign: "center", cursor: "pointer", background: dragOver ? "var(--gl)" : "#fff", transition: ".18s" }
-    },
-    /* @__PURE__ */ React.createElement("div", { style: { fontSize: 48, marginBottom: 10 } }, "\u{1F4C1}"),
-    /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 15, marginBottom: 5 } }, "D\xE9posez votre fichier CSV ici"),
-    /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 16 } }, "ou cliquez pour parcourir \xB7 Max 100 lignes \xB7 Encodage UTF-8 \xB7 S\xE9parateur , ou ;"),
-    /* @__PURE__ */ React.createElement("input", { ref: fileRef, type: "file", accept: ".csv,.txt", style: { display: "none" }, onChange: handleFile }),
-    /* @__PURE__ */ React.createElement("span", { style: { background: "var(--g)", color: "#fff", padding: "9px 22px", borderRadius: 100, fontSize: 13, fontWeight: 700 } }, "\u{1F4C2} Choisir un fichier CSV")
-  ), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 14, background: "var(--bg)", borderRadius: 10, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: "var(--mu)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 8 } }, "Colonnes support\xE9es"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5 } }, CRM_COLS.map((c) => /* @__PURE__ */ React.createElement("span", { key: c.k, style: { fontSize: 10, padding: "3px 8px", borderRadius: 100, background: c.req ? "#dcfce7" : "var(--bg)", border: `1px solid ${c.req ? "#a7f3d0" : "var(--br)"}`, color: c.req ? "#166534" : "var(--mu)", fontWeight: c.req ? 700 : 400 } }, c.k, c.req ? "" : " ?"))), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", marginTop: 6 } }, "\u{1F7E2} Obligatoire \xA0\u2B1C Optionnel"))), step === "mapping" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { background: "var(--gl)", border: "1px solid #a7f3d0", borderRadius: 9, padding: 11, marginBottom: 14, fontSize: 12, color: "#166534", display: "flex", gap: 6, alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", null, "\u2705"), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("strong", null, rawRows.length, " lignes"), " d\xE9tect\xE9es \xB7 ", /* @__PURE__ */ React.createElement("strong", null, headers.length, " colonnes"), " trouv\xE9es \xB7 V\xE9rifiez et ajustez le mapping")), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 10, marginBottom: 16 } }, CRM_COLS.map((col) => /* @__PURE__ */ React.createElement("div", { key: col.k, style: { background: "#fff", border: "1.5px solid var(--br)", borderRadius: 8, padding: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, fontWeight: 700, marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { color: col.req ? "var(--g)" : "var(--mu)" } }, col.k, col.req ? " *" : ""), colMap[col.k] && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9, background: "var(--gl)", color: "var(--g)", padding: "1px 6px", borderRadius: 100, fontWeight: 700 } }, "\u2713")), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { fontSize: 11, padding: "5px 8px" }, value: colMap[col.k] || "", onChange: (e) => setColMap((m) => ({ ...m, [col.k]: e.target.value || void 0 })) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "\u2014 Non mapp\xE9 \u2014"), headers.map((h) => /* @__PURE__ */ React.createElement("option", { key: h, value: h }, h)))))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "fbt2", style: { flex: 1, background: "var(--bg)", color: "var(--tx)", border: "1.5px solid var(--br)" }, onClick: () => {
-    setStep("upload");
-    setRawRows([]);
-    setHeaders([]);
-  } }, "\u2190 Retour"), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 2 }, onClick: buildPreview }, "\u{1F441} Pr\xE9visualiser \u2192"))), step === "preview" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10, marginBottom: 12, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, background: "var(--gl)", border: "1px solid #a7f3d0", borderRadius: 9, padding: "10px 14px", minWidth: 120 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22, fontWeight: 800, color: "var(--g)", fontFamily: "var(--fd)" } }, validCount), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "#166534" } }, "\u2705 Valides")), errCount > 0 && /* @__PURE__ */ React.createElement("div", { style: { flex: 1, background: "var(--rl)", border: "1px solid #fca5a5", borderRadius: 9, padding: "10px 14px", minWidth: 120 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22, fontWeight: 800, color: "var(--rd)", fontFamily: "var(--fd)" } }, errCount), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "#991b1b" } }, "\u26A0\uFE0F Avec erreurs"))), /* @__PURE__ */ React.createElement("div", { style: { maxHeight: 300, overflowY: "auto", border: "1px solid var(--br)", borderRadius: 9, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 11 } }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", { style: { background: "var(--bg)", position: "sticky", top: 0 } }, /* @__PURE__ */ React.createElement("th", { style: { padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: "1px solid var(--br)", color: "var(--mu)" } }, "#"), /* @__PURE__ */ React.createElement("th", { style: { padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: "1px solid var(--br)" } }, "Titre"), /* @__PURE__ */ React.createElement("th", { style: { padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: "1px solid var(--br)" } }, "Type"), /* @__PURE__ */ React.createElement("th", { style: { padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: "1px solid var(--br)" } }, "Prix"), /* @__PURE__ */ React.createElement("th", { style: { padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: "1px solid var(--br)" } }, "Statut"))), /* @__PURE__ */ React.createElement("tbody", null, preview.slice(0, 50).map((r) => /* @__PURE__ */ React.createElement("tr", { key: r._idx, style: { borderBottom: "1px solid var(--br)", background: r._errs.length ? "#fff7f7" : "#fff" } }, /* @__PURE__ */ React.createElement("td", { style: { padding: "7px 10px", color: "var(--mu)" } }, r._idx), /* @__PURE__ */ React.createElement("td", { style: { padding: "7px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, r.title || /* @__PURE__ */ React.createElement("span", { style: { color: "var(--mu)" } }, "\u2014")), /* @__PURE__ */ React.createElement("td", { style: { padding: "7px 10px" } }, r.property_type || "\u2014"), /* @__PURE__ */ React.createElement("td", { style: { padding: "7px 10px", fontWeight: 700, color: "var(--g)" } }, r.price ? parseInt(r.price).toLocaleString("fr-SN") + " F" : "\u2014"), /* @__PURE__ */ React.createElement("td", { style: { padding: "7px 10px" } }, r._errs.length ? /* @__PURE__ */ React.createElement("span", { style: { color: "var(--rd)", fontSize: 10 } }, "\u274C ", r._errs.join(", ")) : /* @__PURE__ */ React.createElement("span", { style: { color: "#16a34a", fontWeight: 700 } }, "\u2713"))))))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "fbt2", style: { flex: 1, background: "var(--bg)", color: "var(--tx)", border: "1.5px solid var(--br)" }, onClick: () => setStep("mapping") }, "\u2190 Mapping"), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { flex: 2 }, onClick: startImport, disabled: validCount === 0 }, "\u26A1 Importer ", validCount, " annonce", validCount > 1 ? "s" : "", " \u2192"))), step === "importing" && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "30px 20px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 48, marginBottom: 12 } }, "\u2699\uFE0F"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 16, marginBottom: 6 } }, "Import en cours\u2026"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 16 } }, progress.done, " / ", progress.total, " annonces trait\xE9es"), /* @__PURE__ */ React.createElement("div", { style: { background: "var(--br)", borderRadius: 100, height: 10, overflow: "hidden", maxWidth: 320, margin: "0 auto 12px" } }, /* @__PURE__ */ React.createElement("div", { style: { background: "var(--g)", height: "100%", width: pct + "%", borderRadius: 100, transition: "width .3s" } })), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: "var(--g)" } }, pct, "%"), progress.errs.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10, fontSize: 11, color: "var(--rd)" } }, "\u26A0\uFE0F ", progress.errs.length, " erreur(s)")), step === "done" && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "24px 20px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 48, marginBottom: 10 } }, "\u{1F389}"), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 800, fontSize: 18, marginBottom: 6 } }, "Import termin\xE9 !"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", marginBottom: 6 } }, /* @__PURE__ */ React.createElement("strong", { style: { color: "var(--g)" } }, progress.total - progress.errs.length, " annonce", progress.total - progress.errs.length > 1 ? "s" : ""), " import\xE9e", progress.total - progress.errs.length > 1 ? "s" : "", " avec succ\xE8s", progress.errs.length > 0 && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--rd)" } }, " \xB7 ", progress.errs.length, " erreur(s)")), progress.errs.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "var(--rl)", borderRadius: 8, padding: 10, marginBottom: 12, fontSize: 11, textAlign: "left", maxHeight: 100, overflowY: "auto" } }, progress.errs.map((e, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { color: "var(--rd)", marginBottom: 2 } }, "\u2022 ", e))), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", style: { maxWidth: 280, margin: "0 auto" }, onClick: () => {
-    setStep("upload");
-    setRawRows([]);
-    setPreview([]);
-    setProgress({ done: 0, total: 0, errs: [] });
-  } }, "\u{1F4C1} Nouvel import")), logs.length > 0 && step === "upload" && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: "var(--mu)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 8 } }, "Historique des imports"), loadingLogs ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, "Chargement\u2026") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 6 } }, logs.map((l) => /* @__PURE__ */ React.createElement("div", { key: l.id, style: { background: "#fff", border: "1.5px solid var(--br)", borderRadius: 9, padding: "10px 13px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 12, marginBottom: 2 } }, l.filename || "import.csv"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, new Date(l.created_at).toLocaleDateString("fr-SN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }), l.notes && /* @__PURE__ */ React.createElement("span", { style: { marginLeft: 6, fontStyle: "italic" } }, "\xB7 ", l.notes))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "center", flexShrink: 0 } }, l.success_rows > 0 && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, fontWeight: 700, color: "#16a34a", background: "#dcfce7", padding: "2px 9px", borderRadius: 100 } }, "\u2713 ", l.success_rows, " import\xE9es"), l.error_rows > 0 && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, fontWeight: 700, color: "var(--rd)", background: "var(--rl)", padding: "2px 9px", borderRadius: 100 } }, "\u2717 ", l.error_rows, " erreurs")))))));
+
+  const validCount=preview.filter(r=>r._errs.length===0).length;
+  const errCount=preview.filter(r=>r._errs.length>0).length;
+  const STEPS_LBL=[["upload","📁 Upload"],["mapping","🔗 Mapping"],["preview","👁 Aperçu"],["importing","⚙️ Import"],["done","✅ Terminé"]];
+  const stepIdx=STEPS_LBL.findIndex(([k])=>k===step);
+  const pct=progress.total>0?Math.round(progress.done/progress.total*100):0;
+
+  return(
+    <div>
+      {/* ══ HERO IMPORT ══ */}
+      {step==="upload"&&(
+        <div style={{background:"linear-gradient(135deg,#0a5c36 0%,#1a3a5c 100%)",borderRadius:14,padding:"22px 20px",marginBottom:20}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:14}}>
+            <div>
+              <div style={{color:"#fff",fontFamily:"var(--fd)",fontWeight:800,fontSize:18,marginBottom:4}}>
+                ⚡ Import 100 annonces en 1 clic
+              </div>
+              <div style={{color:"rgba(255,255,255,.65)",fontSize:12,marginBottom:12}}>
+                Testez l'import massif avec <strong style={{color:"var(--au)"}}>100 annonces générées automatiquement</strong> — villas, appartements, terrains dans tout le Sénégal
+              </div>
+              <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+                <button onClick={importDemo}
+                  style={{background:"var(--au)",color:"#1a1a1a",border:"none",borderRadius:9,padding:"10px 22px",fontSize:13,fontWeight:800,cursor:"pointer",display:"flex",alignItems:"center",gap:7,boxShadow:"0 4px 18px rgba(234,179,8,.35)"}}>
+                  ⚡ Importer 100 annonces démo →
+                </button>
+                <button onClick={downloadTemplate}
+                  style={{background:"rgba(255,255,255,.12)",color:"#fff",border:"1.5px solid rgba(255,255,255,.3)",borderRadius:9,padding:"10px 18px",fontSize:12,fontWeight:700,cursor:"pointer"}}>
+                  ⬇️ Télécharger le modèle CSV
+                </button>
+              </div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:7,minWidth:160}}>
+              {[["🏠","7 types de biens"],["🌍","9 villes couvertes"],["📄","Données 100% réalistes"],["⚙️","Import par chunks"],].map(([ico,txt])=>(
+                <div key={txt} style={{display:"flex",alignItems:"center",gap:8,color:"rgba(255,255,255,.8)",fontSize:11}}>
+                  <span style={{fontSize:15}}>{ico}</span>{txt}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14,flexWrap:"wrap",gap:8}}>
+        <div>
+          <div className="dtit2" style={{marginBottom:3}}>📥 Import CSV personnalisé</div>
+          <div style={{fontSize:12,color:"var(--mu)"}}>Importez vos propres annonces via fichier CSV ou Excel</div>
+        </div>
+        {step!=="upload"&&(
+          <button onClick={downloadTemplate} style={{background:"var(--bg)",border:"1.5px solid var(--br)",borderRadius:8,padding:"8px 14px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>
+            ⬇️ Modèle CSV
+          </button>
+        )}
+      </div>
+
+      {/* Stepper */}
+      <div style={{display:"flex",borderRadius:10,overflow:"hidden",border:"1px solid var(--br)",marginBottom:18}}>
+        {STEPS_LBL.map(([k,l],i)=>(
+          <div key={k} style={{flex:1,padding:"8px 2px",textAlign:"center",fontSize:10,fontWeight:700,
+            background:step===k?"var(--g)":i<stepIdx?"var(--gl)":"var(--bg)",
+            color:step===k?"#fff":i<stepIdx?"var(--g)":"var(--mu)",
+            borderRight:i<STEPS_LBL.length-1?"1px solid var(--br)":"none",transition:".15s"}}>
+            {l}
+          </div>
+        ))}
+      </div>
+
+      {/* ── UPLOAD ── */}
+      {step==="upload"&&(
+        <>
+          <div
+            onClick={()=>fileRef.current?.click()}
+            onDragOver={e=>{e.preventDefault();setDragOver(true);}}
+            onDragLeave={()=>setDragOver(false)}
+            onDrop={e=>{e.preventDefault();setDragOver(false);const f=e.dataTransfer.files?.[0];if(f){const dt=new DataTransfer();dt.items.add(f);fileRef.current.files=dt.files;handleFile({target:{files:dt.files}});}}}
+            style={{border:`2.5px dashed ${dragOver?"var(--g)":"var(--br)"}`,borderRadius:"var(--r)",padding:"36px 20px",textAlign:"center",cursor:"pointer",background:dragOver?"var(--gl)":"#fff",transition:".18s"}}
+          >
+            <div style={{fontSize:48,marginBottom:10}}>📁</div>
+            <div style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:15,marginBottom:5}}>Déposez votre fichier CSV ici</div>
+            <div style={{fontSize:12,color:"var(--mu)",marginBottom:16}}>ou cliquez pour parcourir · Max 100 lignes · Encodage UTF-8 · Séparateur , ou ;</div>
+            <input ref={fileRef} type="file" accept=".csv,.txt" style={{display:"none"}} onChange={handleFile}/>
+            <span style={{background:"var(--g)",color:"#fff",padding:"9px 22px",borderRadius:100,fontSize:13,fontWeight:700}}>📂 Choisir un fichier CSV</span>
+          </div>
+          {/* Info colonnes */}
+          <div style={{marginTop:14,background:"var(--bg)",borderRadius:10,padding:14}}>
+            <div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:".4px",marginBottom:8}}>Colonnes supportées</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+              {CRM_COLS.map(c=><span key={c.k} style={{fontSize:10,padding:"3px 8px",borderRadius:100,background:c.req?"#dcfce7":"var(--bg)",border:`1px solid ${c.req?"#a7f3d0":"var(--br)"}`,color:c.req?"#166534":"var(--mu)",fontWeight:c.req?700:400}}>{c.k}{c.req?"":" ?"}</span>)}
+            </div>
+            <div style={{fontSize:10,color:"var(--mu)",marginTop:6}}>🟢 Obligatoire &nbsp;⬜ Optionnel</div>
+          </div>
+        </>
+      )}
+
+      {/* ── MAPPING ── */}
+      {step==="mapping"&&(
+        <>
+          <div style={{background:"var(--gl)",border:"1px solid #a7f3d0",borderRadius:9,padding:11,marginBottom:14,fontSize:12,color:"#166534",display:"flex",gap:6,alignItems:"center"}}>
+            <span>✅</span>
+            <span><strong>{rawRows.length} lignes</strong> détectées · <strong>{headers.length} colonnes</strong> trouvées · Vérifiez et ajustez le mapping</span>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:10,marginBottom:16}}>
+            {CRM_COLS.map(col=>(
+              <div key={col.k} style={{background:"#fff",border:"1.5px solid var(--br)",borderRadius:8,padding:10}}>
+                <div style={{fontSize:10,fontWeight:700,marginBottom:4,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{color:col.req?"var(--g)":"var(--mu)"}}>{col.k}{col.req?" *":""}</span>
+                  {colMap[col.k]&&<span style={{fontSize:9,background:"var(--gl)",color:"var(--g)",padding:"1px 6px",borderRadius:100,fontWeight:700}}>✓</span>}
+                </div>
+                <select className="fi" style={{fontSize:11,padding:"5px 8px"}} value={colMap[col.k]||""} onChange={e=>setColMap(m=>({...m,[col.k]:e.target.value||undefined}))}>
+                  <option value="">— Non mappé —</option>
+                  {headers.map(h=><option key={h} value={h}>{h}</option>)}
+                </select>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:10}}>
+            <button className="fbt2" style={{flex:1,background:"var(--bg)",color:"var(--tx)",border:"1.5px solid var(--br)"}} onClick={()=>{setStep("upload");setRawRows([]);setHeaders([]);}}>← Retour</button>
+            <button className="fbt2 fbg" style={{flex:2}} onClick={buildPreview}>👁 Prévisualiser →</button>
+          </div>
+        </>
+      )}
+
+      {/* ── PREVIEW ── */}
+      {step==="preview"&&(
+        <>
+          <div style={{display:"flex",gap:10,marginBottom:12,flexWrap:"wrap"}}>
+            <div style={{flex:1,background:"var(--gl)",border:"1px solid #a7f3d0",borderRadius:9,padding:"10px 14px",minWidth:120}}>
+              <div style={{fontSize:22,fontWeight:800,color:"var(--g)",fontFamily:"var(--fd)"}}>{validCount}</div>
+              <div style={{fontSize:11,color:"#166534"}}>✅ Valides</div>
+            </div>
+            {errCount>0&&<div style={{flex:1,background:"var(--rl)",border:"1px solid #fca5a5",borderRadius:9,padding:"10px 14px",minWidth:120}}>
+              <div style={{fontSize:22,fontWeight:800,color:"var(--rd)",fontFamily:"var(--fd)"}}>{errCount}</div>
+              <div style={{fontSize:11,color:"#991b1b"}}>⚠️ Avec erreurs</div>
+            </div>}
+          </div>
+          <div style={{maxHeight:300,overflowY:"auto",border:"1px solid var(--br)",borderRadius:9,marginBottom:14}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:11}}>
+              <thead>
+                <tr style={{background:"var(--bg)",position:"sticky",top:0}}>
+                  <th style={{padding:"8px 10px",textAlign:"left",fontWeight:700,borderBottom:"1px solid var(--br)",color:"var(--mu)"}}>#</th>
+                  <th style={{padding:"8px 10px",textAlign:"left",fontWeight:700,borderBottom:"1px solid var(--br)"}}>Titre</th>
+                  <th style={{padding:"8px 10px",textAlign:"left",fontWeight:700,borderBottom:"1px solid var(--br)"}}>Type</th>
+                  <th style={{padding:"8px 10px",textAlign:"left",fontWeight:700,borderBottom:"1px solid var(--br)"}}>Prix</th>
+                  <th style={{padding:"8px 10px",textAlign:"left",fontWeight:700,borderBottom:"1px solid var(--br)"}}>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                {preview.slice(0,50).map(r=>(
+                  <tr key={r._idx} style={{borderBottom:"1px solid var(--br)",background:r._errs.length?"#fff7f7":"#fff"}}>
+                    <td style={{padding:"7px 10px",color:"var(--mu)"}}>{r._idx}</td>
+                    <td style={{padding:"7px 10px",maxWidth:160,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.title||<span style={{color:"var(--mu)"}}>—</span>}</td>
+                    <td style={{padding:"7px 10px"}}>{r.property_type||"—"}</td>
+                    <td style={{padding:"7px 10px",fontWeight:700,color:"var(--g)"}}>{r.price?parseInt(r.price).toLocaleString("fr-SN")+" F":"—"}</td>
+                    <td style={{padding:"7px 10px"}}>
+                      {r._errs.length?<span style={{color:"var(--rd)",fontSize:10}}>❌ {r._errs.join(", ")}</span>:<span style={{color:"#16a34a",fontWeight:700}}>✓</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{display:"flex",gap:10}}>
+            <button className="fbt2" style={{flex:1,background:"var(--bg)",color:"var(--tx)",border:"1.5px solid var(--br)"}} onClick={()=>setStep("mapping")}>← Mapping</button>
+            <button className="fbt2 fbg" style={{flex:2}} onClick={startImport} disabled={validCount===0}>
+              ⚡ Importer {validCount} annonce{validCount>1?"s":""} →
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ── IMPORTING ── */}
+      {step==="importing"&&(
+        <div style={{textAlign:"center",padding:"30px 20px"}}>
+          <div style={{fontSize:48,marginBottom:12}}>⚙️</div>
+          <div style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:16,marginBottom:6}}>Import en cours…</div>
+          <div style={{fontSize:12,color:"var(--mu)",marginBottom:16}}>{progress.done} / {progress.total} annonces traitées</div>
+          <div style={{background:"var(--br)",borderRadius:100,height:10,overflow:"hidden",maxWidth:320,margin:"0 auto 12px"}}>
+            <div style={{background:"var(--g)",height:"100%",width:pct+"%",borderRadius:100,transition:"width .3s"}}/>
+          </div>
+          <div style={{fontSize:12,fontWeight:700,color:"var(--g)"}}>{pct}%</div>
+          {progress.errs.length>0&&<div style={{marginTop:10,fontSize:11,color:"var(--rd)"}}>⚠️ {progress.errs.length} erreur(s)</div>}
+        </div>
+      )}
+
+      {/* ── DONE ── */}
+      {step==="done"&&(
+        <div style={{textAlign:"center",padding:"24px 20px"}}>
+          <div style={{fontSize:48,marginBottom:10}}>🎉</div>
+          <div style={{fontFamily:"var(--fd)",fontWeight:800,fontSize:18,marginBottom:6}}>Import terminé !</div>
+          <div style={{fontSize:13,color:"var(--mu)",marginBottom:6}}>
+            <strong style={{color:"var(--g)"}}>{progress.total-progress.errs.length} annonce{progress.total-progress.errs.length>1?"s":""}</strong> importée{progress.total-progress.errs.length>1?"s":""} avec succès
+            {progress.errs.length>0&&<span style={{color:"var(--rd)"}}> · {progress.errs.length} erreur(s)</span>}
+          </div>
+          {progress.errs.length>0&&(
+            <div style={{background:"var(--rl)",borderRadius:8,padding:10,marginBottom:12,fontSize:11,textAlign:"left",maxHeight:100,overflowY:"auto"}}>
+              {progress.errs.map((e,i)=><div key={i} style={{color:"var(--rd)",marginBottom:2}}>• {e}</div>)}
+            </div>
+          )}
+          <button className="fbt2 fbg" style={{maxWidth:280,margin:"0 auto"}} onClick={()=>{setStep("upload");setRawRows([]);setPreview([]);setProgress({done:0,total:0,errs:[]});}}>
+            📁 Nouvel import
+          </button>
+        </div>
+      )}
+
+      {/* ── HISTORIQUE ── */}
+      {logs.length>0&&step==="upload"&&(
+        <div style={{marginTop:20}}>
+          <div style={{fontSize:12,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:".4px",marginBottom:8}}>Historique des imports</div>
+          {loadingLogs?<div style={{fontSize:12,color:"var(--mu)"}}>Chargement…</div>:(
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {logs.map(l=>(
+                <div key={l.id} style={{background:"#fff",border:"1.5px solid var(--br)",borderRadius:9,padding:"10px 13px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:10,flexWrap:"wrap"}}>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:12,marginBottom:2}}>{l.filename||"import.csv"}</div>
+                    <div style={{fontSize:11,color:"var(--mu)"}}>{new Date(l.created_at).toLocaleDateString("fr-SN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}{l.notes&&<span style={{marginLeft:6,fontStyle:"italic"}}>· {l.notes}</span>}</div>
+                  </div>
+                  <div style={{display:"flex",gap:8,alignItems:"center",flexShrink:0}}>
+                    {l.success_rows>0&&<span style={{fontSize:11,fontWeight:700,color:"#16a34a",background:"#dcfce7",padding:"2px 9px",borderRadius:100}}>✓ {l.success_rows} importées</span>}
+                    {l.error_rows>0&&<span style={{fontSize:11,fontWeight:700,color:"var(--rd)",background:"var(--rl)",padding:"2px 9px",borderRadius:100}}>✗ {l.error_rows} erreurs</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
+
+
 function AgenceDash({ user, profile, myList, loading, onOpenListing, showDT, setEditListing, setShowProfileEdit, toggleStatus, del, boost, setProfile }) {
   const [tab, setTab] = useState("overview");
   const [agencyInfo, setAgencyInfo] = useState(null);
@@ -2547,14 +2191,18 @@ function AgenceDash({ user, profile, myList, loading, onOpenListing, showDT, set
       if (ags) setAgents(ags);
       if (ls) {
         setAllListings(ls);
+        // Charger les visites maintenant qu'on a les listing IDs
         if (ls.length > 0) {
-          const ids = ls.map((l) => l.id);
-          const { data: vr } = await sb.from("visit_requests").select("*,listings(id,title,cover_image,property_type,quartier)").in("listing_id", ids).order("created_at", { ascending: false });
+          const ids = ls.map(l => l.id);
+          const { data: vr } = await sb.from("visit_requests")
+            .select("*,listings(id,title,cover_image,property_type,quartier)")
+            .in("listing_id", ids)
+            .order("created_at", { ascending: false });
           if (vr) setAgenceVisits(vr);
         }
       }
       if (rv) setReviews(rv);
-    } catch (e) {
+    } catch(e) {
       console.warn("AgenceDash.loadAgency:", e);
     } finally {
       setAgLoading(false);
@@ -2562,12 +2210,9 @@ function AgenceDash({ user, profile, myList, loading, onOpenListing, showDT, set
   }
   async function updateAgenceVisit(visitId, newStatus) {
     const { error } = await sb.from("visit_requests").update({ status: newStatus }).eq("id", visitId);
-    if (error) {
-      showDT("\u274C " + error.message, "err");
-      return;
-    }
-    setAgenceVisits((vs) => vs.map((v) => v.id === visitId ? { ...v, status: newStatus } : v));
-    showDT(newStatus === "confirmed" ? "\u2705 Visite confirm\xE9e !" : newStatus === "done" ? "\u2714 Visite marqu\xE9e effectu\xE9e" : "Statut mis \xE0 jour");
+    if (error) { showDT("❌ " + error.message, "err"); return; }
+    setAgenceVisits(vs => vs.map(v => v.id === visitId ? { ...v, status: newStatus } : v));
+    showDT(newStatus === "confirmed" ? "✅ Visite confirmée !" : newStatus === "done" ? "✔ Visite marquée effectuée" : "Statut mis à jour");
   }
   async function saveAgency() {
     setSavingAg(true);
@@ -2596,59 +2241,45 @@ function AgenceDash({ user, profile, myList, loading, onOpenListing, showDT, set
     { k: "agency_profile", i: "\u{1F3E2}", l: "Profil agence" },
     { k: "profile", i: "\u{1F464}", l: "Mon compte" }
   ];
-  return /* @__PURE__ */ React.createElement(DashLayout, { navs, tab, setTab, profile, user, roleLabel: "\u{1F3E2} Agence" }, agLoading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : !profile.agency_id ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 40, marginBottom: 10 } }, "\u{1F3E2}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "Aucune agence associ\xE9e"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 5 } }, "Contactez l'administrateur pour cr\xE9er ou associer votre agence.")) : /* @__PURE__ */ React.createElement(React.Fragment, null, tab === "overview" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 52, height: 52, borderRadius: 12, background: agencyInfo && PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].c : "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 22 } }, (agencyInfo && agencyInfo.name || "A")[0]), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 800, fontSize: 17, display: "flex", alignItems: "center", gap: 7 } }, agencyInfo && agencyInfo.name, agencyInfo && agencyInfo.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9e")), agencyInfo && /* @__PURE__ */ React.createElement("span", { style: { background: PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].c : "var(--g)", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100 } }, "Plan ", agencyInfo.subscription_plan && PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].l : agencyInfo.subscription_plan))), /* @__PURE__ */ React.createElement("div", { className: "kpig" }, [["\u{1F3E0}", allListings.length, "Annonces"], ["\u2705", act, "Actives"], ["\u{1F441}", totV.toLocaleString("fr"), "Vues"], ["\u{1F4E9}", totC, "Contacts"], ["\u{1F465}", agents.length + 1, "Agents"], ["\u2B50", avgRating || "\u2014", "Note moy."]].map(([ico, val, lbl]) => /* @__PURE__ */ React.createElement("div", { className: "kpi", key: lbl }, /* @__PURE__ */ React.createElement("div", { className: "kpiic" }, ico), /* @__PURE__ */ React.createElement("div", { className: "kpiv" }, val), /* @__PURE__ */ React.createElement("div", { className: "kpil" }, lbl)))), /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      style: { display: "flex", gap: 12, marginBottom: 18, flexWrap: "wrap" }
-    },
-    /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        onClick: () => setTab("import"),
-        style: { flex: "1 1 220px", minWidth: 200, background: "linear-gradient(135deg,#0a5c36,#1a3a5c)", borderRadius: 12, padding: "16px 18px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 4px 18px rgba(10,92,54,.25)", transition: ".18s" }
-      },
-      /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36 } }, "\u26A1"),
-      /* @__PURE__ */ React.createElement(
-        "div",
-        null,
-        /* @__PURE__ */ React.createElement("div", { style: { color: "#fff", fontFamily: "var(--fd)", fontWeight: 800, fontSize: 14, marginBottom: 3 } }, "Import 100 annonces en 1 clic"),
-        /* @__PURE__ */ React.createElement("div", { style: { color: "rgba(255,255,255,.65)", fontSize: 11 } }, "Importez tout votre portefeuille via CSV ou d\xE9mo \u2192")
-      )
-    ),
-    allListings.length === 0 && /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        onClick: () => setTab("listings"),
-        style: { flex: "1 1 220px", minWidth: 200, background: "#fff", border: "1.5px dashed var(--br)", borderRadius: 12, padding: "16px 18px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14 }
-      },
-      /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36 } }, "\u{1F3E0}"),
-      /* @__PURE__ */ React.createElement(
-        "div",
-        null,
-        /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 13, marginBottom: 3 } }, "Aucune annonce encore"),
-        /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, "Importez en masse ou publiez une \xE0 une")
-      )
+  return /* @__PURE__ */ React.createElement(DashLayout, { navs, tab, setTab, profile, user, roleLabel: "\u{1F3E2} Agence" }, agLoading ? /* @__PURE__ */ React.createElement("div", { className: "ldr" }, /* @__PURE__ */ React.createElement("div", { className: "spin" })) : !profile.agency_id ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 40, marginBottom: 10 } }, "\u{1F3E2}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "Aucune agence associ\xE9e"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 5 } }, "Contactez l'administrateur pour cr\xE9er ou associer votre agence.")) : /* @__PURE__ */ React.createElement(React.Fragment, null, tab === "overview" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 52, height: 52, borderRadius: 12, background: agencyInfo && PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].c : "var(--g)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 22 } }, (agencyInfo && agencyInfo.name || "A")[0]), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 800, fontSize: 17, display: "flex", alignItems: "center", gap: 7 } }, agencyInfo && agencyInfo.name, agencyInfo && agencyInfo.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9e")), agencyInfo && /* @__PURE__ */ React.createElement("span", { style: { background: PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].c : "var(--g)", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100 } }, "Plan ", agencyInfo.subscription_plan && PLANS[agencyInfo.subscription_plan] ? PLANS[agencyInfo.subscription_plan].l : agencyInfo.subscription_plan))), /* @__PURE__ */ React.createElement("div", { className: "kpig" }, [["\u{1F3E0}", allListings.length, "Annonces"], ["\u2705", act, "Actives"], ["\u{1F441}", totV.toLocaleString("fr"), "Vues"], ["\u{1F4E9}", totC, "Contacts"], ["\u{1F465}", agents.length + 1, "Agents"], ["\u2B50", avgRating || "\u2014", "Note moy."]].map(([ico, val, lbl]) => /* @__PURE__ */ React.createElement("div", { className: "kpi", key: lbl }, /* @__PURE__ */ React.createElement("div", { className: "kpiic" }, ico), /* @__PURE__ */ React.createElement("div", { className: "kpiv" }, val), /* @__PURE__ */ React.createElement("div", { className: "kpil" }, lbl)))), /* @__PURE__ */ React.createElement("div", {
+  style: { display:"flex", gap:12, marginBottom:18, flexWrap:"wrap" }
+},
+  /* @__PURE__ */ React.createElement("div", {
+    onClick: () => setTab("import"),
+    style: { flex:"1 1 220px", minWidth:200, background:"linear-gradient(135deg,#0a5c36,#1a3a5c)", borderRadius:12, padding:"16px 18px", cursor:"pointer", display:"flex", alignItems:"center", gap:14, boxShadow:"0 4px 18px rgba(10,92,54,.25)", transition:".18s" }
+  },
+    /* @__PURE__ */ React.createElement("div", { style:{ fontSize:36 } }, "⚡"),
+    /* @__PURE__ */ React.createElement("div", null,
+      /* @__PURE__ */ React.createElement("div", { style:{ color:"#fff", fontFamily:"var(--fd)", fontWeight:800, fontSize:14, marginBottom:3 } }, "Import 100 annonces en 1 clic"),
+      /* @__PURE__ */ React.createElement("div", { style:{ color:"rgba(255,255,255,.65)", fontSize:11 } }, "Importez tout votre portefeuille via CSV ou démo →")
     )
-  ), allListings.length > 0 && /* @__PURE__ */ React.createElement(PerformanceChart, { myList: allListings }), /* @__PURE__ */ React.createElement(RecentListingsTable, { myList: allListings, onOpenListing, onViewAll: () => setTab("listings"), title: "Derni\xE8res annonces de l'agence" })), tab === "listings" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F3E0} Toutes les annonces de l'agence (", allListings.length, ")"), allListings.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32 } }, "\u{1F3E0}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, marginTop: 8 } }, "Aucune annonce publi\xE9e")) : /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1px solid var(--br)", borderRadius: "var(--r)", overflow: "auto", boxShadow: "var(--sh)" } }, /* @__PURE__ */ React.createElement("table", { className: "dtbl", style: { minWidth: 580 } }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Bien"), /* @__PURE__ */ React.createElement("th", null, "Prix"), /* @__PURE__ */ React.createElement("th", null, "Statut"), /* @__PURE__ */ React.createElement("th", null, "Boost"), /* @__PURE__ */ React.createElement("th", null, "Vues"), /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, allListings.map((l) => /* @__PURE__ */ React.createElement("tr", { key: l.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 7, alignItems: "center" } }, /* @__PURE__ */ React.createElement("img", { src: l.cover_image || "", alt: "", style: { width: 38, height: 30, borderRadius: 4, objectFit: "cover", flexShrink: 0 }, onError: (e) => e.target.style.display = "none" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 11 } }, PICO[l.property_type], " ", (l.title || "").slice(0, 22)), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--mu)" } }, "\u{1F4CD} ", l.quartier)))), /* @__PURE__ */ React.createElement("td", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 11, color: "var(--g)" } }, fmt(l.price)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sdot" }, /* @__PURE__ */ React.createElement("span", { className: `dot ${l.status === "active" ? "dg" : l.status === "archived" ? "dr" : "dy"}` }), l.status)), /* @__PURE__ */ React.createElement("td", null, l.is_premium ? /* @__PURE__ */ React.createElement("span", { className: "boost-badge" }, "\u2B50 Premium") : /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => boost(l.id) }, "\u{1F680} Boost")), /* @__PURE__ */ React.createElement("td", { style: { fontSize: 11, color: "var(--mu)" } }, "\u{1F441} ", l.views_count || 0), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "abtns" }, /* @__PURE__ */ React.createElement("button", { className: "ab abv", onClick: () => onOpenListing(l), title: "Voir" }, "\u{1F441}"), /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => setEditListing(l), title: "Modifier" }, "\u270F\uFE0F"), /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => toggleStatus(l.id, l.status) }, l.status === "active" ? "\u23F8" : "\u25B6"), /* @__PURE__ */ React.createElement("button", { className: "ab abd", onClick: () => del(l.id) }, "\u{1F5D1}"))))))))), tab === "import" && /* @__PURE__ */ React.createElement(
-    React.Fragment,
-    null,
-    /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u26A1 Import CRM \u2014 100 annonces en 1 clic"),
-    /* @__PURE__ */ React.createElement(
-      "div",
-      { className: "al awi", style: { marginBottom: 16 } },
-      "\u{1F4A1} Importez votre portefeuille d'annonces en masse via CSV ou utilisez l'import d\xE9mo pour voir la fonctionnalit\xE9 en action."
-    ),
-    /* @__PURE__ */ React.createElement(CrmImportPanel, {
-      user,
-      profile,
-      agencyId: profile.agency_id,
-      showDT,
-      onImported: (n) => {
-        showDT("\u2705 " + n + " annonce" + (n > 1 ? "s" : "") + " import\xE9e" + (n > 1 ? "s" : "") + " avec succ\xE8s !");
-        loadAgency();
-      }
-    })
-  ), tab === "visits" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F4E1} Demandes de visites \xE0 distance"), /* @__PURE__ */ React.createElement(VisitRequestsPanel, { visitReqs: agenceVisits, onUpdateStatus: updateAgenceVisit })), tab === "team" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F465} \xC9quipe (", agents.length + 1, " membres)"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "dash-card", style: { display: "flex", gap: 12, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { className: "dav", style: { width: 44, height: 44, fontSize: 15, margin: 0, flexShrink: 0 } }, (profile.full_name || user.email || "?")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13 } }, profile.full_name || user.email), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, user.email)), /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gl)", color: "var(--g)", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 100 } }, "\u{1F3E2} Responsable")), agents.map((ag) => /* @__PURE__ */ React.createElement("div", { key: ag.id, className: "dash-card", style: { display: "flex", gap: 12, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { className: "dav", style: { width: 44, height: 44, fontSize: 15, margin: 0, flexShrink: 0 } }, (ag.full_name || ag.id || "A")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13 } }, ag.full_name || "Agent"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, ag.phone || "\u2014"), ag.bio && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", marginTop: 2, fontStyle: "italic" } }, ag.bio.slice(0, 60), ag.bio.length > 60 ? "\u2026" : "")), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right" } }, ag.experience_years > 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, ag.experience_years, " ans exp."), ag.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9")))), agents.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "20px", color: "var(--mu)", fontSize: 12 } }, "Aucun agent rattach\xE9 encore. Les agents qui s'inscrivent et choisissent votre agence appara\xEEtront ici."))), tab === "reviews" && /* @__PURE__ */ React.createElement(
+  ),
+  allListings.length === 0 && /* @__PURE__ */ React.createElement("div", {
+    onClick: () => setTab("listings"),
+    style: { flex:"1 1 220px", minWidth:200, background:"#fff", border:"1.5px dashed var(--br)", borderRadius:12, padding:"16px 18px", cursor:"pointer", display:"flex", alignItems:"center", gap:14 }
+  },
+    /* @__PURE__ */ React.createElement("div", { style:{ fontSize:36 } }, "🏠"),
+    /* @__PURE__ */ React.createElement("div", null,
+      /* @__PURE__ */ React.createElement("div", { style:{ fontFamily:"var(--fd)", fontWeight:700, fontSize:13, marginBottom:3 } }, "Aucune annonce encore"),
+      /* @__PURE__ */ React.createElement("div", { style:{ fontSize:11, color:"var(--mu)" } }, "Importez en masse ou publiez une à une")
+    )
+  )
+), allListings.length > 0 && /* @__PURE__ */ React.createElement(PerformanceChart, { myList: allListings }), /* @__PURE__ */ React.createElement(RecentListingsTable, { myList: allListings, onOpenListing, onViewAll: () => setTab("listings"), title: "Dernières annonces de l'agence" })), tab === "listings" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F3E0} Toutes les annonces de l'agence (", allListings.length, ")"), allListings.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty-state" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32 } }, "\u{1F3E0}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, marginTop: 8 } }, "Aucune annonce publi\xE9e")) : /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1px solid var(--br)", borderRadius: "var(--r)", overflow: "auto", boxShadow: "var(--sh)" } }, /* @__PURE__ */ React.createElement("table", { className: "dtbl", style: { minWidth: 580 } }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Bien"), /* @__PURE__ */ React.createElement("th", null, "Prix"), /* @__PURE__ */ React.createElement("th", null, "Statut"), /* @__PURE__ */ React.createElement("th", null, "Boost"), /* @__PURE__ */ React.createElement("th", null, "Vues"), /* @__PURE__ */ React.createElement("th", null, "Actions"))), /* @__PURE__ */ React.createElement("tbody", null, allListings.map((l) => /* @__PURE__ */ React.createElement("tr", { key: l.id }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 7, alignItems: "center" } }, /* @__PURE__ */ React.createElement("img", { src: l.cover_image || "", alt: "", style: { width: 38, height: 30, borderRadius: 4, objectFit: "cover", flexShrink: 0 }, onError: (e) => e.target.style.display = "none" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 11 } }, PICO[l.property_type], " ", (l.title || "").slice(0, 22)), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--mu)" } }, "\u{1F4CD} ", l.quartier)))), /* @__PURE__ */ React.createElement("td", { style: { fontFamily: "var(--fd)", fontWeight: 700, fontSize: 11, color: "var(--g)" } }, fmt(l.price)), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("span", { className: "sdot" }, /* @__PURE__ */ React.createElement("span", { className: `dot ${l.status === "active" ? "dg" : l.status === "archived" ? "dr" : "dy"}` }), l.status)), /* @__PURE__ */ React.createElement("td", null, l.is_premium ? /* @__PURE__ */ React.createElement("span", { className: "boost-badge" }, "\u2B50 Premium") : /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => boost(l.id) }, "\u{1F680} Boost")), /* @__PURE__ */ React.createElement("td", { style: { fontSize: 11, color: "var(--mu)" } }, "\u{1F441} ", l.views_count || 0), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("div", { className: "abtns" }, /* @__PURE__ */ React.createElement("button", { className: "ab abv", onClick: () => onOpenListing(l), title: "Voir" }, "\u{1F441}"), /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => setEditListing(l), title: "Modifier" }, "\u270F\uFE0F"), /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => toggleStatus(l.id, l.status) }, l.status === "active" ? "\u23F8" : "\u25B6"), /* @__PURE__ */ React.createElement("button", { className: "ab abd", onClick: () => del(l.id) }, "\u{1F5D1}"))))))))), tab === "import" && /* @__PURE__ */ React.createElement(React.Fragment, null,
+  /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u26A1 Import CRM \u2014 100 annonces en 1 clic"),
+  /* @__PURE__ */ React.createElement("div", { className: "al awi", style: { marginBottom: 16 } },
+    "\u{1F4A1} Importez votre portefeuille d'annonces en masse via CSV ou utilisez l'import d\xE9mo pour voir la fonctionnalit\xE9 en action."
+  ),
+  /* @__PURE__ */ React.createElement(CrmImportPanel, {
+    user,
+    profile,
+    agencyId: profile.agency_id,
+    showDT,
+    onImported: (n) => {
+      showDT("\u2705 " + n + " annonce" + (n > 1 ? "s" : "") + " import\xE9e" + (n > 1 ? "s" : "") + " avec succ\xE8s !");
+      loadAgency();
+    }
+  })
+), tab === "visits" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F4E1} Demandes de visites \xE0 distance"), /* @__PURE__ */ React.createElement(VisitRequestsPanel, { visitReqs: agenceVisits, onUpdateStatus: updateAgenceVisit })), tab === "team" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "dtit2" }, "\u{1F465} \xC9quipe (", agents.length + 1, " membres)"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { className: "dash-card", style: { display: "flex", gap: 12, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { className: "dav", style: { width: 44, height: 44, fontSize: 15, margin: 0, flexShrink: 0 } }, (profile.full_name || user.email || "?")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13 } }, profile.full_name || user.email), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, user.email)), /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gl)", color: "var(--g)", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 100 } }, "\u{1F3E2} Responsable")), agents.map((ag) => /* @__PURE__ */ React.createElement("div", { key: ag.id, className: "dash-card", style: { display: "flex", gap: 12, alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { className: "dav", style: { width: 44, height: 44, fontSize: 15, margin: 0, flexShrink: 0 } }, (ag.full_name || ag.id || "A")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13 } }, ag.full_name || "Agent"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, ag.phone || "\u2014"), ag.bio && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)", marginTop: 2, fontStyle: "italic" } }, ag.bio.slice(0, 60), ag.bio.length > 60 ? "\u2026" : "")), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right" } }, ag.experience_years > 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--mu)" } }, ag.experience_years, " ans exp."), ag.is_verified && /* @__PURE__ */ React.createElement("span", { style: { background: "#dcfce7", color: "#16a34a", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4 } }, "\u2705 V\xE9rifi\xE9")))), agents.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "20px", color: "var(--mu)", fontSize: 12 } }, "Aucun agent rattach\xE9 encore. Les agents qui s'inscrivent et choisissent votre agence appara\xEEtront ici."))), tab === "reviews" && /* @__PURE__ */ React.createElement(
     ReviewsBlock,
     {
       reviews,
@@ -2946,6 +2577,7 @@ function Dashboard({ user, onOpenListing, onShowAgency, onLogout, favIds, onFav,
   const [favListings, setFavListings] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+  // initialProfile = appProfile depuis App (évite flash ParticulierDash)
   const [profile, setProfile] = useState(initialProfile || null);
   const [profileRetries, setProfileRetries] = useState(0);
   const [editListing, setEditListing] = useState(null);
@@ -2955,22 +2587,23 @@ function Dashboard({ user, onOpenListing, onShowAgency, onLogout, favIds, onFav,
     setDToast({ msg, type });
     setTimeout(() => setDToast(null), 3200);
   };
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
+  // Retry si profile toujours null après load (race condition signup → trigger)
   useEffect(() => {
     if (!loading && !profile && profileRetries < 3) {
       const t = setTimeout(() => {
-        setProfileRetries((r) => r + 1);
+        setProfileRetries(r => r + 1);
         loadProfile();
       }, 800 * (profileRetries + 1));
       return () => clearTimeout(t);
     }
   }, [loading, profile, profileRetries]);
+
   async function loadProfile() {
     const { data: p } = await sb.from("profiles").select("*").eq("id", user.id).single();
     if (p) setProfile(p);
   }
+
   async function load() {
     setLoading(true);
     try {
@@ -3022,15 +2655,24 @@ function Dashboard({ user, onOpenListing, onShowAgency, onLogout, favIds, onFav,
     setAlerts((al) => al.filter((a) => a.id !== id));
     showDT("Alerte supprim\xE9e");
   }
-  const role = profile ? profile.role || "particulier" : null;
+  // ── RBAC Routing ──────────────────────────────────────────────────
+  // Priorité : role pro > user_type diaspora > particulier
+  // Jamais afficher ParticulierDash si le profil n'est pas encore chargé
+  const role = profile ? (profile.role || "particulier") : null;
   const isDiaspora = profile && profile.user_type === "diaspora";
-  const roleLabel = !profile ? "\u23F3 Chargement..." : role === "admin" ? "\u{1F510} Admin" : role === "agence" ? "\u{1F3E2} Agence" : role === "agent" ? "\u{1F3E1} Agent" : role === "promoteur" ? "\u{1F3D7}\uFE0F Promoteur" : isDiaspora ? "\u{1F30D} Diaspora" : "\u{1F464} Particulier";
+  const roleLabel = !profile ? "⏳ Chargement..." 
+    : role === "admin" ? "🔐 Admin"
+    : role === "agence" ? "🏢 Agence"
+    : role === "agent" ? "🏡 Agent"
+    : role === "promoteur" ? "🏗️ Promoteur"
+    : isDiaspora ? "🌍 Diaspora"
+    : "👤 Particulier";
+
   function renderDashboard() {
-    if (!profile) return /* @__PURE__ */ React.createElement(
-      "div",
-      { className: "ldr" },
+    // Spinner pendant chargement profil (évite flash ParticulierDash)
+    if (!profile) return /* @__PURE__ */ React.createElement("div", { className: "ldr" }, 
       /* @__PURE__ */ React.createElement("div", { className: "spin" }),
-      profileRetries > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12, fontSize: 12, color: "var(--mu)" } }, "Chargement du profil\u2026 (" + profileRetries + "/3)")
+      profileRetries > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12, fontSize: 12, color: "var(--mu)" } }, "Chargement du profil… (" + profileRetries + "/3)")
     );
     if (role === "admin") return /* @__PURE__ */ React.createElement(AdminDash, { user, profile, showDT });
     if (role === "agence") return /* @__PURE__ */ React.createElement(AgenceDash, { ...sharedProps });
@@ -3039,6 +2681,7 @@ function Dashboard({ user, onOpenListing, onShowAgency, onLogout, favIds, onFav,
     if (isDiaspora) return /* @__PURE__ */ React.createElement(DiasporaDash, { user, profile, favIds, favListings, convs, loading, onOpenListing, showDT, setShowProfileEdit, onFav });
     return /* @__PURE__ */ React.createElement(ParticulierDash, { ...sharedProps });
   }
+
   const sharedProps = { user, profile, myList, convs, favIds, favListings, alerts, loading, onOpenListing, onShowAgency, showDT, setEditListing, setShowProfileEdit, toggleStatus, del, boost, toggleAlert, deleteAlert, setProfile, onFav };
   return /* @__PURE__ */ React.createElement(React.Fragment, null, editListing && /* @__PURE__ */ React.createElement(ListingEditModal, { user, listing: editListing, onClose: () => setEditListing(null), onSaved: (updated) => {
     setMyList((ls) => ls.map((l) => l.id === updated.id ? updated : l));
@@ -3430,21 +3073,13 @@ function ProfileEditModal({ user, profile, onClose, onSaved }) {
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
   async function save() {
-    setSaving(true);
-    setErr("");
+    setSaving(true); setErr("");
     try {
       const { error } = await sb.from("profiles").update({ full_name: name, phone, whatsapp: wa }).eq("id", user.id);
-      if (error) {
-        setErr(error.message);
-        return;
-      }
+      if (error) { setErr(error.message); return; }
       onSaved({ full_name: name, phone, whatsapp: wa });
       onClose();
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setSaving(false);
-    }
+    } catch(e) { setErr(e.message); } finally { setSaving(false); }
   }
   return /* @__PURE__ */ React.createElement("div", { className: "ov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal" }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtit" }, "\u270F\uFE0F Modifier le profil"), /* @__PURE__ */ React.createElement("button", { className: "mcls", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "mbd" }, err && /* @__PURE__ */ React.createElement("div", { className: "al ale" }, "\u274C ", err), /* @__PURE__ */ React.createElement("div", { className: "pedit-grid" }, /* @__PURE__ */ React.createElement("div", { className: "fg", style: { gridColumn: "1/-1" } }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Nom complet"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: name, onChange: (e) => setName(e.target.value), placeholder: "Ibrahima Diallo" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "T\xE9l\xE9phone"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: phone, onChange: (e) => setPhone(e.target.value), placeholder: "+221 77 000 00 00" })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "WhatsApp"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: wa, onChange: (e) => setWa(e.target.value), placeholder: "+221 77 000 00 00" }))), /* @__PURE__ */ React.createElement("button", { className: "fbt2 fbg", onClick: save, disabled: saving }, saving ? "Enregistrement..." : "\u{1F4BE} Sauvegarder"))));
 }
@@ -3530,57 +3165,40 @@ function EstimationModal({ onClose, listings = [] }) {
     setStep(2);
   }
   async function submitLead() {
-    if (!email.includes("@")) {
-      setErr("Email invalide");
-      return;
-    }
-    setSaving(true);
-    setErr("");
-    const _safeT = new Promise((res) => setTimeout(() => res({ timeout: true }), 8e3));
+    if (!email.includes("@")) { setErr("Email invalide"); return; }
+    setSaving(true); setErr("");
+    const _safeT = new Promise(res => setTimeout(() => res({ timeout: true }), 8000));
     try {
       Promise.race([
         sb.from("estimation_leads").insert({
-          email,
-          phone: phone || null,
-          property_type: form.property_type,
-          transaction_type: form.transaction_type,
+          email, phone: phone || null,
+          property_type: form.property_type, transaction_type: form.transaction_type,
           surface: form.surface ? parseFloat(form.surface) : null,
           rooms: form.rooms ? parseInt(form.rooms) : null,
-          quartier: form.quartier || null,
-          city: form.city,
+          quartier: form.quartier || null, city: form.city,
           estimated_price_min: result?.min ? Math.round(result.min) : null,
-          estimated_price_max: result?.max ? Math.round(result.max) : null
+          estimated_price_max: result?.max ? Math.round(result.max) : null,
         }),
         _safeT
-      ]).catch(() => {
-      });
+      ]).catch(() => {});
       fetch(`${SB_URL}/functions/v1/send-estimation-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "apikey": SB_KEY },
         body: JSON.stringify({
           email,
           estimation: {
-            median: result.median,
-            min: result.min,
-            max: result.max,
-            price_per_m2: result.price_per_m2,
-            confidence: result.confidence,
-            similar_count: result.similar_count || result.total_count || 0
+            median: result.median, min: result.min, max: result.max,
+            price_per_m2: result.price_per_m2, confidence: result.confidence,
+            similar_count: result.similar_count || result.total_count || 0,
           },
           details: {
-            property_type: form.property_type,
-            transaction_type: form.transaction_type,
-            city: form.city,
-            quartier: form.quartier || null,
-            surface: form.surface || null,
-            rooms: form.rooms || null
+            property_type: form.property_type, transaction_type: form.transaction_type,
+            city: form.city, quartier: form.quartier || null,
+            surface: form.surface || null, rooms: form.rooms || null,
           }
         })
-      }).catch(() => {
-      });
-    } catch (e) {
-      console.warn("submitLead:", e);
-    }
+      }).catch(() => {});
+    } catch (e) { console.warn("submitLead:", e); }
     setSaving(false);
     setStep(3);
   }
@@ -4051,7 +3669,7 @@ class AppErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-function App() {
+export default function App() {
   const [page, setPage] = useState("home");
   const [prevPage, setPrevPage] = useState("home");
   const [listings, setListings] = useState([]);
@@ -4141,13 +3759,15 @@ function App() {
       if (prof) {
         setAppProfile(prof);
       } else {
-        await new Promise((r) => setTimeout(r, 1e3));
+        // Race condition signup: le trigger n'a pas encore créé le profil
+        // Attendre 1s et réessayer
+        await new Promise(r => setTimeout(r, 1000));
         const { data: prof2 } = await sb.from("profiles").select("*").eq("id", u.id).single();
         if (prof2) setAppProfile(prof2);
       }
       const { data: rv } = await sb.from("recently_viewed").select("*,listings(*)").eq("user_id", u.id).order("viewed_at", { ascending: false }).limit(6);
       if (rv) setRecentlyViewed(rv.filter((r) => r.listings).map((r) => r.listings));
-      return prof || null;
+      return prof || null; // Retourner le profil pour usage dans onSuccess
     } catch (e) {
       console.warn("loadUserData:", e);
       return null;
@@ -4240,13 +3860,10 @@ function App() {
   }), [listings, searchQ, txF, propF, advF, sortBy]);
   const paged = filtered.slice(0, listPage * PAGE_SIZE);
   const hasMore = paged.length < filtered.length;
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("nav", { className: "nav" }, /* @__PURE__ */ React.createElement("div", { className: "navi" }, /* @__PURE__ */ React.createElement("button", { className: "logo", onClick: () => setPage("home") }, "\u{1F3E1} Sene", /* @__PURE__ */ React.createElement("span", null, "Galsen")), /* @__PURE__ */ React.createElement("div", { className: "navl" }, /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "home" ? "on" : ""}`, onClick: () => setPage("home") }, "Accueil"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "listings" ? "on" : ""}`, onClick: () => setPage("listings") }, "Annonces"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "map" ? "on" : ""}`, onClick: () => setPage("map") }, "\u{1F5FA}\uFE0F Carte"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "prices" ? "on" : ""}`, onClick: () => setPage("prices") }, "\u{1F4CA} Prix"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "market" ? "on" : ""}`, onClick: () => setPage("market") }, "\u{1F4C8} March\xE9"), /* @__PURE__ */ React.createElement("button", { className: "nb", style: { color: "var(--au)", fontWeight: 700 }, onClick: () => setShowEstim(true) }, "\u{1F4B0} Estimer"), user && /* @__PURE__ */ React.createElement(
-    "button",
-    { className: `nb ${page === "dashboard" ? "on" : ""}`, onClick: () => setPage("dashboard"), style: { display: "flex", alignItems: "center", gap: 5 } },
-    "Dashboard",
-    appProfile && appProfile.user_type === "diaspora" && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9, background: "#dbeafe", color: "#1e40af", padding: "1px 5px", borderRadius: 100, fontWeight: 700 } }, "\u{1F30D}"),
-    appProfile && ["agence", "agent", "promoteur", "admin"].includes(appProfile.role) && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9, background: "#dcfce7", color: "#166534", padding: "1px 5px", borderRadius: 100, fontWeight: 700 } }, appProfile.role)
-  )), /* @__PURE__ */ React.createElement("div", { className: "nauth" }, user ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "ncta", onClick: () => setShowForm(true) }, "+ Annonce"), /* @__PURE__ */ React.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ React.createElement("button", { className: "nb", style: { padding: "7px 10px", fontSize: 16 }, onClick: () => setShowNotif((o) => !o) }, "\u{1F514}", unreadCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "nbadge" }, unreadCount > 9 ? "9+" : unreadCount)), showNotif && /* @__PURE__ */ React.createElement(NotifPanel, { user, notifs, onClose: () => setShowNotif(false), onMarkAll: () => {
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("nav", { className: "nav" }, /* @__PURE__ */ React.createElement("div", { className: "navi" }, /* @__PURE__ */ React.createElement("button", { className: "logo", onClick: () => setPage("home") }, "\u{1F3E1} Sene", /* @__PURE__ */ React.createElement("span", null, "Galsen")), /* @__PURE__ */ React.createElement("div", { className: "navl" }, /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "home" ? "on" : ""}`, onClick: () => setPage("home") }, "Accueil"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "listings" ? "on" : ""}`, onClick: () => setPage("listings") }, "Annonces"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "map" ? "on" : ""}`, onClick: () => setPage("map") }, "\u{1F5FA}\uFE0F Carte"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "prices" ? "on" : ""}`, onClick: () => setPage("prices") }, "\u{1F4CA} Prix"), /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "market" ? "on" : ""}`, onClick: () => setPage("market") }, "\u{1F4C8} March\xE9"), /* @__PURE__ */ React.createElement("button", { className: "nb", style: { color: "var(--au)", fontWeight: 700 }, onClick: () => setShowEstim(true) }, "\u{1F4B0} Estimer"), user && /* @__PURE__ */ React.createElement("button", { className: `nb ${page === "dashboard" ? "on" : ""}`, onClick: () => setPage("dashboard"), style: { display: "flex", alignItems: "center", gap: 5 } },
+            "Dashboard",
+            appProfile && appProfile.user_type === "diaspora" && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9, background: "#dbeafe", color: "#1e40af", padding: "1px 5px", borderRadius: 100, fontWeight: 700 } }, "🌍"),
+            appProfile && ["agence","agent","promoteur","admin"].includes(appProfile.role) && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9, background: "#dcfce7", color: "#166534", padding: "1px 5px", borderRadius: 100, fontWeight: 700 } }, appProfile.role))), /* @__PURE__ */ React.createElement("div", { className: "nauth" }, user ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "ncta", onClick: () => setShowForm(true) }, "+ Annonce"), /* @__PURE__ */ React.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ React.createElement("button", { className: "nb", style: { padding: "7px 10px", fontSize: 16 }, onClick: () => setShowNotif((o) => !o) }, "\u{1F514}", unreadCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "nbadge" }, unreadCount > 9 ? "9+" : unreadCount)), showNotif && /* @__PURE__ */ React.createElement(NotifPanel, { user, notifs, onClose: () => setShowNotif(false), onMarkAll: () => {
     markAllRead();
     setShowNotif(false);
   } })), /* @__PURE__ */ React.createElement("button", { className: "av", onClick: () => setPage("dashboard"), title: user.email }, ini, unreadCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "nbadge", style: { top: -3, right: -3 } }, unreadCount))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "nb", onClick: () => setShowAuth(true) }, "Connexion"), /* @__PURE__ */ React.createElement("button", { className: "ncta", onClick: () => setShowAuth(true) }, "+ Annonce")), /* @__PURE__ */ React.createElement(MobileNav, { page, setPage: (p) => {
@@ -4256,9 +3873,11 @@ function App() {
     setShowAuth(false);
     setPage("dashboard");
     showT("Bienvenue sur SeneGalsen ! \u{1F389}");
+    // Charger profil DB ET détecter le type (diaspora/role pro) depuis la source de vérité
     loadUserData(u).then(() => {
       sb.from("profiles").select("user_type,role").eq("id", u.id).single().then(({ data: p }) => {
         if (p && p.user_type === "diaspora" && u?.user_metadata?.user_type === "diaspora") {
+          // Montrer le welcome uniquement pour les nouveaux comptes diaspora
           setShowDiasporaWelcome(true);
         }
       });
@@ -4309,15 +3928,3 @@ function App() {
     else if (l === "Accueil") setPage("home");
   } }, l))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: 10, opacity: 0.35 } }, "\xA9 2026 SeneGalsen Immobilier \xB7 Dakar, S\xE9n\xE9gal"))));
 }
-
-try{
-  ReactDOM.createRoot(document.getElementById('root')).render(
-    React.createElement(AppErrorBoundary, null, React.createElement(App))
-  );
-}catch(err){
-  document.getElementById('root').innerHTML='<div style="font-family:monospace;padding:30px;background:#fee2e2;margin:20px;border-radius:12px"><strong>Erreur: </strong>'+err.message+'</div>';
-  console.error(err);
-}
-</script>
-</body>
-</html>
