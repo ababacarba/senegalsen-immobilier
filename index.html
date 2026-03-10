@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a5c36"><title>SeneGalsen Immobilier</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/><style>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a5c36"><title>SeneGalsen Immobilier — La référence immobilière au Sénégal</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/><style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --g:#0a5c36;--gl:#e8f5ef;--gm:#16a34a;
@@ -1828,6 +1828,16 @@ function VerificationPanel({ listing, ownerProfile, inspections = [], user, onIn
     boxShadow: ok ? "0 2px 6px #16a34a30" : "none",
     transition: ".2s"
   } }, ok ? /* @__PURE__ */ React.createElement("span", { style: { color: "#fff", fontWeight: 800, fontSize: 13 } }, "\u2713") : /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, opacity: 0.5 } }, ico)), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, fontWeight: 700, color: ok ? "#15803d" : "#94a3b8", textAlign: "center" } }, label)), i < arr.length - 1 && /* @__PURE__ */ React.createElement("div", { style: { height: 2, flex: 0.6, background: ok && arr[i + 1]?.ok ? "linear-gradient(90deg,#16a34a,#16a34a)" : ok ? "linear-gradient(90deg,#16a34a,#e2e8f0)" : "#e2e8f0", marginBottom: 14, transition: ".3s" } })))), communityCount > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, background: "#eef2ff", borderRadius: 6, padding: "5px 10px", fontSize: 10, color: "#4338ca", fontWeight: 600 } }, /* @__PURE__ */ React.createElement("span", null, "\u{1F465}"), /* @__PURE__ */ React.createElement("span", null, communityCount, " membre", communityCount > 1 ? "s" : "", " SeneGalsen ", communityCount > 1 ? "ont" : "a", " \xE9galement visit\xE9 ce bien")))));
+}
+function VLevelBadge({ level, size = "sm" }) {
+  const map = {
+    none: { icon: "\u26AA", label: "Non v\xE9rifi\xE9", cls: "vbadge-none" },
+    partial: { icon: "\u{1F7E1}", label: "Docs v\xE9rifi\xE9s", cls: "vbadge-partial" },
+    checked: { icon: "\u{1F535}", label: "ID v\xE9rifi\xE9e", cls: "vbadge-checked" },
+    inspected: { icon: "\u2705", label: "Inspect\xE9", cls: "vbadge-inspected" }
+  };
+  const v = map[level] || map.none;
+  return /* @__PURE__ */ React.createElement("span", { className: `vbadge-pill ${v.cls}` }, v.icon, size !== "xs" && " " + v.label);
 }
 function VerifCheckRow({ ico, title, done, doneLabel, pendingLabel, detail, showDetails }) {
   return /* @__PURE__ */ React.createElement("div", { style: { background: done ? "#f0fdf4" : "#fafafa", borderRadius: 8, border: `1.5px solid ${done ? "#86efac" : "#e2e8f0"}`, padding: "9px 12px" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 32, height: 32, borderRadius: 50, background: done ? "#dcfce7" : "#f1f5f9", border: `2px solid ${done ? "#16a34a" : "#e2e8f0"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 } }, done ? "\u2705" : "\u23F3"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 700, fontSize: 12 } }, ico, " ", title), /* @__PURE__ */ React.createElement("span", { style: {
