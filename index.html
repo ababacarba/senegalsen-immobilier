@@ -4748,9 +4748,9 @@ function VerifRequestsAdminTab({ showDT, adminProfile }) {
     showDT(status === "approved" ? "\u{1F3C5} V\xE9rification approuv\xE9e !" : status === "rejected" ? "Demande refus\xE9e" : status === "in_review" ? "\u{1F50D} Traitement lanc\xE9" : "Statut mis \xE0 jour");
     setShowNoteFor(null);
   }
-  async function savePricing(level, newPrice, newDelay) {
-    await sb.from("verification_pricing").update({ price_xof: parseInt(newPrice), delay_days: parseInt(newDelay) }).eq("level", level);
-    setPricing((ps) => ps.map((p) => p.level === level ? { ...p, price_xof: parseInt(newPrice), delay_days: parseInt(newDelay) } : p));
+  async function savePricing(level, newPrice, newDelay, role = "particulier") {
+    await sb.from("verification_pricing").update({ price_xof: parseInt(newPrice), delay_days: parseInt(newDelay) }).eq("level", level).eq("role", role);
+    setPricing((ps) => ps.map((p) => p.level === level && p.role === role ? { ...p, price_xof: parseInt(newPrice), delay_days: parseInt(newDelay) } : p));
     showDT("\u2705 Tarif mis \xE0 jour");
   }
   const filtered = filter === "all" ? requests : requests.filter((r) => r.status === filter);
@@ -4769,10 +4769,7 @@ function VerifRequestsAdminTab({ showDT, adminProfile }) {
     },
     "\u2699\uFE0F ",
     showPricingEditor ? "Fermer" : "G\xE9rer les tarifs"
-  )), showPricingEditor && /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1.5px solid var(--g)", borderRadius: 12, padding: 16, marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 12 } }, "\u{1F4B0} Configuration des tarifs"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10 } }, pricing.map((p) => {
-    const t = VERIF_TIERS[p.level];
-    return /* @__PURE__ */ React.createElement(PricingEditor, { key: p.level, tier: t, pricing: p, onSave: savePricing });
-  }))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))", gap: 8, marginBottom: 14 } }, [
+  )), showPricingEditor && /* @__PURE__ */ React.createElement("div", { style: { background: "#fff", border: "1.5px solid var(--g)", borderRadius: 12, padding: 16, marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 12 } }, "\u{1F4B0} Configuration des tarifs de v\xE9rification"), /* @__PURE__ */ React.createElement(PricingEditorGrid, { pricing, onSave: savePricing })), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))", gap: 8, marginBottom: 14 } }, [
     ["\u{1F4E5}", "En attente", stats.pending, "#b45309", "#fffbeb"],
     ["\u{1F50D}", "En cours", stats.in_review, "#5b21b6", "#f5f3ff"],
     ["\u2705", "Approuv\xE9es", stats.done, "#15803d", "#f0fdf4"],
@@ -4793,23 +4790,82 @@ function VerifRequestsAdminTab({ showDT, adminProfile }) {
     ), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6 } }, /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => updateStatus(r.id, "rejected", { rejection_reason: rejNote[r.id], admin_notes: rejNote[r.id] }) }, "\u274C Confirmer le refus"), /* @__PURE__ */ React.createElement("button", { className: "ab", onClick: () => setShowNoteFor(null) }, "Annuler"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 5, flexWrap: "wrap", marginTop: 8, borderTop: "1px solid var(--br)", paddingTop: 8 } }, r.status === "payment_pending" && /* @__PURE__ */ React.createElement("button", { className: "ab abe", onClick: () => updateStatus(r.id, "paid", { payment_confirmed: true, payment_date: (/* @__PURE__ */ new Date()).toISOString() }) }, "\u2705 Confirmer paiement"), r.status === "paid" && /* @__PURE__ */ React.createElement("button", { className: "ab", style: { background: "#f5f3ff", color: "#5b21b6", border: "1.5px solid #c4b5fd" }, onClick: () => updateStatus(r.id, "in_review", { assigned_agent_id: adminProfile?.id }) }, "\u{1F50D} Lancer traitement"), r.status === "in_review" && /* @__PURE__ */ React.createElement("button", { className: "ab abe", style: { background: "#f0fdf4", color: "#15803d", border: "1.5px solid #86efac" }, onClick: () => updateStatus(r.id, "approved", { admin_notes: "V\xE9rification accord\xE9e par " + adminProfile?.full_name }) }, "\u{1F3C5} Approuver"), !["approved", "rejected", "cancelled"].includes(r.status) && /* @__PURE__ */ React.createElement("button", { className: "ab abd", onClick: () => setShowNoteFor(r.id) }, "\u274C Refuser")));
   })));
 }
-function PricingEditor({ tier, pricing, onSave }) {
-  const [price, setPrice] = React.useState(pricing?.price_xof || tier?.defaultPrice || 0);
-  const [delay, setDelay] = React.useState(pricing?.delay_days || 3);
-  const [saving, setSaving] = React.useState(false);
-  return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", background: "var(--bg)", borderRadius: 9, padding: "10px 14px" } }, /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 auto" } }, /* @__PURE__ */ React.createElement("span", { className: `vbadge-pill vbadge-${tier?.level}` }, tier?.icon, " ", tier?.label)), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flex: 1, flexWrap: "wrap", alignItems: "center" } }, /* @__PURE__ */ React.createElement("div", { className: "fg", style: { flex: 1, minWidth: 120, margin: 0 } }, /* @__PURE__ */ React.createElement("label", { className: "fl", style: { fontSize: 9 } }, "Prix (FCFA)"), /* @__PURE__ */ React.createElement("input", { className: "fi", style: { padding: "4px 8px", fontSize: 11 }, type: "number", value: price, onChange: (e) => setPrice(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg", style: { flex: "0 0 80px", margin: 0 } }, /* @__PURE__ */ React.createElement("label", { className: "fl", style: { fontSize: 9 } }, "D\xE9lai (j.)"), /* @__PURE__ */ React.createElement("input", { className: "fi", style: { padding: "4px 8px", fontSize: 11 }, type: "number", value: delay, onChange: (e) => setDelay(e.target.value) })), /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      className: "ab abe",
-      disabled: saving,
-      onClick: async () => {
-        setSaving(true);
-        await onSave(tier?.level, price, delay);
-        setSaving(false);
+const VERIF_ROLES_CONFIG = [
+  { k: "particulier", label: "Particulier", ico: "\u{1F464}", color: "#64748b" },
+  { k: "agent", label: "Agent", ico: "\u{1F3E0}", color: "#0891b2" },
+  { k: "agence", label: "Agence", ico: "\u{1F3E2}", color: "#0a5c36" },
+  { k: "promoteur", label: "Promoteur", ico: "\u{1F3D7}\uFE0F", color: "#1e3a5f" }
+];
+const VERIF_LEVELS_ORDER = ["partial", "checked", "inspected"];
+function PricingEditorGrid({ pricing, onSave }) {
+  const [vals, setVals] = React.useState({});
+  const [saving, setSaving] = React.useState({});
+  React.useEffect(() => {
+    const init = {};
+    pricing.forEach((p) => {
+      init[p.level + "_" + p.role] = { price: p.price_xof, delay: p.delay_days };
+    });
+    setVals(init);
+  }, [pricing]);
+  function setVal(level, role, field, v) {
+    setVals((prev) => ({ ...prev, [level + "_" + role]: { ...prev[level + "_" + role] || {}, [field]: v } }));
+  }
+  async function handleSave(level, role) {
+    const key = level + "_" + role;
+    const v = vals[key];
+    if (!v) return;
+    setSaving((s) => ({ ...s, [key]: true }));
+    await onSave(level, v.price, v.delay, role);
+    setSaving((s) => ({ ...s, [key]: false }));
+  }
+  const tiers = VERIF_LEVELS_ORDER.map((lv) => VERIF_TIERS[lv]).filter(Boolean);
+  return /* @__PURE__ */ React.createElement("div", { style: { overflowX: "auto" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "180px repeat(4,1fr)", gap: 8, minWidth: 680 } }, /* @__PURE__ */ React.createElement("div", null), VERIF_ROLES_CONFIG.map((r) => /* @__PURE__ */ React.createElement("div", { key: r.k, style: { textAlign: "center", padding: "8px 4px", background: r.color + "18", borderRadius: 8, border: `1.5px solid ${r.color}33` } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 18 } }, r.ico), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 800, fontSize: 11, color: r.color } }, r.label))), tiers.map((tier) => /* @__PURE__ */ React.createElement(React.Fragment, { key: tier.level }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7, padding: "10px 0" } }, /* @__PURE__ */ React.createElement("span", { className: `vbadge-pill vbadge-${tier.level}` }, tier.icon, " ", tier.label)), VERIF_ROLES_CONFIG.map((r) => {
+    const key = tier.level + "_" + r.k;
+    const v = vals[key] || {};
+    const orig = pricing.find((p) => p.level === tier.level && p.role === r.k);
+    const dirty = orig && (parseInt(v.price) !== orig.price_xof || parseInt(v.delay) !== orig.delay_days);
+    return /* @__PURE__ */ React.createElement("div", { key: r.k, style: { background: "var(--bg)", borderRadius: 9, padding: "8px 10px", border: `1.5px solid ${dirty ? "#f59e0b" : "var(--br)"}` } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 6 } }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, fontWeight: 700, color: "var(--mu)", marginBottom: 2 } }, "PRIX (FCFA)"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        className: "fi",
+        type: "number",
+        style: { padding: "3px 6px", fontSize: 11, width: "100%" },
+        value: v.price ?? "",
+        onChange: (e) => setVal(tier.level, r.k, "price", e.target.value)
       }
-    },
-    "Sauver"
-  )));
+    )), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 48px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, fontWeight: 700, color: "var(--mu)", marginBottom: 2 } }, "D\xC9LAI (j)"), /* @__PURE__ */ React.createElement(
+      "input",
+      {
+        className: "fi",
+        type: "number",
+        style: { padding: "3px 6px", fontSize: 11, width: "100%" },
+        value: v.delay ?? "",
+        onChange: (e) => setVal(tier.level, r.k, "delay", e.target.value)
+      }
+    ))), /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        onClick: () => handleSave(tier.level, r.k),
+        disabled: saving[key] || !dirty,
+        style: {
+          width: "100%",
+          padding: "4px 0",
+          borderRadius: 6,
+          fontSize: 10,
+          fontWeight: 800,
+          border: "none",
+          cursor: dirty ? "pointer" : "default",
+          background: dirty ? "var(--g)" : "var(--br)",
+          color: dirty ? "#fff" : "var(--mu)",
+          transition: ".15s"
+        }
+      },
+      saving[key] ? "\u2026" : "\u{1F4BE} Sauver"
+    ));
+  })))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10, fontSize: 9, color: "var(--mu)", fontStyle: "italic" } }, '\u{1F7E1} Cadre orange = modification non sauvegard\xE9e \xB7 Cliquez "\u{1F4BE} Sauver" pour chaque cellule modifi\xE9e.'));
+}
+function PricingEditor({ tier, pricing, onSave }) {
+  return null;
 }
 function AgentVerifyReportModal({ listing, agentName, onConfirm, onClose }) {
   const [desc, setDesc] = useState("");
