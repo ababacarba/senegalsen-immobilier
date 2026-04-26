@@ -3,6 +3,9 @@
   "framework": null,
   "buildCommand": "",
   "outputDirectory": ".",
+  "outputDirectory": ".",
+"compress": true,
+"cleanUrls": true,
   "builds": [
     {
       "src": "*.html",
