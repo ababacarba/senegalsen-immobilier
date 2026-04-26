@@ -1,0 +1,25 @@
+name: Scan sécurité mensuel OWASP ZAP
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'   # Le 1er de chaque mois à 9h
+  workflow_dispatch:        # Déclenchement manuel possible
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan OWASP ZAP
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'https://www.kerjom.com'
+          cmd_options: '-a'
+
+      - name: Notifier résultat sur Slack
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -s -X POST "${SLACK_WEBHOOK_URL}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"🔴 *Scan sécurité Kërjom* — des vulnérabilités ont été détectées. Vérifier les résultats GitHub Actions."}'
