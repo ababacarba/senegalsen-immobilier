@@ -3,9 +3,6 @@
   "framework": null,
   "buildCommand": "",
   "outputDirectory": ".",
-  "outputDirectory": ".",
-"compress": true,
-"cleanUrls": true,
   "builds": [
     {
       "src": "*.html",
@@ -29,6 +26,42 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/logo.webp",
+      "destination": "/logo.webp"
+    },
+    {
+      "source": "/logo-nav.webp",
+      "destination": "/logo-nav.webp"
+    },
+    {
+      "source": "/logo-dark.webp",
+      "destination": "/logo-dark.webp"
+    },
+    {
+      "source": "/logo-icon.webp",
+      "destination": "/logo-icon.webp"
+    },
+    {
+      "source": "/logo-white.webp",
+      "destination": "/logo-white.webp"
+    },
+    {
+      "source": "/logo-avatar.webp",
+      "destination": "/logo-avatar.webp"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
+    },
     {
       "source": "/privacy",
       "destination": "/privacy.html"
