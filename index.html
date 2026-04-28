@@ -32125,160 +32125,10 @@ function HeroV5({ listings, stab, setStab, searchQ, setSearchQ, stats, setTxF, s
 
       /* Titre */
       React.createElement('h1', { className: 'hero-kj-h1' },
-        'Trouvez votre logement',
+        'Trouvez un bien v\u00e9rifi\u00e9',
         React.createElement('br'),
-        'au S\u00e9n\u00e9gal, ',
-        React.createElement('em', null, 'simplement')
+        'en toute confiance au S\u00e9n\u00e9gal'
       ),
-
-      /* Sous-titre */
-      React.createElement('p', { className: 'hero-kj-sub' },
-        'Achat, location, courte dur\u00e9e \u2014 acc\u00e9dez \u00e0 des annonces v\u00e9rifi\u00e9es partout au S\u00e9n\u00e9gal.'
-      ),
-
-      /* Search Box */
-      React.createElement('div', { className: 'hero-kj-box' },
-
-        /* Toggle Acheter / Louer */
-        React.createElement('div', { className: 'hero-kj-toggle' },
-          React.createElement('button', {
-            className: 'hero-kj-tb' + ((stab === 'location' || stab === 'location_saisonniere') ? ' on' : ''),
-            onClick: function() { setStab('location'); }
-          }, '\uD83D\uDD11 Louer'),
-          React.createElement('button', {
-            className: 'hero-kj-tb' + ((stab === 'vente' || stab === 'projets') ? ' on' : ''),
-            onClick: function() { setStab('vente'); }
-          }, '\uD83C\uDFE0 Acheter'),
-          React.createElement('button', {
-            className: 'hero-kj-tb' + (stab === 'location_saisonniere' ? ' on' : ''),
-            onClick: function() { setStab('location_saisonniere'); }
-          }, '\u23F1 Courte dur\u00e9e')
-        ),
-
-        /* Fields */
-        React.createElement('div', { className: 'hero-kj-fields' },
-
-          /* Champ 1 : Localisation - icone bleue */
-          React.createElement('div', { className: 'hero-kj-f', onClick: function(){ document.getElementById('hkj-loc').focus(); } },
-            React.createElement('div', { className: 'hero-kj-f-ico loc' },
-              React.createElement('svg', { width: '16', height: '16', fill: 'none', viewBox: '0 0 16 16', stroke: '#60A5FA', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                React.createElement('path', { d: 'M8 1.5C5.79 1.5 4 3.29 4 5.5c0 3.25 4 9 4 9s4-5.75 4-9c0-2.21-1.79-3.5-4-3.5z' }),
-                React.createElement('circle', { cx: '8', cy: '5.5', r: '1.25' })
-              )
-            ),
-            React.createElement('div', { className: 'hero-kj-f-body' },
-              React.createElement('label', { htmlFor: 'hkj-loc' }, 'Localisation'),
-              React.createElement('input', {
-                id: 'hkj-loc',
-                type: 'text',
-                placeholder: 'Dakar, Almadies, Saly\u2026',
-                defaultValue: searchQ || '',
-                onKeyDown: function(e) { if (e.key === 'Enter') doHeroSearch(); }
-              })
-            )
-          ),
-
-          /* Champ 2 : Type de bien - icone violette */
-          React.createElement('div', { className: 'hero-kj-f', onClick: function(){ document.getElementById('hkj-type').focus(); } },
-            React.createElement('div', { className: 'hero-kj-f-ico typ' },
-              React.createElement('svg', { width: '16', height: '16', fill: 'none', viewBox: '0 0 16 16', stroke: '#A78BFA', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                React.createElement('path', { d: 'M2 6.5L8 1.5l6 5V14H10V10H6v4H2V6.5z' })
-              )
-            ),
-            React.createElement('div', { className: 'hero-kj-f-body' },
-              React.createElement('label', { htmlFor: 'hkj-type' }, 'Type de bien'),
-              React.createElement('select', {
-                id: 'hkj-type',
-                value: heroType,
-                onChange: function(e) { setHeroType(e.target.value); },
-                style: { color: heroType ? '#fff' : 'rgba(255,255,255,.28)', fontSize: '13px' }
-              },
-                React.createElement('option', { value: '' }, 'Appartement, Villa\u2026'),
-                React.createElement('option', { value: 'appartement' }, 'Appartement'),
-                React.createElement('option', { value: 'villa' }, 'Villa'),
-                React.createElement('option', { value: 'maison' }, 'Maison'),
-                React.createElement('option', { value: 'terrain' }, 'Terrain'),
-                React.createElement('option', { value: 'commerce' }, 'Commerce'),
-                React.createElement('option', { value: 'chambre' }, 'Chambre')
-              )
-            )
-          ),
-
-          /* Champ 3 : Budget - icone verte */
-          React.createElement('div', { className: 'hero-kj-f', onClick: function(){ document.getElementById('hkj-budget').focus(); } },
-            React.createElement('div', { className: 'hero-kj-f-ico bud' },
-              React.createElement('svg', { width: '16', height: '16', fill: 'none', viewBox: '0 0 16 16', stroke: '#34D399', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round' },
-                React.createElement('rect', { x: '1.5', y: '3.5', width: '13', height: '9', rx: '1.5' }),
-                React.createElement('circle', { cx: '8', cy: '8', r: '2' }),
-                React.createElement('path', { d: 'M1.5 6h2M12.5 6h2M1.5 10h2M12.5 10h2' })
-              )
-            ),
-            React.createElement('div', { className: 'hero-kj-f-body' },
-              React.createElement('label', { htmlFor: 'hkj-budget' }, 'Budget max'),
-              React.createElement('input', {
-                id: 'hkj-budget',
-                type: 'text',
-                placeholder: '200 000 FCFA',
-                value: heroBudget,
-                onChange: function(e) { setHeroBudget(e.target.value); },
-                onKeyDown: function(e) { if (e.key === 'Enter') doHeroSearch(); }
-              })
-            )
-          ),
-
-          /* Bouton Rechercher */
-          React.createElement('button', {
-            className: 'hero-kj-sbtn',
-            onClick: doHeroSearch,
-            'aria-label': 'Rechercher'
-          },
-            React.createElement('svg', { width: '15', height: '15', fill: 'none', viewBox: '0 0 15 15', stroke: 'currentColor', strokeWidth: '2.5', strokeLinecap: 'round' },
-              React.createElement('circle', { cx: '6', cy: '6', r: '4.5' }),
-              React.createElement('line', { x1: '9.5', y1: '9.5', x2: '13', y2: '13' })
-            ),
-            'Rechercher'
-          )
-        )
-      ),
-
-            /* Chips */
-      React.createElement('div', { className: 'hero-kj-chips' },
-        React.createElement('span', { className: 'hero-kj-chip-lbl' }, 'Filtres\u00a0:'),
-        CHIPS.map(function(c) {
-          return React.createElement('button', {
-            key: c.key,
-            className: 'hero-kj-chip' + (heroChips.has(c.key) ? ' on' : ''),
-            onClick: function() { toggleChip(c.key); }
-          }, c.label);
-        })
-      ),
-
-      /* Stats */
-      React.createElement('div', { className: 'hero-kj-stats' },
-        React.createElement('div', null,
-          React.createElement('div', { className: 'hero-kj-stat-n' }, displayCount > 0 ? displayCount + '+' : '500+'),
-          React.createElement('div', { className: 'hero-kj-stat-l' }, 'Annonces actives')
-        ),
-        React.createElement('div', null,
-          React.createElement('div', { className: 'hero-kj-stat-n' }, '98%'),
-          React.createElement('div', { className: 'hero-kj-stat-l' }, 'Annonces v\u00e9rifi\u00e9es')
-        ),
-        React.createElement('div', null,
-          React.createElement('div', { className: 'hero-kj-stat-n' }, stats && stats.cities > 0 ? stats.cities : '14'),
-          React.createElement('div', { className: 'hero-kj-stat-l' }, 'Villes couvertes')
-        ),
-        React.createElement('div', null,
-          React.createElement('div', { className: 'hero-kj-stat-n' }, '4,9 \u2605'),
-          React.createElement('div', { className: 'hero-kj-stat-l' }, 'Note plateforme')
-        )
-      ),
-
-      /* CTA secondaire — Déposer une annonce */
-      React.createElement('div', { className: 'hero-kj-cta' },
-        React.createElement('div', { className: 'hero-kj-cta-t' },
-          React.createElement('h3', null, 'Vous avez un bien \u00e0 vendre ou louer\u00a0?'),
-          React.createElement('p', null, 'Publiez votre annonce en 3 minutes \u2014 diffusion sur tout le S\u00e9n\u00e9gal.')
-        ),
         React.createElement('button', {
           className: 'hero-kj-cta-btn',
           onClick: onPublish
@@ -32286,8 +32136,7 @@ function HeroV5({ listings, stab, setStab, searchQ, setSearchQ, stats, setTxF, s
           React.createElement('span', null, '+'),
           'D\u00e9poser une annonce'
         )
-      )
-
+      
     ) /* fin hero-kj-inner */
   ); /* fin section hero-kj */
 }
