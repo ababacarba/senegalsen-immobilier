@@ -5290,12 +5290,7 @@ header {
  align-items: center;
 }
 
-/* ══════════════════════════════════════════════════════════════
- FIX NAVBAR — Espace parasite causé par <style> dans le body
- React rend React.createElement("style", null, CSS) dans le DOM.
- Un <style> dans le body peut avoir display:block et créer un
- espace visuel. Ce fix le supprime proprement.
- ══════════════════════════════════════════════════════════════ */
+/* FIX NAVBAR — suppression style body */
 #root style,
 body > div > style,
 .nav ~ style,
@@ -7163,9 +7158,6 @@ hr,.divider{border-color:var(--br);}
   }
 }
 </style>
-
-
-/* ═══ KËRJOM PREMIUM DESIGN SYSTEM ═══ */
 <style id="kj-design-system">
 :root {
   /* Brand */
@@ -7639,8 +7631,6 @@ hr,.divider{border-color:var(--br);}
   .logo img { width: 120px !important; height: 28px !important; }
 }
 </style>
-
-/* ═══ TYPOGRAPHIE PREMIUM ═══ */
 <style id="kj-typography">
 h2, .sect-title {
   font-size: clamp(22px, 3vw, 32px) !important;
