@@ -33347,20 +33347,9 @@ loading ?  React.createElement("div", { className: "grid" }, [1, 2, 3, 4, 5, 6].
     window.scrollTo(0, 0);
   }, onOpenListing: (l) => open(l, "agency"), favIds, onFav: toggleFav, user, showToast: showT }), page === "tarifs_old" &&  React.createElement(PricingPage, { user, profile: appProfile, onBack: () => setPage(prevPage || "home"), onSubscribe: (plan) => { setPage("dashboard"); } }), page === "services" &&  React.createElement(ServicesMarketplacePage, { user, profile: appProfile, onBack: () => setPage(prevPage || "home"), onRequestLogin: (action) => { setPendingAction(action); setShowAuth(true); }, pendingAction, onPendingDone: () => setPendingAction(null) }), page === "dashboard" && user &&  React.createElement(Dashboard, { user, onOpenListing: (l) => open(l, "dashboard"), onShowAgency: (id) => showAgency(id, "dashboard"), onLogout: logout, favIds, onFav: toggleFav, initialProfile: appProfile }),  React.createElement("footer", { className: "footer" },
   React.createElement("div", { className: "footer-inner" },
-    
-    /* CTA secondaire */
-    React.createElement("div", { className: "footer-cta-box" },
-      React.createElement("h4", null, "\uD83D\uDE80 Vous \u00eates une agence immobili\u00e8re ?"),
-      React.createElement("p", null, "Publiez vos annonces, g\u00e9rez vos clients et boostez votre visibilit\u00e9."),
-      React.createElement("button", { className: "footer-cta-btn", onClick: () => window.location.href="/tarifs" },
-        "\uD83C\uDF89 Essai gratuit 30 jours"
-      )
-    ),
 
-    /* Navigation structurée */
     React.createElement("div", { className: "footer-top" },
-      
-      /* Brand */
+
       React.createElement("div", { className: "footer-brand" },
         React.createElement("div", { className: "flogo" },
           React.createElement("img", {
@@ -33370,62 +33359,56 @@ loading ?  React.createElement("div", { className: "grid" }, [1, 2, 3, 4, 5, 6].
             alt: "K\u00ebrjom"
           })
         ),
-        React.createElement("p", null, "La plateforme immobili\u00e8re de r\u00e9f\u00e9rence au S\u00e9n\u00e9gal. Annonces v\u00e9rifi\u00e9es, professionnels qualifi\u00e9s."),
+        React.createElement("p", null,
+          "La plateforme immobili\u00e8re de r\u00e9f\u00e9rence au S\u00e9n\u00e9gal. Annonces v\u00e9rifi\u00e9es, professionnels qualifi\u00e9s."
+        ),
         React.createElement("div", { className: "footer-social" },
-          React.createElement("a", { className: "footer-social-btn", href: "https://facebook.com/kerjom", target: "_blank", rel: "noopener noreferrer", title: "Facebook" }, "f"),
-          React.createElement("a", { className: "footer-social-btn", href: "https://linkedin.com/company/kerjom", target: "_blank", rel: "noopener noreferrer", title: "LinkedIn" }, "in"),
-          React.createElement("a", { className: "footer-social-btn", href: "https://instagram.com/kerjom", target: "_blank", rel: "noopener noreferrer", title: "Instagram" }, "\uD83D\uDCF7"),
-          React.createElement("a", { className: "footer-social-btn", href: "https://wa.me/221780000000", target: "_blank", rel: "noopener noreferrer", title: "WhatsApp" }, "\u2709")
+          React.createElement("a", { className: "footer-social-btn", href: "https://facebook.com/kerjom", target: "_blank", rel: "noopener noreferrer" }, "f"),
+          React.createElement("a", { className: "footer-social-btn", href: "https://linkedin.com/company/kerjom", target: "_blank", rel: "noopener noreferrer" }, "in"),
+          React.createElement("a", { className: "footer-social-btn", href: "https://wa.me/221780000000", target: "_blank", rel: "noopener noreferrer" }, "\uD83D\uDCAC")
         )
       ),
 
-      /* Plateforme */
       React.createElement("div", null,
         React.createElement("div", { className: "footer-col-title" }, "Plateforme"),
         React.createElement("div", { className: "flinks" },
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("home"); } }, "Accueil"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("listings"); } }, "Annonces"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("map"); } }, "Carte"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("pricing"); } }, "Prix"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("services"); } }, "Services"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("verified"); } }, "Bien V\u00e9rifi\u00e9 \u2705")
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("home"); } }, "Accueil"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("listings"); } }, "Annonces"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("map"); } }, "Carte"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("pricing"); } }, "Tarifs"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("services"); } }, "Services")
         )
       ),
 
-      /* Professionnels */
       React.createElement("div", null,
         React.createElement("div", { className: "footer-col-title" }, "Professionnels"),
         React.createElement("div", { className: "flinks" },
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("agents"); } }, "Agents"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("agencies"); } }, "Agences"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("promoteurs"); } }, "Promoteurs"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("pricing"); } }, "Tarifs")
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("agents"); } }, "Agents"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("agencies"); } }, "Agences"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("pricing"); } }, "Abonnements"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("publish"); } }, "Publier une annonce")
         )
       ),
 
-      /* Contact */
       React.createElement("div", null,
-        React.createElement("div", { className: "footer-col-title" }, "Contact"),
+        React.createElement("div", { className: "footer-col-title" }, "Contact & Aide"),
         React.createElement("div", { className: "flinks" },
           React.createElement("a", { href: "mailto:contact@kerjom.com" }, "contact@kerjom.com"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("contact"); } }, "Nous contacter"),
           React.createElement("a", { href: "https://wa.me/221780000000", target: "_blank", rel: "noopener noreferrer" }, "WhatsApp"),
-          React.createElement("a", { href: "#", onClick: (e) => { e.preventDefault(); window.setPage && window.setPage("faq"); } }, "FAQ")
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("faq"); } }, "FAQ"),
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("contact"); } }, "Nous contacter")
         )
       )
     ),
 
-    /* Bas de footer */
     React.createElement("div", { className: "footer-bottom" },
-      React.createElement("span", { style: { color: "rgba(255,255,255,.3)", fontSize: 12 } },
-        "\u00a9 2026 K\u00ebrjom \u2014 Immobilier v\u00e9rifi\u00e9 au S\u00e9n\u00e9gal"
+      React.createElement("span", { style: { color: "rgba(255,255,255,.35)", fontSize: 12 } },
+        "\u00a9 2025 K\u00ebrjom \u2014 Immobilier v\u00e9rifi\u00e9 au S\u00e9n\u00e9gal"
       ),
       React.createElement("div", { className: "footer-legal" },
         React.createElement("a", { href: "/privacy" }, "Confidentialit\u00e9"),
         React.createElement("a", { href: "/terms" }, "CGU"),
         React.createElement("a", { href: "/charte" }, "Charte Agents"),
-        React.createElement("a", { href: "/contenu" }, "Politique Contenu"),
-        React.createElement("a", { href: "/reservation" }, "R\u00e9servation"),
         React.createElement("a", { href: "/antifraude" }, "Anti-Fraude")
       )
     )
