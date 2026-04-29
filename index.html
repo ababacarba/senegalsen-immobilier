@@ -7687,138 +7687,166 @@ h3, .sect-sub {
 }
 </style>
 <style id="kj-intent-block">
-/* ═══ BLOC INTENTION PREMIUM ═══ */
+/* ═══ BLOC INTENTION PREMIUM — Production-Ready ═══ */
 .kj-intent-section {
   background: #fff;
-  padding: 56px 24px 60px;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 48px 24px 56px;
+  border-bottom: 1px solid #EAECF0;
+  position: relative;
+  z-index: 10;
+  margin-top: -40px;          /* chevauchement hero */
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -4px 32px rgba(0,0,0,.06);
 }
 .kj-intent-inner {
   max-width: 1040px;
   margin: 0 auto;
 }
+
+/* Header section */
 .kj-intent-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 .kj-intent-title {
   font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
   color: #0D1B3E;
-  margin: 0 0 8px;
-  letter-spacing: -.015em;
+  margin: 0 0 10px;
+  letter-spacing: -.02em;
+  line-height: 1.2;
 }
 .kj-intent-sub {
   font-size: 16px;
   color: #6B7280;
   margin: 0;
   font-weight: 400;
+  line-height: 1.6;
 }
 
 /* Grille 2 groupes */
 .kj-intent-groups {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 28px;
 }
 .kj-intent-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
+
+/* Labels de groupe — plus visibles */
 .kj-intent-group-label {
   font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .12em;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .11em;
   text-transform: uppercase;
-  color: #9CA3AF;
-  margin-bottom: 4px;
-  padding-left: 4px;
+  color: #475569;           /* plus foncé */
+  padding-left: 2px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+.kj-intent-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E2E8F0;     /* mini divider */
+  border-radius: 1px;
+}
+
+/* Grille 2 cards par groupe */
 .kj-intent-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* Card */
+/* Card premium */
 .kj-intent-card {
   background: #fff;
-  border: 1.5px solid #E5E7EB;
+  border: 1.5px solid #D1D5DB;   /* légèrement plus contrasté */
   border-radius: 20px;
-  padding: 24px 20px;
+  padding: 20px 18px;             /* hauteur réduite 10% */
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0;
-  transition: all 0.25s ease;
+  transition: all 250ms ease;
   position: relative;
   text-align: left;
   font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);   /* relief subtil default */
 }
 .kj-intent-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 12px 28px rgba(0,0,0,.09);
   border-color: #206AFB;
 }
 .kj-intent-card.active {
   border: 2px solid #206AFB;
   background: rgba(32,106,251,.05);
-  box-shadow: 0 8px 24px rgba(32,106,251,0.12);
+  box-shadow: 0 8px 24px rgba(32,106,251,.13);
 }
 .kj-intent-card:focus-visible {
   outline: 3px solid #206AFB;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
-/* Icône */
+/* Icône — plus grande (+12%) */
 .kj-intent-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
   background: rgba(32,106,251,.08);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
-  transition: all 0.25s ease;
+  transition: all 250ms ease;
   flex-shrink: 0;
 }
 .kj-intent-card:hover .kj-intent-icon,
 .kj-intent-card.active .kj-intent-icon {
   background: rgba(32,106,251,.14);
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 .kj-intent-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 29px;    /* +12% */
+  height: 29px;
   stroke: #206AFB;
   fill: none;
-  stroke-width: 2;
+  stroke-width: 1.85;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Titre card — plus grand et plus gras */
 .kj-intent-card-title {
-  font-size: 17px;
+  font-size: 18px;         /* 17→18px */
   font-weight: 700;
   color: #0F172A;
-  margin: 0 0 6px;
-  letter-spacing: -.01em;
+  margin: 0 0 5px;
+  letter-spacing: -.015em;
+  line-height: 1.2;
 }
-.kj-intent-card.active .kj-intent-card-title {
-  color: #206AFB;
-}
+.kj-intent-card.active .kj-intent-card-title { color: #206AFB; }
+
+/* Sous-texte — plus contrasté */
 .kj-intent-card-sub {
   font-size: 13px;
-  color: #6B7280;
+  color: #4B5563;          /* 6B7280→4B5563 */
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.45;
+  font-weight: 400;
 }
 
-/* Badge actif */
+/* Badge check actif */
 .kj-intent-badge {
   position: absolute;
   top: 14px; right: 14px;
@@ -7827,7 +7855,7 @@ h3, .sect-sub {
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 200ms ease;
 }
 .kj-intent-card.active .kj-intent-badge { opacity: 1; }
 .kj-intent-badge svg {
@@ -7836,14 +7864,22 @@ h3, .sect-sub {
   fill: none; stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Responsive */
+/* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
-  .kj-intent-groups { grid-template-columns: 1fr; }
-  .kj-intent-section { padding: 36px 16px 40px; }
+  .kj-intent-section {
+    margin-top: -24px;
+    border-radius: 20px 20px 0 0;
+    padding: 32px 16px 40px;
+  }
+  .kj-intent-groups { grid-template-columns: 1fr; gap: 20px; }
   .kj-intent-title { font-size: 22px; }
+  .kj-intent-sub { font-size: 14px; }
 }
 @media (max-width: 480px) {
-  .kj-intent-cards { grid-template-columns: 1fr; }
+  .kj-intent-section { margin-top: -16px; }
+  .kj-intent-cards { grid-template-columns: 1fr; gap: 10px; }
+  .kj-intent-card { padding: 16px 14px; }
+  .kj-intent-icon { width: 48px; height: 48px; }
 }
 </style>
 </head><body><div id="root"></div>
