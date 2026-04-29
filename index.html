@@ -34086,23 +34086,6 @@ function CommuneInput({ value, onChange }) {
 
 </script>
 <!-- Liens légaux footer -->
-<div id="legal-footer" style="background:#0f172a;padding:20px;text-align:center;font-size:11px;color:rgba(255,255,255,.35);line-height:2;">
-  <div style="margin-bottom:8px;">
-    <a href="/privacy"     style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">🛡️ Confidentialité</a>
-    <span style="opacity:.3;">·</span>
-    <a href="/terms"       style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">📋 CGU</a>
-    <span style="opacity:.3;">·</span>
-    <a href="/charte"      style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">🤝 Charte Agents</a>
-    <span style="opacity:.3;">·</span>
-    <a href="/contenu"     style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">📝 Politique Contenu</a>
-    <span style="opacity:.3;">·</span>
-    <a href="/reservation" style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">🔑 Réservation</a>
-    <span style="opacity:.3;">·</span>
-    <a href="/antifraude"  style="color:rgba(255,255,255,.55);text-decoration:none;margin:0 8px;">🛡️ Anti-Fraude</a>
-  </div>
-  <div>© 2026 Kërjom — Immobilier vérifié au Sénégal &nbsp;·&nbsp;
-    <a href="mailto:contact@kerjom.com" style="color:rgba(255,255,255,.5);text-decoration:none;">contact@kerjom.com</a>
-  </div>
 </div>
 <script>
 /* ════════════════════════════════════════
@@ -34149,6 +34132,33 @@ function CommuneInput({ value, onChange }) {
       '</div>' +
       '<div class="kj-legal-body">' + doc.html + '</div>' +
     '</div>';
+
+    // Fermer en cliquant overlay ou le X
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.classList.contains('kj-legal-close')) {
+        document.body.removeChild(overlay);
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Touche Echap
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        if (document.body.contains(overlay)) document.body.removeChild(overlay);
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', onKey);
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    document.body.appendChild(overlay);
+  }
+
+  window.__kjShowLegal = showLegal;
+})();
+</script>
+</body>
+</html';
 
     // Fermer en cliquant overlay ou le X
     overlay.addEventListener('click', function(e) {
