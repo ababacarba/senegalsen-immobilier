@@ -7686,6 +7686,166 @@ h3, .sect-sub {
   .kj-legal-overlay { align-items: flex-end; padding: 0; }
 }
 </style>
+<style id="kj-intent-block">
+/* ═══ BLOC INTENTION PREMIUM ═══ */
+.kj-intent-section {
+  background: #fff;
+  padding: 56px 24px 60px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.kj-intent-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.kj-intent-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.kj-intent-title {
+  font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: #0D1B3E;
+  margin: 0 0 8px;
+  letter-spacing: -.015em;
+}
+.kj-intent-sub {
+  font-size: 16px;
+  color: #6B7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Grille 2 groupes */
+.kj-intent-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.kj-intent-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kj-intent-group-label {
+  font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9CA3AF;
+  margin-bottom: 4px;
+  padding-left: 4px;
+}
+.kj-intent-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Card */
+.kj-intent-card {
+  background: #fff;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 24px 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  transition: all 0.25s ease;
+  position: relative;
+  text-align: left;
+  font-family: var(--fd, 'Plus Jakarta Sans', sans-serif);
+}
+.kj-intent-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+  border-color: #206AFB;
+}
+.kj-intent-card.active {
+  border: 2px solid #206AFB;
+  background: rgba(32,106,251,.05);
+  box-shadow: 0 8px 24px rgba(32,106,251,0.12);
+}
+.kj-intent-card:focus-visible {
+  outline: 3px solid #206AFB;
+  outline-offset: 2px;
+}
+
+/* Icône */
+.kj-intent-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(32,106,251,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+.kj-intent-card:hover .kj-intent-icon,
+.kj-intent-card.active .kj-intent-icon {
+  background: rgba(32,106,251,.14);
+  transform: scale(1.08);
+}
+.kj-intent-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: #206AFB;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kj-intent-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 6px;
+  letter-spacing: -.01em;
+}
+.kj-intent-card.active .kj-intent-card-title {
+  color: #206AFB;
+}
+.kj-intent-card-sub {
+  font-size: 13px;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Badge actif */
+.kj-intent-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 20px; height: 20px;
+  background: #206AFB;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.kj-intent-card.active .kj-intent-badge { opacity: 1; }
+.kj-intent-badge svg {
+  width: 11px; height: 11px;
+  stroke: #fff; stroke-width: 2.5;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kj-intent-groups { grid-template-columns: 1fr; }
+  .kj-intent-section { padding: 36px 16px 40px; }
+  .kj-intent-title { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .kj-intent-cards { grid-template-columns: 1fr; }
+}
+</style>
 </head><body><div id="root"></div>
 
 <div id="splash">
@@ -33284,51 +33444,74 @@ React.createElement("div", { className: "nauth" }, user ?  React.createElement(R
     setShowEstim(false);
     setPage("listings");
   } }), toast &&  React.createElement("div", { className: `toast t${toast.type}` }, toast.msg), showCmp && cmpItems.length >= 2 &&  React.createElement(CompareModal, { items: cmpItems, onClose: () => setShowCmp(false) }), showAlert && user &&  React.createElement(AlertModal, { user, currentFilters: { txF, propF, advF }, onClose: () => setShowAlert(false), showToast: showT }),  React.createElement(CompareBar, { items: cmpItems, onRemove: (id) => setCmpItems((p) => p.filter((x) => x.id !== id)), onClear: () => setCmpItems([]), onCompare: () => setShowCmp(true) }), page === "home" &&  React.createElement(React.Fragment, null,  React.createElement(HeroV5, { listings: listings, stab: stab, setStab: setStab, searchQ: searchQ, setSearchQ: setSearchQ, stats: stats, setTxF: setTxF, setPropF: setPropF, setPage: setPage, setListPage: setListPage, fmt: fmt, onPublish: function() { if(user) { setShowForm(true); } else { setShowAuth(true); } } }),
-  React.createElement("section", {
-  style: {
-    padding: "28px 20px",
-    background: "#fff",
-    borderBottom: "1px solid #f1f5f9"
-  }
-},
-  React.createElement("div", { style: { maxWidth: 860, margin: "0 auto" } },
-    React.createElement("div", { style: { fontFamily: "var(--fd)", fontSize: 13, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: ".08em", textAlign: "center", marginBottom: 16 } },
-      "Je cherche \u00e0"
+  React.createElement("section", {className: "kj-intent-section"},
+  React.createElement("div", {className: "kj-intent-inner"},
+
+    React.createElement("div", {className: "kj-intent-header"},
+      React.createElement("h2", {className: "kj-intent-title"}, "Que souhaitez-vous faire ?"),
+      React.createElement("p", {className: "kj-intent-sub"}, "Explorez les meilleures opportunit\u00e9s immobili\u00e8res au S\u00e9n\u00e9gal.")
     ),
-    React.createElement("div", {
-      style: { display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }
-    },
-      React.createElement("button", {
+
+    React.createElement("div", {className: "kj-intent-groups"},
+
+      React.createElement("div", {className: "kj-intent-group"},
+        React.createElement("p", {className: "kj-intent-group-label"}, "Je cherche un bien"),
+        React.createElement("div", {className: "kj-intent-cards"},
+          React.createElement("button", {
+        className: "kj-intent-card",
         onClick: function() { setTxF("vente"); setPage("listings"); },
-        style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "16px 28px", background: "#f8fafc", border: "2px solid #e5e7eb", borderRadius: 14, cursor: "pointer", flex: "0 0 auto", transition: ".18s", minWidth: 110 }
+        "aria-label": "Acheter"
       },
-        React.createElement("span", { style: { fontSize: 28, lineHeight: 1 } }, "\uD83C\uDFE0"),
-        React.createElement("span", { style: { fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700, color: "#111827" } }, "Acheter"),
-        React.createElement("span", { style: { fontSize: 12, color: "#6b7280" } }, "Maisons & terrains")
-      ),
-      React.createElement("button", {
+      React.createElement("div", {className: "kj-intent-badge"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'}})),
+      React.createElement("div", {className: "kj-intent-icon"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'}})),
+      React.createElement("p", {className: "kj-intent-card-title"}, "Acheter"),
+      React.createElement("p", {className: "kj-intent-card-sub"}, "Maisons & terrains")
+    ),
+          React.createElement("button", {
+        className: "kj-intent-card",
         onClick: function() { setTxF("location"); setPage("listings"); },
-        style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "16px 28px", background: "#f0fdf4", border: "2px solid #0EA5E9", borderRadius: 14, cursor: "pointer", flex: "0 0 auto", transition: ".18s", minWidth: 110 }
+        "aria-label": "Louer"
       },
-        React.createElement("span", { style: { fontSize: 28, lineHeight: 1 } }, "\uD83D\uDD11"),
-        React.createElement("span", { style: { fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700, color: "#0EA5E9" } }, "Louer"),
-        React.createElement("span", { style: { fontSize: 12, color: "#6b7280" } }, "Appartements & villas")
+      React.createElement("div", {className: "kj-intent-badge"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'}})),
+      React.createElement("div", {className: "kj-intent-icon"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg>'}})),
+      React.createElement("p", {className: "kj-intent-card-title"}, "Louer"),
+      React.createElement("p", {className: "kj-intent-card-sub"}, "Appartements & villas")
+    )
+        )
       ),
-      React.createElement("button", {
-        onClick: function() { if(user){ setShowForm(true); } else { setShowAuth(true); } },
-        style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "16px 28px", background: "#f8fafc", border: "2px solid #e5e7eb", borderRadius: 14, cursor: "pointer", flex: "0 0 auto", transition: ".18s", minWidth: 110 }
+
+      React.createElement("div", {className: "kj-intent-group"},
+        React.createElement("p", {className: "kj-intent-group-label"}, "Je suis propri\u00e9taire"),
+        React.createElement("div", {className: "kj-intent-cards"},
+          React.createElement("button", {
+        className: "kj-intent-card",
+        onClick: function() { if(user){{ setShowForm(true); }} else {{ setShowAuth(true); }} },
+        "aria-label": "Publier"
       },
-        React.createElement("span", { style: { fontSize: 28, lineHeight: 1 } }, "\uD83D\uDCDD"),
-        React.createElement("span", { style: { fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700, color: "#111827" } }, "Publier"),
-        React.createElement("span", { style: { fontSize: 12, color: "#6b7280" } }, "D\u00e9poser une annonce")
-      ),
-      React.createElement("button", {
+      React.createElement("div", {className: "kj-intent-badge"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'}})),
+      React.createElement("div", {className: "kj-intent-icon"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'}})),
+      React.createElement("p", {className: "kj-intent-card-title"}, "Publier"),
+      React.createElement("p", {className: "kj-intent-card-sub"}, "D\u00e9poser une annonce")
+    ),
+          React.createElement("button", {
+        className: "kj-intent-card",
         onClick: function() { setShowEstim(true); },
-        style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "16px 28px", background: "#f8fafc", border: "2px solid #e5e7eb", borderRadius: 14, cursor: "pointer", flex: "0 0 auto", transition: ".18s", minWidth: 110 }
+        "aria-label": "Estimer"
       },
-        React.createElement("span", { style: { fontSize: 28, lineHeight: 1 } }, "\uD83D\uDCB0"),
-        React.createElement("span", { style: { fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700, color: "#111827" } }, "Estimer"),
-        React.createElement("span", { style: { fontSize: 12, color: "#6b7280" } }, "Prix du march\u00e9")
+      React.createElement("div", {className: "kj-intent-badge"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'}})),
+      React.createElement("div", {className: "kj-intent-icon"},
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: '<svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><path d="M22 20H2"/></svg>'}})),
+      React.createElement("p", {className: "kj-intent-card-title"}, "Estimer"),
+      React.createElement("p", {className: "kj-intent-card-sub"}, "Prix du march\u00e9")
+    )
+        )
       )
     )
   )
