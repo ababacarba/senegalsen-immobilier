@@ -33284,8 +33284,6 @@ React.createElement("div", { className: "nauth" }, user ?  React.createElement(R
     setShowEstim(false);
     setPage("listings");
   } }), toast &&  React.createElement("div", { className: `toast t${toast.type}` }, toast.msg), showCmp && cmpItems.length >= 2 &&  React.createElement(CompareModal, { items: cmpItems, onClose: () => setShowCmp(false) }), showAlert && user &&  React.createElement(AlertModal, { user, currentFilters: { txF, propF, advF }, onClose: () => setShowAlert(false), showToast: showT }),  React.createElement(CompareBar, { items: cmpItems, onRemove: (id) => setCmpItems((p) => p.filter((x) => x.id !== id)), onClear: () => setCmpItems([]), onCompare: () => setShowCmp(true) }), page === "home" &&  React.createElement(React.Fragment, null,  React.createElement(HeroV5, { listings: listings, stab: stab, setStab: setStab, searchQ: searchQ, setSearchQ: setSearchQ, stats: stats, setTxF: setTxF, setPropF: setPropF, setPage: setPage, setListPage: setListPage, fmt: fmt, onPublish: function() { if(user) { setShowForm(true); } else { setShowAuth(true); } } }),
-React.createElement("div", { className: "sbar" },  React.createElement("div", { className: "sbari" }, [[stats.total + "+", "Annonces actives"], [stats.agencies + "+", "Agences"], [stats.cities + "+", "Villes"], ["\uD83D\uDEE1\uFE0F", "Protocole certifi\xE9"]].map(([n, l]) =>  React.createElement("div", { className: "st", key: l },  React.createElement("div", { className: "stn" }, n),  React.createElement("div", { className: "stl" }, l))))),
-  
   React.createElement("section", {
   style: {
     padding: "28px 20px",
