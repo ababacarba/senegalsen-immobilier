@@ -32769,6 +32769,7 @@ function App() {
   const [page, setPage] = useState(function(){var r=window.__KJ_INIT_ROUTE;return(r&&r.page)||"home";});
   window.__kerjomNavigate = setPage; /* intercepte par kj-router-shim */
   window.__kerjomOpenListing = function(l){ if(l){ setSelected(l); setPage("detail"); } };
+  window.__kerjomOpenPublish = function(){ if(user) setShowForm(true); else setShowAuth(true); };
   window.__kerjomPublish  = function(){ if(user) { setShowForm(true); } else { setShowAuth(true); } }; /* bridge global formulaire */
   const [prevPage, setPrevPage] = useState("home");
   const [listings, setListings] = useState([]);
@@ -33870,7 +33871,7 @@ loading ?  React.createElement("div", { className: "grid" }, [1, 2, 3, 4, 5, 6].
           React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("map"); } }, "Carte"),
           React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("tarifs"); } }, "Tarifs"),
           React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("services"); } }, "Services"),
-          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomNavigate("publish"); } }, "Publier une annonce")
+          React.createElement("a", { href: "#", onClick: function(e) { e.preventDefault(); if(window.__kerjomNavigate) window.__kerjomOpenPublish && window.__kerjomOpenPublish(); } }, "Publier une annonce")
         )
       ),
 
