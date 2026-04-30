@@ -23,6 +23,14 @@
     {
       "src": "*.txt",
       "use": "@vercel/static"
+    },
+    {
+      "src": "assets/images/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "legal/*.json",
+      "use": "@vercel/static"
     }
   ],
   "rewrites": [
