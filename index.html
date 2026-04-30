@@ -34523,10 +34523,7 @@ function CommuneInput({ value, onChange }) {
       })
       .catch(function(){ alert('Document temporairement indisponible. Réessayez.'); });
   }
-  function _renderLegalModal(doc) {(key) {
-    var doc = LEGAL_DOCS[key];
-    if (!doc) return;
-
+  function _renderLegalModal(doc) {
     var overlay = document.createElement('div');
     overlay.className = 'kj-legal-overlay';
     overlay.innerHTML = '<div class="kj-legal-modal">' +
