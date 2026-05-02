@@ -7634,59 +7634,7 @@ h3, .sect-sub {
 }
 </style>
 
-<style id="kj-legal-modal">
-.kj-legal-overlay {
-  position: fixed; inset: 0; z-index: 9000;
-  background: rgba(0,0,0,0.55);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  animation: kjFadeIn .2s ease;
-}
-@keyframes kjFadeIn { from{opacity:0} to{opacity:1} }
 
-.kj-legal-modal {
-  background: #fff;
-  border-radius: 16px;
-  width: 100%; max-width: 760px;
-  max-height: 88vh;
-  display: flex; flex-direction: column;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-  animation: kjSlideUp .25s ease;
-}
-@keyframes kjSlideUp { from{transform:translateY(20px);opacity:0} to{transform:none;opacity:1} }
-
-.kj-legal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid #e2e8f0;
-  flex-shrink: 0;
-}
-.kj-legal-header h2 {
-  font-size: 17px; font-weight: 700; color: #0F172A;
-  margin: 0; line-height: 1.3;
-}
-.kj-legal-close {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: #f1f5f9; border: none; cursor: pointer;
-  font-size: 16px; display: flex; align-items: center;
-  justify-content: center; flex-shrink: 0;
-  transition: background .15s;
-}
-.kj-legal-close:hover { background: #e2e8f0; }
-
-.kj-legal-body {
-  overflow-y: auto; padding: 24px;
-  flex: 1;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px; line-height: 1.7; color: #374151;
-}
-.kj-legal-body strong { color: #0F172A; }
-
-@media (max-width: 480px) {
-  .kj-legal-modal { border-radius: 12px 12px 0 0; max-height: 92vh; }
-  .kj-legal-overlay { align-items: flex-end; padding: 0; }
-}
-</style>
 <style id="kj-intent-block">
 /* ═══ BLOC INTENTION PREMIUM — Production-Ready ═══ */
 .kj-intent-section {
@@ -34322,12 +34270,12 @@ loading ?  React.createElement("div", { className: "grid" }, [1, 2, 3, 4, 5, 6].
         "\u00a9 2025 K\u00ebrjom \u2014 Immobilier v\u00e9rifi\u00e9 au S\u00e9n\u00e9gal"
       ),
       React.createElement("div", { className: "footer-legal" },
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("privacy"); } }, "\uD83D\uDEE1\uFE0F Confidentialit\u00e9"),
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("terms"); } }, "\uD83D\uDCCB CGU"),
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("charte"); } }, "\uD83E\uDD1D Charte Agents"),
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("contenu"); } }, "\uD83D\uDCDD Politique Contenu"),
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("reservation"); } }, "\uD83D\uDD11 R\u00e9servation"),
-        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.__kjShowLegal && window.__kjShowLegal("antifraude"); } }, "\uD83D\uDEE1\uFE0F Anti-Fraude")
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/privacy"; } }, "\uD83D\uDEE1\uFE0F Confidentialit\u00e9"),
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/terms"; } }, "\uD83D\uDCCB CGU"),
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/charte"; } }, "\uD83E\uDD1D Charte Agents"),
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/contenu"; } }, "\uD83D\uDCDD Politique Contenu"),
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/reservation"; } }, "\uD83D\uDD11 R\u00e9servation"),
+        React.createElement("a", { href: "#", onClick: function(e){ e.preventDefault(); window.location.href="/antifraude"; } }, "\uD83D\uDEE1\uFE0F Anti-Fraude")
       )
     )
   )

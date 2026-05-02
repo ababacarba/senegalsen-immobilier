@@ -392,5 +392,31 @@
       "destination": "https://kerjom-seo.vercel.app/robots.txt",
       "permanent": false
     }
+  ],
+  "routes": [
+    {
+      "src": "/antifraude",
+      "dest": "/antifraude.html"
+    },
+    {
+      "src": "/reservation",
+      "dest": "/reservation.html"
+    },
+    {
+      "src": "/contenu",
+      "dest": "/contenu.html"
+    },
+    {
+      "src": "/charte",
+      "dest": "/charte.html"
+    },
+    {
+      "src": "/terms",
+      "dest": "/terms.html"
+    },
+    {
+      "src": "/privacy",
+      "dest": "/privacy.html"
+    }
   ]
 }
